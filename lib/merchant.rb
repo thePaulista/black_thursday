@@ -8,4 +8,13 @@ class Merchant
     @name = name
   end
 
+  def name
+  # binding.pry
+    @name[:name]
+  end
+
+  def id
+    @id[:id]
+  end
+
 end

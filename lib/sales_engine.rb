@@ -11,7 +11,6 @@ class SalesEngine
       csv_file_object = CSV.open value, headers: true, header_converters: :symbol
       @csv_files[key] = csv_file_object
     end
-
   end
 
   def self.merchants
@@ -27,8 +26,12 @@ if __FILE__ == $0
 
 se = SalesEngine.from_csv({:merchants => './data/merchants.csv'})
 mr = SalesEngine.merchants
-puts mr.all
+# puts mr.all
 puts mr.find_by_name("Shopin1901")
-# puts mr.find_by_name("jejum")
+puts mr.find_by_name("BurgerKing")
+puts mr.find_by_id("12334132")
+puts mr.find_by_id("12")
+
+# puts mr.find_all_by_name
 
 end

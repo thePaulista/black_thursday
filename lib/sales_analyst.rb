@@ -22,7 +22,7 @@ class SalesAnalyst
     average.round(1)
   end
 
-  def get_all_merchant_id_numbers
+  def all_merchant_id_numbers
     # searches through Item Repo and returns array of all merchant_id strings
     all_items = @sales_engine.items.all
     all_items.map do |item|
@@ -30,7 +30,7 @@ class SalesAnalyst
     end
   end
 
-  def get_item_counts_for_each_merchants
+  def item_counts_for_each_merchants
     id_count_pairs = all_merchant_id_numbers
     id_count_pairs.inject(Hash.new(0)) { |hash, item| hash[item] += 1; hash }
   end
@@ -49,8 +49,8 @@ class SalesAnalyst
     standard_deviation.round(1)
   end
 
-  def find_percentage_of_those_who_fall_one_std_dev_below
-    #find those below one std dev based on normal distribution graph, which is 15.8%
+  def get_number_of_merchants_one_stdv_away_from_mean
+    #changed method name to comform with the new spec, but method is the same
     total = total_number_of_merchants
     percentage = 0.158
     total * percentage
@@ -62,18 +62,20 @@ class SalesAnalyst
     items.sort_by { |key, value| value }
   end
 
-  def merchants_below_one_std_dev
+  def get_merchants_one_stdv_above_mean
     # this returns the merchant_ids with the item counts
     # takes sorted nested array of merchants, and extracts those below one std dev
     sorted = sort_merchants_based_on_the_number_of_listings
-    below_avg = find_percentage_of_those_who_fall_one_std_dev_below
-    sorted.first(below_avg)
+    above_avg = get_number_of_merchants_one_stdv_away_from_mean
+    sorted.last(above_avg).to_h.keys
+    # binding.pry
   end
-
-  def merchants_with_low_item_count
-    merchant_ids = merchants_below_one_std_dev.to_h.keys
+# WORK ON THIS
+  def merchants_with_high_item_count
+    merchant_ids = get_merchants_one_stdv_above_mean
     @sales_engine.merchants.all.select do |m|
       merchant_ids.include?(m.id)
+      binding.pry
     end
   end
 
@@ -143,4 +145,6 @@ sa = SalesAnalyst.new(se)
 # sa.get_number_of_items_that_fall_2_stdv_above
 # puts sa.items_with_2_std_dev_above_avg_price.count
 # puts sa.golden_items.count
+# puts sa.get_merchants_one_stdv_above_mean
+sa.merchants_with_high_item_count
 end

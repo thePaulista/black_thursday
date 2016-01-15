@@ -48,7 +48,7 @@ class SalesAnalystTest < Minitest::Test
     total = @sa.total_number_of_merchants
     percentage = 0.158
     expected = total * percentage
-    binding.pry
+    # binding.pry
 
     submitted = @sa.find_percentage_of_those_who_fall_one_std_dev_below
 

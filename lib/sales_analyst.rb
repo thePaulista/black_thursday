@@ -73,7 +73,7 @@ class SalesAnalyst
     sorted = sort_merchants_based_on_the_number_of_listings
     below_avg = find_percentage_of_those_who_fall_one_std_dev_below
     # ROOT OF PROBLEM
-    binding.pry
+    # binding.pry
     sorted.first(below_avg)
   end
 

@@ -1,11 +1,10 @@
 require './test/test_helper'
 require './lib/items'
-require 'bigdecimal'
 
 class ItemTest < Minitest::Test
 
   def setup
-    @time = Time.now
+    @time = Time.now.to_s
     @i = Items.new({
       :id          => 123456,
       :name        => "Pencil",
@@ -35,7 +34,7 @@ class ItemTest < Minitest::Test
   end
 
   def test_item_initializes_with_created_at
-    assert_equal @time, @i.created_at
+    assert_equal Time.parse(@time), @i.created_at
   end
 
 end

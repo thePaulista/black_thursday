@@ -16,21 +16,7 @@ class ItemRepository
   def parse_items(items)
     @items_array = []
     items.each do |row|
-      id          = row[:id]
-      name        = row[:name]
-      description = row[:description]
-      unit_price  = row[:unit_price]
-      created_at  = row[:created_at]
-      updated_at  = row[:updated_at]
-      merchant_id = row[:merchant_id]
-
-      @items_array << Items.new({:id          => id,
-                                 :name        => name,
-                                 :description => description,
-                                 :unit_price  => unit_price,
-                                 :created_at  => created_at,
-                                 :updated_at  => updated_at,
-                                 :merchant_id => merchant_id})
+      @items_array << Items.new(row)
     end
   end
 

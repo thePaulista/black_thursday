@@ -1,5 +1,6 @@
 require_relative 'sales_engine'
 require 'bigdecimal'
+require 'pry'
 
 class SalesAnalyst
   attr_reader :sales_engine
@@ -35,8 +36,8 @@ class SalesAnalyst
 
   def item_counts_for_each_merchants
     id_count_pairs = all_merchant_id_numbers
-    # id_count_pairs.inject(Hash.new(0)) { |hash, item| hash[item] += 1; hash }.values
-    id_count_pairs.inject(Hash.new(0)) { |hash, item| hash[item] += 1; hash }
+    id_count_pairs.inject(Hash.new(0)) { |hash, item| hash[item] += 1; hash }.values
+    # id_count_pairs.inject(Hash.new(0)) { |hash, item| hash[item] += 1; hash }
   end
 
   def combine_merchant_item_count
@@ -71,6 +72,8 @@ class SalesAnalyst
     # takes sorted nested array of merchants, and extracts those below one std dev
     sorted = sort_merchants_based_on_the_number_of_listings
     below_avg = find_percentage_of_those_who_fall_one_std_dev_below
+    # ROOT OF PROBLEM
+    binding.pry
     sorted.first(below_avg)
   end
 
@@ -81,22 +84,12 @@ class SalesAnalyst
     # push the merchant.name of any matching merchants
 
     merch_repo = @sales_engine.merchants
+    # binding.pry
     merchants = merchants_below_one_std_dev
-    merchant_ids = merchants.keys
+    merchant_ids = merchants.to_h.keys
 
-    # # binding.pry
-    #
-    # # merch_repo = @sales_engine.merchants
-    # # binding.pry
-    # merchant_ids.map do |id|
-    #   id = id.to_i
-    #   merch_repo.find_by_id(id)
-    # end
-
-
-    merchant_ids.select do |id|
-        @sales_engine.items.find_by_id(id)
-        binding.pry
+    merchant_ids.map do |id|
+      merch_repo.find_by_id(id)
     end
   end
 

@@ -8,7 +8,14 @@ class Items
     @id          = args_hash[:id].to_i
     @name        = args_hash[:name]
     @description = args_hash[:description]
-    @unit_price  = BigDecimal.new(args_hash[:unit_price].insert(-3, "."),4)
+
+    # @unit_price  = BigDecimal.new(args_hash[:unit_price].insert(-3, "."),4)
+    if args_hash[:unit_price].is_a?(BigDecimal)
+      @unit_price = args_hash[:unit_price]
+    else
+      @unit_price  = BigDecimal.new(args_hash[:unit_price].insert(-3, "."),4)
+    end
+
     @created_at  = args_hash[:created_at]
     @updated_at  = args_hash[:updated_at]
     @merchant_id = args_hash[:merchant_id].to_i

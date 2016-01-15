@@ -7,7 +7,6 @@ class Items
     @name        = args_hash[:name]
     @description = args_hash[:description]
 
-    # @unit_price  = BigDecimal.new(args_hash[:unit_price].insert(-3, "."),4)
     if args_hash[:unit_price].is_a?(BigDecimal)
       @unit_price = args_hash[:unit_price]
     else
@@ -18,9 +17,5 @@ class Items
     @updated_at  = Time.parse(args_hash[:updated_at])
     @merchant_id = args_hash[:merchant_id].to_i
   end
-
-  # def created_at
-  #   Time.parse(@created_at)
-  # end
 
 end

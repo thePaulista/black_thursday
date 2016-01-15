@@ -16,10 +16,7 @@ class MerchantRepository
   def parse_merchants(merchants)
     @merchant_array = []
     merchants.each do |row|
-      id   = row[:id]
-      name = row[:name]
-
-      @merchant_array << Merchant.new({:id => id, :name => name})
+      @merchant_array << Merchant.new(row)
     end
   end
 

@@ -67,7 +67,7 @@ class SalesAnalystTest < Minitest::Test
 
   def test_average_invoices_per_merchant_standard_deviation
     skip
-    expected = 3.3
+    expected = 3.29
     submitted = @sa.average_invoices_per_merchant_standard_deviation
 
     assert_equal expected, submitted

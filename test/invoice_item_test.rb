@@ -42,6 +42,10 @@ class InvoiceItemTest < Minitest::Test
     assert_equal Time.parse(@time), @invoice_item.created_at
   end
 
+  def test_invoice_item_initializes_with_updated_at
+    assert_equal Time.parse(@time), @invoice_item.updated_at
+  end
+
   def test_unit_price_to_dollars
     assert_equal 10.99, @invoice_item.unit_price_to_dollars
   end

@@ -123,7 +123,7 @@ class SalesAnalyst
 
   def items_with_2_std_dev_above_avg_price
     sorted_prices = sort_price_for_all_items
-    top_priced = get_number_of_items_that_within_2_stdv_above
+    top_priced = get_number_of_items_that_are_within_2_stdv_above
     sorted_prices.first(top_priced)
   end  #THIS RETURNS 30 ITEMS
 
@@ -134,6 +134,13 @@ class SalesAnalyst
     end.first(top_priced.count)
   end  #THIS RETURNS 32 ITEMS INSTEAD OF 30. NEEDED TO ADD .FIRST()
   #finished iteration 1
+
+  def invoice_status(status)
+    status_count = @sales_engine.invoices.find_all_by_status(status).count
+    all_invoices = @sales_engine.invoices.all.count
+    raw_percentage = status_count / all_invoices.to_f
+    (raw_percentage * 100).round(2)
+  end
 
   def total_number_of_invoices
     @sales_engine.invoices.all.count  #count = 4985

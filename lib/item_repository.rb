@@ -13,11 +13,15 @@ class ItemRepository
     "#<#{self.class} #{@merchants.size} rows>"
   end
 
+  # def parse_items(items)
+  #   @items_array = []
+  #   items.each do |row|
+  #     @items_array << Items.new(row)
+  #   end
+  # end
+
   def parse_items(items)
-    @items_array = []
-    items.each do |row|
-      @items_array << Items.new(row)
-    end
+    @items_array = items.map { |row| Items.new(row) }
   end
 
   def all

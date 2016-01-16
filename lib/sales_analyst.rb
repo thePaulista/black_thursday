@@ -25,9 +25,7 @@ class SalesAnalyst
   def all_merchant_id_numbers
     # searches through Item Repo and returns array of all merchant_id strings
     all_items = @sales_engine.items.all
-    all_items.map do |item|
-      item.merchant_id
-    end
+    all_items.map {|item| item.merchant_id}
   end
 
   def item_counts_for_each_merchants
@@ -141,13 +139,33 @@ class SalesAnalyst
       top_priced.include?(item.unit_price)
     end.first(top_priced.count)
   end  #THIS RETURNS 32 ITEMS INSTEAD OF 30. NEEDED TO ADD .FIRST()
-end
   #finished iteration 1
 
+  def total_number_of_invoices
+    @sales_engine.invoices.all.count  #count = 4985
+  end
+
+  def average_invoices_per_merchant  #required method
+    avg = @sales_engine.invoices.all.count/total_number_of_merchants.to_f
+    avg.round(2)
+  end #answer = 10.49
+
+  # def total_merchant_id_numbers
+  #   # searches through Item Repo and returns array of all merchant_id strings
+  #   all_invoices = @sales_engine.invoices.all
+  #   all_invoices.map {|invoice| invoice.merchant_id}
+  # end
+  #
+  # def total_invoice_count_for_each_merchants
+  #   total_invoice = total_merchant_id_numbers
+  #   total_invoice.inject(Hash.new(0)) { |hash, invoice| hash[invoice] += 1; hash }
+  # end
+end
 
 if __FILE__ == $0
 se = SalesEngine.from_csv({:merchants => './data/merchants.csv',
-                           :items => './data/items.csv'})
+                           :items => './data/items.csv',
+                           :invoices  => './data/invoices.csv'})
 
 sa = SalesAnalyst.new(se)
 # sa.get_hash_of_merchants_to_items
@@ -161,4 +179,8 @@ sa = SalesAnalyst.new(se)
 # sa.average_price_per_merchant
 # sa.merchants_with_high_item_count
 # sa.average_average_price_per_merchant
+sa.average_invoices_per_merchant
+# sa.all_merchant_id_numbers
+# sa.invoice_count_for_each_merchants
+# sa.total_invoice_count_for_each_merchants
 end

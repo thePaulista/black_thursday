@@ -9,8 +9,6 @@ class Invoice
     @status      = args_hash[:status].to_sym
     @created_at  = Time.parse(args_hash[:created_at])
     @updated_at  = Time.parse(args_hash[:updated_at])
-    # @created_at  = args_hash[:created_at]
-    # @updated_at  = args_hash[:updated_at]
   end
 
 end

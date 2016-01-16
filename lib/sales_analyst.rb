@@ -85,12 +85,6 @@ class SalesAnalyst
     merchant_to_items
   end
 
-  # def average_item_price_for_merchants(merchant_id) #required method
-  #   merchant_to_items = get_hash_of_merchants_to_items
-  #   item_prices = merchant_to_items[merchant_id].map {|x| x.unit_price}
-  #   (item_prices.inject(:+)/item_prices.count)#.to_s
-  # end
-
   def average_item_price_for_merchant(merchant_id) #required method
     merchant_to_items = get_hash_of_merchants_to_items
     item_prices = merchant_to_items[merchant_id].map {|x| x.unit_price}
@@ -101,13 +95,7 @@ class SalesAnalyst
     all_items = @sales_engine.items.all
     all_items.map {|item| item.unit_price}.inject(:+)/all_items.count
     #result need to be .to_s??
-    # binding.pry
     end
-
-  def average_average_price_per_merchant #required method new
-    avg_all = average_price_per_merchant
-    (avg_all * total_number_of_items)/ total_number_of_merchants #COME BACK TO THIS. USE REDUCE
-  end
 
   def average_average_price_per_merchant #required method new
     avg_all = average_price_per_merchant
@@ -138,27 +126,17 @@ class SalesAnalyst
       top_priced.include?(item.unit_price)
     end.first(top_priced.count)
   end  #THIS RETURNS 32 ITEMS INSTEAD OF 30. NEEDED TO ADD .FIRST()
-  #finished iteration 1
 
   def total_number_of_invoices
     @sales_engine.invoices.all.count  #count = 4985
   end
 
   def average_invoices_per_merchant  #required method
-    avg = @sales_engine.invoices.all.count/total_number_of_merchants.to_f
+    # binding.pry
+    avg = @sales_engine.invoices.all.count / total_number_of_merchants.to_f
     avg.round(2)
   end #answer = 10.49
 
-  # def total_merchant_id_numbers
-  #   # searches through Item Repo and returns array of all merchant_id strings
-  #   all_invoices = @sales_engine.invoices.all
-  #   all_invoices.map {|invoice| invoice.merchant_id}
-  # end
-  #
-  # def total_invoice_count_for_each_merchants
-  #   total_invoice = total_merchant_id_numbers
-  #   total_invoice.inject(Hash.new(0)) { |hash, invoice| hash[invoice] += 1; hash }
-  # end
 end
 
 if __FILE__ == $0
@@ -182,4 +160,5 @@ sa.average_invoices_per_merchant
 # sa.all_merchant_id_numbers
 # sa.invoice_count_for_each_merchants
 # sa.total_invoice_count_for_each_merchants
+sa.average_invoices_per_merchant
 end

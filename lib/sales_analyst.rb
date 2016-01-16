@@ -123,7 +123,11 @@ class SalesAnalyst
 
   def items_with_2_std_dev_above_avg_price
     sorted_prices = sort_price_for_all_items
+<<<<<<< HEAD
     top_priced = get_number_of_items_that_within_2_stdv_above
+=======
+    top_priced = get_number_of_items_that_are_within_2_stdv_above
+>>>>>>> d55586070abdbcd5a0e1c35a75dc90cbb9e01a92
     sorted_prices.first(top_priced)
   end  #THIS RETURNS 30 ITEMS
 
@@ -137,6 +141,13 @@ class SalesAnalyst
 
   def total_number_of_invoices
     @sales_engine.invoices.all.count  #count = 4985
+  end
+
+  def invoice_status(status)
+    status_count = @sales_engine.invoices.find_all_by_status(status).count
+    all_invoices = @sales_engine.invoices.all.count
+    raw_percentage = status_count / all_invoices.to_f
+    (raw_percentage * 100).round(2)
   end
 
   def average_invoices_per_merchant  #required method

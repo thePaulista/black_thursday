@@ -11,7 +11,7 @@ class ItemTest < Minitest::Test
       :description => "You can use it to write things",
       :unit_price  => BigDecimal.new(10.99,4),
       :created_at  => @time,
-      :updated_at  => @time,
+      :updated_at  => @time
     })
   end
 

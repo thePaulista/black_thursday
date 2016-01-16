@@ -11,4 +11,9 @@ class Invoice
     @updated_at  = Time.parse(args_hash[:updated_at])
   end
 
+  def merchants
+    sales_engine = SalesEngine.from_csv({:merchants => './data/merchants.csv'})
+    puts sales_engine.merchants.find_by_id(@merchant_id)
+  end
+
 end

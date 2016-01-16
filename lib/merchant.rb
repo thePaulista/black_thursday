@@ -8,4 +8,9 @@ class Merchant
     @name = args_hash[:name]
   end
 
+  def invoices
+    sales_engine = SalesEngine.from_csv({:invoices => './data/invoices.csv'})
+    puts sales_engine.invoices.find_all_by_merchant_id(@id).to_a
+  end
+
 end

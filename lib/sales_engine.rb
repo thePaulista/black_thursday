@@ -44,16 +44,18 @@ sales_engine = SalesEngine.from_csv({:merchants => './data/merchants.csv',
 item_repo = sales_engine.items
 item = item_repo.find_by_name("510+ RealPush Icon Set")
 puts item
+puts "\n"
 
 merch_repo = sales_engine.merchants
-merchant = merch_repo.find_by_name("CJsDecor")
-# merchant.invoices
-# return array of invoice objects connected to merchant[merch_repo.find_by_name("CJsDecor")]
-puts merchant
+merchant = merch_repo.find_by_id(12334144)
+merchant.invoices
+
+puts "\n"
 
 invoice_repo = sales_engine.invoices
 invoice = invoice_repo.find_by_id(1)
-# invoice.merchant
-# return merchant object connected to invoice[invoice_repo.find_by_id(1)]
+invoice.merchants
+
+puts "\n"
 puts invoice
 end

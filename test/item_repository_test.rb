@@ -1,6 +1,7 @@
 require_relative 'test_helper'
 require_relative '../lib/item_repository'
 require 'pry'
+require 'bigdecimal'
 
 class ItemRepositoryTest < Minitest::Test
 
@@ -157,23 +158,23 @@ class ItemRepositoryTest < Minitest::Test
   end
 
   def test_find_all_by_price_in_range_lowest
-    range = (0..1)
+    range     = (0..1)
     expected  = 6
     submitted = @ir.find_all_by_price_in_range(range)
 
-    assert_equal expected, submitted.count
+    assert_equal expected, submitted.length
   end
 
   def test_find_all_by_price_in_range_lower
-    range = (10..15)
+    range     = (10..15)
     expected  = 205
     submitted = @ir.find_all_by_price_in_range(range)
 
-    assert_equal expected, submitted.count
+    assert_equal expected, submitted.length
   end
 
   def test_find_all_by_price_in_range_upper
-    range = (1000..1500)
+    range     = (1000..1500)
     expected  = 19
     submitted = @ir.find_all_by_price_in_range(range)
 
@@ -181,7 +182,7 @@ class ItemRepositoryTest < Minitest::Test
   end
 
   def test_find_all_by_price_in_range_mid
-    range = (10..150)
+    range     = (10..150)
     expected  = 910
     submitted = @ir.find_all_by_price_in_range(range)
 

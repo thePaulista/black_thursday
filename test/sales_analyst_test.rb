@@ -52,6 +52,7 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_golden_items
+    # skip
     expected = 30
     submitted = @sa.golden_items
 
@@ -76,24 +77,12 @@ class SalesAnalystTest < Minitest::Test
   def test_invoice_status_pending
     status = :pending
     expected = 29.55
-
-    # status_count = @sales_engine.invoices.find_all_by_status(status).count
-    # all_invoices = @sales_engine.invoices.all.count
-    # raw_percentage = status_count / all_invoices.to_f
-    # (raw_percentage * 100).round(2)
-
-    status_count = @se.invoices.find_all_by_status(status).count
-    all_invoices = @se.invoices.all.count
-    raw_percentage = status_count / all_invoices.to_f
-    submitted = (raw_percentage * 100).round(2)
-
-    # submitted = @sa.invoice_status(status)
+    submitted = @sa.invoice_status(status)
 
     assert_equal expected, submitted
   end
 
   def test_invoice_status_shipped
-    skip
     status = :shipped
     expected = 56.95
     submitted = @sa.invoice_status(status)
@@ -102,7 +91,6 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_invoice_status_returned
-    skip
     status = :returned
     expected = 13.50
     submitted = @sa.invoice_status(status)

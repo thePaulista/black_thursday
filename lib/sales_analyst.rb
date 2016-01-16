@@ -170,7 +170,7 @@ class SalesAnalyst
  ######finished std dev above for invoices
 
 ######question 2 - who are our top performing merchants?
-  def get_merchant_count_two_stdv_above_mean
+  def get_merchant_count_two_stdv_from_mean
     total = total_number_of_merchants
     percentage = 0.022
     total * percentage #answer = 10.45
@@ -183,38 +183,54 @@ class SalesAnalyst
 
   def get_merchants_two_stdv_above_mean
     sorted = sort_merchants_based_on_the_number_of_invoices
-    above_avg = get_merchant_count_two_stdv_above_mean
+    above_avg = get_merchant_count_two_stdv_from_mean
     sorted.last(above_avg).to_h.keys
   end
 
+  # REDO THIS ONE. RETURNING 194 INVOICES FROM TOP MERCHANTS
+  # def top_merchants_by_invoice_count #required method
+  #   merchants = get_merchants_two_stdv_above_mean
+  #   @sales_engine.invoices.all.select do |m|
+  #     merchants.include?(m.merchant_id)
+  #   end #returns 194 invoices by the top merchants
+  # end
+#################################################
+####this method is essentially invoice.merchant
+# this answers question two, but it's returning an array
+# of nil,
   def top_merchants_by_invoice_count #required method
     merchants = get_merchants_two_stdv_above_mean
-    @sales_engine.invoices.all.select do |m|
-      merchants.include?(m.merchant_id)
-  end #returns 194 invoices by the top merchants
-end
+    top =[]
+    if merchants.length > 0 then
+      merchants.each do |m|
+        topper = @sales_engine.merchants.find_by_id(merchants)
+        top << topper
+      end
+    end
+   return top
+  end
 
-  # def get_merchants_two_stdv_above_mean
-  #   sorted = sort_merchants_based_on_the_number_of_invoices
-  #   above_avg = get_number_of_merchants_one_stdv_away_from_mean
-  #   sorted.last(above_avg).to_h.keys
-  # end
+###above is question 2, below anwers question 3
 
-  # ENDED HERE  we are answering the question Which merchants
-  # are more than two standard dev above the mean
-
-  #  def merchants_with_2_std_dev_above_avg_price
-  #    sorted_prices = sort_price_for_all_items
-  #    top_priced = get_number_of_items_that_are_within_2_stdv_above
-  #    sorted_prices.first(top_priced)
-  #  end
-  # ####
-  # def all_merchant_id_numbers_on_invoice
-  #   # searches through Invoice Repo and returns array of all merchant_id strings
-  #   all_inv = @sales_engine.invoices.all
-  #   all_inv.map {|inv| inv.merchant_id}
-  #   # binding.pry
-  # end
+  def get_merchants_two_stdv_below_mean
+    sorted = sort_merchants_based_on_the_number_of_invoices
+    below_avg = get_merchant_count_two_stdv_from_mean
+    sorted.first(below_avg).to_h.keys
+  binding.pry
+  end
+################################question 3...redo
+  def bottom_merchants_by_invoice_count #required method
+    merchants = get_merchants_two_stdv_below_mean
+    bottom =[]
+    if merchants.length > 0 then
+      merchants.each do |m|
+        bottomer = @sales_engine.merchants.find_by_id(merchants)
+        bottom << bottomer
+      end
+    end
+   return bottomer
+  end
+####################################
 
 
 end
@@ -234,7 +250,7 @@ sa = SalesAnalyst.new(se)
 # puts sa.golden_items.count
 # puts sa.get_merchants_one_stdv_above_mean
 # sa.average_price_per_merchant
-sa.merchants_with_high_item_count
+# sa.merchants_with_high_item_count
 # sa.average_average_price_per_merchant
 # sa.average_invoices_per_merchant
 # sa.all_merchant_id_numbers
@@ -248,5 +264,7 @@ sa.merchants_with_high_item_count
 # sa.sort_merchants_based_on_the_number_of_invoices
 # sa.get_merchants_one_stdv_above_mean
 # sa.get_merchants_two_stdv_above_mean
-sa.top_merchants_by_invoice_count
+# sa.top_merchants_by_invoice_count
+# sa.top_merchants_by_invoice
+sa.get_merchants_two_stdv_below_mean
 end

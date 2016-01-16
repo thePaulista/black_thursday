@@ -52,7 +52,6 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_golden_items
-    # skip
     expected = 30
     submitted = @sa.golden_items
 
@@ -67,7 +66,6 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_invoices_per_merchant_standard_deviation
-    skip
     expected = 3.29
     submitted = @sa.average_invoices_per_merchant_standard_deviation
 

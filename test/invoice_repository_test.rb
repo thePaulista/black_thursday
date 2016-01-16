@@ -33,4 +33,28 @@ class InvoiceRepositoryTest < Minitest::Test
     assert_equal expected_1, submitted_1.id
     assert_equal expected_2, submitted_2.id
   end
+
+  def test_find_all_by_customer_id
+    customer_id = 5
+    expected = 8
+    submitted = @invoice_repo.find_all_by_customer_id(customer_id)
+
+    assert_equal expected, submitted.count
+  end
+
+  def test_find_all_by_merchant_id
+    merchant_id = 12336730
+    expected = 7
+    submitted = @invoice_repo.find_all_by_merchant_id(merchant_id)
+
+    assert_equal expected, submitted.count
+  end
+
+  def find_all_by_status
+    status = pending
+    expected = 7
+    submitted = @invoice_repo.find_all_by_status(status)
+
+    assert_equal expected, submitted.count
+  end
 end

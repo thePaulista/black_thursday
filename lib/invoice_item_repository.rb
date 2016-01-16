@@ -46,6 +46,6 @@ end
 if __FILE__ == $0
 ir = InvoiceItemRepository.new
 ir.from_csv("./data/invoice_items.csv")
-invoice = ir.find_by_id(6)
+invoice = ir.find_by_id(10)
 puts invoice
 end

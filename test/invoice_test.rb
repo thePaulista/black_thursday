@@ -19,7 +19,7 @@ class InvoiceTest < Minitest::Test
   end
 
   def test_invoice_kind_of?
-
+    assert_kind_of Invoice, @i
   end
 
   def test_invoice_initializes_with_id

@@ -4,8 +4,8 @@ require_relative '../lib/invoice_item_repository'
 class InvoiceItemRepositoryTest < Minitest::Test
 
   def setup
-    csv_object_of_items = CSV.open './data/invoice_items.csv', headers: true, header_converters: :symbol
-    @invoice_items_repo = InvoiceItemRepository.new(csv_object_of_items)
+    @invoice_items_repo = InvoiceItemRepository.new
+    @invoice_items_repo.from_csv("./data/invoice_items.csv")
   end
 
   def test_can_create_a_repo_of_invoice_items
@@ -33,22 +33,23 @@ class InvoiceItemRepositoryTest < Minitest::Test
 
   def test_find_by_id_returns_nil
     expected = nil
-    submitted = @invoice_items_repo.find_by_id(0)
+    submitted = @invoice_items_repo.find_by_id(200000)
 
     assert_equal expected, submitted
   end
 
   def test_find_all_by_item_id
-    expected = 19
-    item_id = 263523644
+    expected = 11
+    item_id = 263408101
     submitted = @invoice_items_repo.find_all_by_item_id(item_id)
 
     assert_equal expected, submitted.count
+    assert_kind_of InvoiceItem, submitted.first
   end
 
   def test_find_all_by_item_id_returns_empty_array
     expected = []
-    item_id = 0
+    item_id = 10
     submitted = @invoice_items_repo.find_all_by_item_id(item_id)
 
     assert_equal expected, submitted
@@ -72,54 +73,6 @@ class InvoiceItemRepositoryTest < Minitest::Test
 
 end
 
-
-# def test_find_all_by_customer_id
-#   customer_id = 5
-#   expected = 8
-#   submitted = @invoice_repo.find_all_by_customer_id(customer_id)
-#
-#   assert_equal expected, submitted.count
-# end
-#
-# def test_find_all_by_merchant_id
-#   merchant_id = 12336730
-#   expected = 7
-#   submitted = @invoice_repo.find_all_by_merchant_id(merchant_id)
-#
-#   assert_equal expected, submitted.count
-# end
-#
-# def find_all_by_status
-#   status = :pending
-#   expected = 7
-#   submitted = @invoice_repo.find_all_by_status(status)
-#
-#   assert_equal expected, submitted.count
-# end
-# end
-
-# RSpec.describe "Iteration 3" do
-#   context "Invoice Items" do
-#     it "#all returns an array of all invoice item instances" do
-#       expected = engine.invoice_items.all
-#       expect(expected.count).to eq 21830
-#     end
-#
-#     it "#find_by_id finds an invoice_item by id" do
-#       id = 10
-#       expected = engine.invoice_items.find_by_id(id)
-#
-#       expect(expected.id).to eq id
-#       expect(expected.item_id).to eq 263523644
-#       expect(expected.invoice_id).to eq 2
-#     end
-#
-#     it "#find_by_id returns nil if the invoice item does not exist" do
-#       id = 200000
-#       expected = engine.invoice_items.find_by_id(id)
-#
-#       expect(expected).to eq nil
-#     end
 #
 #     it "#find_all_by_item_id finds all items matching given item_id" do
 #       item_id = 263408101

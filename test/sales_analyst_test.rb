@@ -22,9 +22,9 @@ class SalesAnalystTest < Minitest::Test
     assert_equal expected, submitted
   end
 
-  def test_calc_items_per_merchant_standard_deviation
+  def test_average_items_per_merchant_standard_deviation
     std_deviation = 3.26
-    submitted = @sa.calc_items_per_merchant_standard_deviation
+    submitted = @sa.average_items_per_merchant_standard_deviation
 
     assert_equal std_deviation, submitted
   end

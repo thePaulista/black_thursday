@@ -209,15 +209,43 @@ class SalesAnalyst
 
 ####################################
   #question 4, which days are more than 2 stdv above mean
-  def dates_from_invoice
-    inv_days = @sales_engine.invoices.find_all_dates
-    inv_days.inject(Hash.new(0)) {|hash,days| hash[days] += 1; hash}.sort_by.values
- #{"Tuesday"=>738, "Wednesday"=>724, "Sunday"=>691, "Monday"=>695, "Thursday"=>736, "Saturday"=>697, "Friday"=>704}
+ #  def sales_dates_from_invoice
+ #    inv_days = @sales_engine.invoices.find_all_dates
+ #    inv_days.inject(Hash.new(0)) {|hash,days| hash[days] += 1; hash}.sort_by.values
+ # {"Tuesday"=>738, "Wednesday"=>724, "Sunday"=>691, "Monday"=>695, "Thursday"=>736, "Saturday"=>697, "Friday"=>704}
+ #  end
+
+#steps: 1.find merchant_id of the top performers GOT IT!
+           #def get_merchants_two_stdv_above_mean
+        # 2. find what days they sold items
+        # 3. sort by highest date
+        # 4. pick highest.
+  def collect_the_day_with_most_sales_among_top_sellers
+      merchant_id = get_merchants_two_stdv_above_mean
   end
+
+  def merchants_with_high_invoice_count
+    merchant_ids = get_merchants_two_stdv_above_mean
+    @sales_engine.invoices.all.select do |inv|
+      merchant_ids.include?(inv.merchant_id)
+    end #this returns 194 invoices belonging to top merchants
+    # sort from highest sales to least
+  end
+
+  def find_all_sales_days_for_invoices_two_stdv_above_mean
+    merchants_with_high_invoice_count.map do |inv|
+      inv.created_at.strftime("%A")
+    end
+  end
+
+  def get_hash_of_days_of_the_week_to_frequency
+    top_days = find_all_sales_days_for_invoices_two_stdv_above_mean
+    top_days.inject(Hash.new(0)) {|hash, days| hash[days] += 1; hash}
+  end #{"Friday"=>30, "Tuesday"=>32, "Sunday"=>32, "Saturday"=>23, "Wednesday"=>20, "Thursday"=>33, "Monday"=>24}
 
   def top_days_by_invoice_count
-  end
-
+    get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.last(1).flatten[0]
+  end  #returns "Thursday", a string, and not array
 
 end
 
@@ -255,4 +283,10 @@ sa = SalesAnalyst.new(se)
 # sa.top_merchants_by_invoice
 # sa.get_merchants_two_stdv_below_mean
 # sa.find_days_that_see_most_sales
+# sa.get_hash_of_merchants_to_inv
+# sa.merchants_with_high_invoice_count
+# sa.sales_dates_from_invoice
+# sa.find_all_dates
+# sa.get_hash_of_days_of_the_week_to_frequency
+# sa.top_days_by_invoice_count
 end

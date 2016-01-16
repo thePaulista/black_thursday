@@ -29,7 +29,6 @@ class ItemTest < Minitest::Test
   end
 
   def test_item_initializes_with_unit_price
-    skip
     unit_price  = BigDecimal.new(10.99,4)
     assert_equal unit_price, @i.unit_price
   end

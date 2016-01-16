@@ -43,8 +43,15 @@ class InvoiceRepository
     end
   end
 
+  def find_all_dates
+    @all_invoices.map do |inv|
+      inv.created_at.strftime("%A")
+    end
+  end
+
 end
 
 if __FILE__ == $0
+
 
 end

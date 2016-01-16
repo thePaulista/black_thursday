@@ -71,7 +71,7 @@ class SalesAnalyst
     end
   end
 
-#find average prices of items based on merchant_ids
+#below starts the solution to find average prices of items based on merchant_ids
   def get_hash_of_merchants_to_items
     all_items = @sales_engine.items.all
     merchant_to_items = {}
@@ -143,6 +143,7 @@ class SalesAnalyst
     avg = @sales_engine.invoices.all.count/total_number_of_merchants.to_f
     avg.round(2)
   end #answer = 10.49
+
 #######find stdv
   def all_the_merchant_id_numbers
     # searches through Item Repo and returns array of all merchant_id strings
@@ -187,50 +188,35 @@ class SalesAnalyst
     sorted.last(above_avg).to_h.keys
   end
 
-  # REDO THIS ONE. RETURNING 194 INVOICES FROM TOP MERCHANTS
-  # def top_merchants_by_invoice_count #required method
-  #   merchants = get_merchants_two_stdv_above_mean
-  #   @sales_engine.invoices.all.select do |m|
-  #     merchants.include?(m.merchant_id)
-  #   end #returns 194 invoices by the top merchants
-  # end
-#################################################
-####this method is essentially invoice.merchant
-# this answers question two, but it's returning an array
-# of nil,
-  def top_merchants_by_invoice_count #required method
+####this method is essentially >invoice.merchant Answer to Q2
+
+  def top_merchants_by_invoice_count  #required method
     merchants = get_merchants_two_stdv_above_mean
-    top =[]
-    if merchants.length > 0 then
-      merchants.each do |m|
-        topper = @sales_engine.merchants.find_by_id(merchants)
-        top << topper
-      end
-    end
-   return top
+    merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
   end
 
 ###above is question 2, below anwers question 3
-
   def get_merchants_two_stdv_below_mean
     sorted = sort_merchants_based_on_the_number_of_invoices
     below_avg = get_merchant_count_two_stdv_from_mean
     sorted.first(below_avg).to_h.keys
-  binding.pry
   end
-################################question 3...redo
+
   def bottom_merchants_by_invoice_count #required method
     merchants = get_merchants_two_stdv_below_mean
-    bottom =[]
-    if merchants.length > 0 then
-      merchants.each do |m|
-        bottomer = @sales_engine.merchants.find_by_id(merchants)
-        bottom << bottomer
-      end
-    end
-   return bottomer
+    merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
   end
+
 ####################################
+  #question 4, which days are more than 2 stdv above mean
+  def dates_from_invoice
+    inv_days = @sales_engine.invoices.find_all_dates
+    inv_days.inject(Hash.new(0)) {|hash,days| hash[days] += 1; hash}.sort_by.values
+ #{"Tuesday"=>738, "Wednesday"=>724, "Sunday"=>691, "Monday"=>695, "Thursday"=>736, "Saturday"=>697, "Friday"=>704}
+  end
+
+  def top_days_by_invoice_count
+  end
 
 
 end
@@ -265,6 +251,8 @@ sa = SalesAnalyst.new(se)
 # sa.get_merchants_one_stdv_above_mean
 # sa.get_merchants_two_stdv_above_mean
 # sa.top_merchants_by_invoice_count
+# sa.bottom_merchants_by_invoice_count
 # sa.top_merchants_by_invoice
-sa.get_merchants_two_stdv_below_mean
+# sa.get_merchants_two_stdv_below_mean
+# sa.find_days_that_see_most_sales
 end

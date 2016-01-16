@@ -18,8 +18,7 @@ class InvoiceItem
   end
 
   def unit_price_to_dollars
-    @invoice_id
-    # returns the price of the invoice item in dollars formatted as a Float
+    @unit_price.to_f
   end
 
 end

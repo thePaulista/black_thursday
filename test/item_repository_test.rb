@@ -117,7 +117,6 @@ class ItemRepositoryTest < Minitest::Test
   end
 
   def test_find_all_by_price
-    skip
     price     = 25.00
     expected  = 79
     submitted = @ir.find_all_by_price(price)

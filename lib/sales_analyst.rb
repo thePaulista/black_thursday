@@ -73,7 +73,6 @@ class SalesAnalyst
     end
   end
 
-#find average prices of items based on merchant_ids
   def get_hash_of_merchants_to_items
     all_items = @sales_engine.items.all
     merchant_to_items = {}

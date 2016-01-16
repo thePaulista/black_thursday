@@ -104,7 +104,13 @@ class SalesAnalyst
     all_items.map {|item| item.unit_price}.inject(:+)/all_items.count
     #result need to be .to_s??
   end
-#finished relationship question 3 above, start question 4 below.
+
+  def average_average_price_per_merchant #required method new
+    avg_all = average_price_per_merchant
+    (avg_all * total_number_of_items)/ total_number_of_merchants #COME BACK TO THIS. USE REDUCE
+  end
+
+  #finished relationship question 3 above, start question 4 below.
   def sort_price_for_all_items
     all_items = @sales_engine.items.all
     all_items.map {|item| item.unit_price}.sort.reverse
@@ -129,7 +135,7 @@ class SalesAnalyst
     end.first(top_priced.count)
   end  #THIS RETURNS 32 ITEMS INSTEAD OF 30. NEEDED TO ADD .FIRST()
 end
- #finished iteration 1
+  #finished iteration 1
 
 
 if __FILE__ == $0

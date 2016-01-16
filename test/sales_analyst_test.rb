@@ -22,9 +22,9 @@ class SalesAnalystTest < Minitest::Test
     assert_equal expected, submitted
   end
 
-  def test_calc_items_per_merchant_standard_deviation
+  def test_average_items_per_merchant_standard_deviation
     std_deviation = 3.26
-    submitted = @sa.calc_items_per_merchant_standard_deviation
+    submitted = @sa.average_items_per_merchant_standard_deviation
 
     assert_equal std_deviation, submitted
   end
@@ -66,8 +66,46 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_invoices_per_merchant_standard_deviation
-    expected = 3.3
-    submitted = sa.average_invoices_per_merchant_standard_deviation
+    skip
+    expected = 3.29
+    submitted = @sa.average_invoices_per_merchant_standard_deviation
+
+    assert_equal expected, submitted
+  end
+
+  def test_invoice_status_pending
+    status = :pending
+    expected = 29.55
+
+    # status_count = @sales_engine.invoices.find_all_by_status(status).count
+    # all_invoices = @sales_engine.invoices.all.count
+    # raw_percentage = status_count / all_invoices.to_f
+    # (raw_percentage * 100).round(2)
+
+    status_count = @se.invoices.find_all_by_status(status).count
+    all_invoices = @se.invoices.all.count
+    raw_percentage = status_count / all_invoices.to_f
+    submitted = (raw_percentage * 100).round(2)
+
+    # submitted = @sa.invoice_status(status)
+
+    assert_equal expected, submitted
+  end
+
+  def test_invoice_status_shipped
+    skip
+    status = :shipped
+    expected = 56.95
+    submitted = @sa.invoice_status(status)
+
+    assert_equal expected, submitted
+  end
+
+  def test_invoice_status_returned
+    skip
+    status = :returned
+    expected = 13.50
+    submitted = @sa.invoice_status(status)
 
     assert_equal expected, submitted
   end

@@ -6,7 +6,7 @@ class SalesAnalystTest < Minitest::Test
 
   def setup
     @se = SalesEngine.from_csv({:merchants => './data/merchants.csv',
-                               :items => './data/items.csv'})
+                                :items => './data/items.csv'})
     @sa = SalesAnalyst.new(@se)
   end
 
@@ -39,6 +39,7 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_find_percentage_of_those_who_fall_one_std_dev_below
+    skip
     #BETH
     # standard error: standard_deviation / square root of (count of items)
     # standard error == 0.15
@@ -56,6 +57,7 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_merchants_below_one_std_dev
+    skip
     expected = @sa.find_percentage_of_those_who_fall_one_std_dev_below.round(0)
     submitted = @sa.merchants_below_one_std_dev
 
@@ -63,7 +65,7 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_merchants_with_low_item_count
-    # skip
+    skip
     expected = 75
     submitted = @sa.merchants_with_low_item_count
 

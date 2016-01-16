@@ -1,3 +1,4 @@
+require 'bigdecimal'
 
 class Items
   attr_accessor :id, :name, :description, :unit_price, :updated_at, :created_at, :merchant_id

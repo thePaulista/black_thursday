@@ -1,5 +1,6 @@
 require_relative 'test_helper'
 require_relative '../lib/item_repository'
+require 'pry'
 
 class ItemRepositoryTest < Minitest::Test
 
@@ -116,9 +117,25 @@ class ItemRepositoryTest < Minitest::Test
   end
 
   def test_find_all_by_price
-    # price     = "9500"
-    price     = 95.00
-    expected  = 9
+    skip
+    price     = 25.00
+    expected  = 79
+    submitted = @ir.find_all_by_price(price)
+
+    assert_equal expected, submitted.count
+  end
+
+  def test_find_all_by_price
+    price     = 10.00
+    expected  = 63
+    submitted = @ir.find_all_by_price(price)
+
+    assert_equal expected, submitted.count
+  end
+
+  def test_find_all_by_price
+    price     = 20000.00
+    expected  = 0
     submitted = @ir.find_all_by_price(price)
 
     assert_equal expected, submitted.count
@@ -133,32 +150,40 @@ class ItemRepositoryTest < Minitest::Test
   end
 
   def test_find_all_by_price_correct_unit_price_but_with_symbol
-    price     = "$9500"
+    price     = $9500
     expected  = []
     submitted = @ir.find_all_by_price(price)
 
     assert_equal expected, submitted
   end
 
-  def test_find_all_by_price_in_range_lower
-    range     = (0.1..1)
+  def test_find_all_by_price_in_range_lowest
+    range = (0..1)
     expected  = 6
     submitted = @ir.find_all_by_price_in_range(range)
 
     assert_equal expected, submitted.count
   end
 
-  def test_find_all_by_price_in_range_middle
-    range     = (10..100)
-    expected  = 853
+  def test_find_all_by_price_in_range_lower
+    range = (10..15)
+    expected  = 205
     submitted = @ir.find_all_by_price_in_range(range)
 
     assert_equal expected, submitted.count
   end
 
   def test_find_all_by_price_in_range_upper
-    range     = (100..1000)
-    expected  = 263
+    range = (1000..1500)
+    expected  = 19
+    submitted = @ir.find_all_by_price_in_range(range)
+
+    assert_equal expected, submitted.count
+  end
+
+  def test_find_all_by_price_in_range_mid
+    range = (10..150)
+    expected  = 910
     submitted = @ir.find_all_by_price_in_range(range)
 
     assert_equal expected, submitted.count

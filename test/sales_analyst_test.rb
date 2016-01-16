@@ -6,7 +6,7 @@ class SalesAnalystTest < Minitest::Test
 
   def setup
     @se = SalesEngine.from_csv({:merchants => './data/merchants.csv',
-                               :items => './data/items.csv'})
+                                :items => './data/items.csv'})
     @sa = SalesAnalyst.new(@se)
   end
 
@@ -15,17 +15,17 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_items_per_merchant
-    expected = 2.9 #remove the hardcode
+    expected = 2.9
     submitted = @sa.average_items_per_merchant
 
     assert_equal expected, submitted
   end
 
   def test_calc_items_per_merchant_standard_deviation
-    std_deviation = 3.3 #remove the hardcode
-    testing = @sa.calc_items_per_merchant_standard_deviation
+    std_deviation = 3.3
+    submitted = @sa.calc_items_per_merchant_standard_deviation
 
-    assert_equal std_deviation, testing
+    assert_equal std_deviation, submitted
 
     # result of inject
     # => 5035.149999999971
@@ -39,6 +39,7 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_find_percentage_of_those_who_fall_one_std_dev_below
+    skip
     #BETH
     # standard error: standard_deviation / square root of (count of items)
     # standard error == 0.15
@@ -48,37 +49,27 @@ class SalesAnalystTest < Minitest::Test
     total = @sa.total_number_of_merchants
     percentage = 0.158
     expected = total * percentage
+    # binding.pry
+
     submitted = @sa.find_percentage_of_those_who_fall_one_std_dev_below
 
     assert_equal expected, submitted
   end
 
   def test_merchants_below_one_std_dev
+    skip
     expected = @sa.find_percentage_of_those_who_fall_one_std_dev_below.round(0)
     submitted = @sa.merchants_below_one_std_dev
 
     assert_equal expected.round(0), submitted.count
   end
 
-  def test_calc_items_per_merchant_standard_deviation
-    skip
-
-    @sa.merchants_with_low_item_count
-
-    fifteen_percent = @sa.find_percentage_of_those_who_fall_one_std_dev_below
-
-    expected = 2.9
-    submitted = @sa.calc_items_per_merchant_standard_deviation
-
-    assert_equal expected, submitted
-  end
-
-
   def test_merchants_with_low_item_count
     skip
-    # returns array of merchants
-    # that are more than one standard_deviation (0.825) below
-    # the average number of products
+    expected = 75
+    submitted = @sa.merchants_with_low_item_count
+
+    assert_equal expected, submitted.count
   end
 
   def test_average_item_price_for_merchant

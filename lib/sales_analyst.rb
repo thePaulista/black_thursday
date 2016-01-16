@@ -32,18 +32,17 @@ class SalesAnalyst
 
   def item_counts_for_each_merchants
     id_count_pairs = all_merchant_id_numbers
-    id_count_pairs.inject(Hash.new(0)) { |hash, item| hash[item] += 1; hash }
+    id_count_pairs.inject(Hash.new(0)) { |hash, item| hash[item] += 1; hash }.values
   end
 
   def combined_merchant_item_count
     item_counts = item_counts_for_each_merchants
-    # avg = average_items_per_merchant
-    avg = 2.9
+    avg = average_items_per_merchant
     item_counts.map {|item| (item - avg) ** 2}
   end
 
   def calc_items_per_merchant_standard_deviation
-    element = combine_merchant_item_count
+    element = combined_merchant_item_count
     element_mean = element.inject(0,:+) / (element.count - 1)
     standard_deviation = (element_mean ** 0.5)
     standard_deviation.round(1)
@@ -110,7 +109,13 @@ class SalesAnalyst
     avg_all = average_price_per_merchant
     (avg_all * total_number_of_items)/ total_number_of_merchants #COME BACK TO THIS. USE REDUCE
   end
-#finished relationship question 3 above, start question 4 below.
+
+  def average_average_price_per_merchant #required method new
+    avg_all = average_price_per_merchant
+    (avg_all * total_number_of_items)/ total_number_of_merchants #COME BACK TO THIS. USE REDUCE
+  end
+
+  #finished relationship question 3 above, start question 4 below.
   def sort_price_for_all_items
     all_items = @sales_engine.items.all
     all_items.map {|item| item.unit_price}.sort.reverse
@@ -135,7 +140,7 @@ class SalesAnalyst
     end.first(top_priced.count)
   end  #THIS RETURNS 32 ITEMS INSTEAD OF 30. NEEDED TO ADD .FIRST()
 end
- #finished iteration 1
+  #finished iteration 1
 
 
 if __FILE__ == $0

@@ -3,6 +3,8 @@ require_relative 'item_repository'
 require_relative 'invoice_repository'
 require 'pry'
 require 'csv'
+require 'bigdecimal'
+require 'time'
 
 
 class SalesEngine

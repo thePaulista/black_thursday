@@ -34,12 +34,20 @@ class SalesEngine
   def invoices
     InvoiceRepository.new(@csv_repo[:invoices])
   end
+
+  def customers
+    CustomerRepository.new(@csv_repo[:customers])
+  end
+
 end
 
 if __FILE__ == $0
-sales_engine = SalesEngine.from_csv({:merchants => './data/merchants.csv',
-                                     :items     => './data/items.csv',
-                                     :invoices  => './data/invoices.csv'})
+sales_engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
+                                     :items         => './data/items.csv',
+                                     :invoices      => './data/invoices.csv',
+                                     :invoice_items => './data/invoice_items.csv',
+                                     :transactions  => './data/transactions.csv',
+                                     :customers     => './data/customers.csv'})
 
 item_repo = sales_engine.items
 item = item_repo.find_by_name("510+ RealPush Icon Set")
@@ -58,4 +66,6 @@ invoice.merchants
 
 puts "\n"
 puts invoice
+
+###ADD THE REST
 end

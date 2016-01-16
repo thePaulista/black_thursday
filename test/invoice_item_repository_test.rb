@@ -53,14 +53,17 @@ class InvoiceItemRepositoryTest < Minitest::Test
     submitted = @invoice_items_repo.find_all_by_item_id(item_id)
 
     assert_equal expected, submitted
+    assert_equal 0, submitted.length
+    assert_equal true, submitted.empty?
   end
 
   def test_find_all_by_invoice_id
-    expected = 8
-    invoice_id = 3
+    expected = 3
+    invoice_id = 100
     submitted = @invoice_items_repo.find_all_by_invoice_id(invoice_id)
 
     assert_equal expected, submitted.count
+    assert_kind_of InvoiceItem, submitted.first
   end
 
   def test_find_all_by_invoice_id_returns_empty_array
@@ -69,40 +72,7 @@ class InvoiceItemRepositoryTest < Minitest::Test
     submitted = @invoice_items_repo.find_all_by_invoice_id(invoice_id)
 
     assert_equal expected, submitted
+    assert_equal 0, submitted.length
+    assert_equal true, submitted.empty?
   end
-
 end
-
-#
-#     it "#find_all_by_item_id finds all items matching given item_id" do
-#       item_id = 263408101
-#       expected = engine.invoice_items.find_all_by_item_id(item_id)
-#
-#       expect(expected.length).to eq 11
-#       expect(expected.first.class).to eq InvoiceItem
-#     end
-#
-#     it "#find_all_by_item_id returns an empty array if there are no matches" do
-#       item_id = 10
-#       expected = engine.invoice_items.find_all_by_item_id(item_id)
-#
-#       expect(expected.length).to eq 0
-#       expect(expected.empty?).to eq true
-#     end
-#
-#     it "#find_all_by_invoice_id finds all items matching given item_id" do
-#       invoice_id = 100
-#       expected = engine.invoice_items.find_all_by_invoice_id(invoice_id)
-#
-#       expect(expected.length).to eq 3
-#       expect(expected.first.class).to eq InvoiceItem
-#     end
-#
-#     it "#find_all_by_invoice_id returns an empty array if there are no matches" do
-#       invoice_id = 1234567890
-#       expected = engine.invoice_items.find_all_by_invoice_id(invoice_id)
-#
-#       expect(expected.length).to eq 0
-#       expect(expected.empty?).to eq true
-#     end
-#   end

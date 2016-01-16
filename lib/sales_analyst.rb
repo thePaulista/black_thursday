@@ -86,12 +86,6 @@ class SalesAnalyst
     merchant_to_items
   end
 
-  # def average_item_price_for_merchants(merchant_id) #required method
-  #   merchant_to_items = get_hash_of_merchants_to_items
-  #   item_prices = merchant_to_items[merchant_id].map {|x| x.unit_price}
-  #   (item_prices.inject(:+)/item_prices.count)#.to_s
-  # end
-
   def average_item_price_for_merchant(merchant_id) #required method
     merchant_to_items = get_hash_of_merchants_to_items
     item_prices = merchant_to_items[merchant_id].map {|x| x.unit_price}
@@ -129,7 +123,7 @@ class SalesAnalyst
 
   def items_with_2_std_dev_above_avg_price
     sorted_prices = sort_price_for_all_items
-    top_priced = get_number_of_items_that_fall_2_stdv_above
+    top_priced = get_number_of_items_that_within_2_stdv_above
     sorted_prices.first(top_priced)
   end  #THIS RETURNS 30 ITEMS
 
@@ -158,11 +152,11 @@ class SalesAnalyst
 
   def invoice_count_for_each_merchants #to get stdv for inv
     inv_count = all_the_merchant_id_numbers
-    inv_count.inject(Hash.new(0)) { |hash, inv| hash[inv] += 1; hash }.values
+    inv_count.inject(Hash.new(0)) { |hash, inv| hash[inv] += 1; hash }
   end
 
   def combined_merchant_invoice_count #to get stdv for inv
-    merch_invoices = invoice_count_for_each_merchants
+    merch_invoices = invoice_count_for_each_merchants.values
     avg = average_invoices_per_merchant
     merch_invoices.map {|inv| (inv - avg) ** 2}
   end
@@ -171,30 +165,62 @@ class SalesAnalyst
     combo = combined_merchant_invoice_count
     diff_mean = combo.inject(0,:+) / (combo.count - 1)
     stdv_invoice = (diff_mean ** 0.5)
-    stdv_invoice.round(2) #3.29
+    stdv_invoice.round(2) #answer = 3.29
   end
  ######finished std dev above for invoices
 
 ######question 2 - who are our top performing merchants?
-  def sort_merchants_by_invoice_count
-    invoice_count_for_each_merchants.sort.reverse
+  def get_merchant_count_two_stdv_above_mean
+    total = total_number_of_merchants
+    percentage = 0.022
+    total * percentage #answer = 10.45
   end
+
+  def sort_merchants_based_on_the_number_of_invoices
+    invoices = invoice_count_for_each_merchants
+    # top = get_merchant_count_two_stdv_above_mean
+    invoices.sort_by {|key, value| value}
+    # binding.pry
+  end
+
+  def get_merchants_two_stdv_above_mean
+    sorted = sort_merchants_based_on_the_number_of_invoices
+    above_avg = get_merchant_count_two_stdv_above_mean
+    sorted.last(above_avg).to_h.keys
+    # binding.pry
+  end
+
+
+
+  def top_merchants_by_invoice_count #required method
+    merchant_ids = get_merchants_two_stdv_above_mean
+    @sales_engine.invoices.all.select do |m|
+      merchant_ids.include?(m.id)
+      # binding.pry
+  end
+end
+
+  # def get_merchants_two_stdv_above_mean
+  #   sorted = sort_merchants_based_on_the_number_of_invoices
+  #   above_avg = get_number_of_merchants_one_stdv_away_from_mean
+  #   sorted.last(above_avg).to_h.keys
+  # end
 
   # ENDED HERE  we are answering the question Which merchants
   # are more than two standard dev above the mean
 
-   def merchants_with_2_std_dev_above_avg_price
-     sorted_prices = sort_price_for_all_items
-     top_priced = get_number_of_items_that_are_within_2_stdv_above
-     sorted_prices.first(top_priced)
-   end
-  ####
-  def all_merchant_id_numbers_on_invoice
-    # searches through Invoice Repo and returns array of all merchant_id strings
-    all_inv = @sales_engine.invoices.all
-    all_inv.map {|inv| inv.merchant_id}
-    # binding.pry
-  end
+  #  def merchants_with_2_std_dev_above_avg_price
+  #    sorted_prices = sort_price_for_all_items
+  #    top_priced = get_number_of_items_that_are_within_2_stdv_above
+  #    sorted_prices.first(top_priced)
+  #  end
+  # ####
+  # def all_merchant_id_numbers_on_invoice
+  #   # searches through Invoice Repo and returns array of all merchant_id strings
+  #   all_inv = @sales_engine.invoices.all
+  #   all_inv.map {|inv| inv.merchant_id}
+  #   # binding.pry
+  # end
 
 
 end
@@ -214,7 +240,7 @@ sa = SalesAnalyst.new(se)
 # puts sa.golden_items.count
 # puts sa.get_merchants_one_stdv_above_mean
 # sa.average_price_per_merchant
-# sa.merchants_with_high_item_count
+sa.merchants_with_high_item_count
 # sa.average_average_price_per_merchant
 # sa.average_invoices_per_merchant
 # sa.all_merchant_id_numbers
@@ -223,5 +249,10 @@ sa = SalesAnalyst.new(se)
 # sa.all_merchant_id_numbers_on_invoice
 # sa.subtract_mean_from_each_value
 # sa.average_invoices_per_merchant_standard_deviation
-sa.sort_merchants_by_invoice
+# sa.sort_merchants_by_invoice
+# sa.get_number_of_merchants_two_stdv_above_mean
+# sa.sort_merchants_based_on_the_number_of_invoices
+# sa.get_merchants_one_stdv_above_mean
+# sa.get_merchants_two_stdv_above_mean
+# sa.top_merchants_by_invoice_count
 end

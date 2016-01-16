@@ -1,3 +1,7 @@
+require 'bigdecimal'
+require 'time'
+require 'date'
+
 class InvoiceItem
   attr_accessor :id, :item_id, :invoice_id, :quantity, :unit_price, :created_at, :updated_at
 

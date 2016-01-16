@@ -11,7 +11,7 @@ class ItemTest < Minitest::Test
       :description => "You can use it to write things",
       :unit_price  => BigDecimal.new(10.99,4),
       :created_at  => @time,
-      :updated_at  => @time,
+      :updated_at  => @time
     })
   end
 
@@ -35,6 +35,10 @@ class ItemTest < Minitest::Test
 
   def test_item_initializes_with_created_at
     assert_equal Time.parse(@time), @i.created_at
+  end
+
+  def test_item_initializes_with_updated_at
+    assert_equal Time.parse(@time), @i.updated_at
   end
 
 end

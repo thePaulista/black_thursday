@@ -51,7 +51,7 @@ class InvoiceRepositoryTest < Minitest::Test
   end
 
   def find_all_by_status
-    status = pending
+    status = :pending
     expected = 7
     submitted = @invoice_repo.find_all_by_status(status)
 

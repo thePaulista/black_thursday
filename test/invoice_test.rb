@@ -12,7 +12,7 @@ class InvoiceTest < Minitest::Test
       :id          => 6,
       :customer_id => 7,
       :merchant_id => 8,
-      :status      => "pending",
+      :status      => :pending,
       :created_at  => @time,
       :updated_at  => @time,
     })
@@ -38,7 +38,7 @@ class InvoiceTest < Minitest::Test
   end
 
   def test_invoice_initializes_with_status
-    status  = "pending"
+    status  = :pending
     assert_equal status, @i.status
   end
 

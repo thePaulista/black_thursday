@@ -52,6 +52,12 @@ class ItemRepository
     @items_array.select { |item| item.merchant_id == id }
   end
 
+  def find_all_dates
+    @all_invoices.map do |inv|
+      inv.created_at.strftime("%A")
+    end
+  end
+
 end
 
 if __FILE__ == $0

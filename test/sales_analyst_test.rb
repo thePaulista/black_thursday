@@ -15,87 +15,46 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_items_per_merchant
-    expected = 2.9
+    expected = 2.88
     submitted = @sa.average_items_per_merchant
 
     assert_equal expected, submitted
   end
 
   def test_calc_items_per_merchant_standard_deviation
-    std_deviation = 3.3
+    std_deviation = 3.26
     submitted = @sa.calc_items_per_merchant_standard_deviation
 
     assert_equal std_deviation, submitted
-
-    # result of inject
-    # => 5035.149999999971
-
-    # result of above divided by .count
-    # => Variance (Population Standard Deviation)
-    # => 10.600315789473624
-
-    # std_deviation
-    # => 3.25581261584165
   end
 
-  def test_find_percentage_of_those_who_fall_one_std_dev_below
-    skip
-    #BETH
-    # standard error: standard_deviation / square root of (count of items)
-    # standard error == 0.15
-    # everyone below == 2.9 - 0.15 = 2.7ish
-    #BETH
-
-    total = @sa.total_number_of_merchants
-    percentage = 0.158
-    expected = total * percentage
-    # binding.pry
-
-    submitted = @sa.find_percentage_of_those_who_fall_one_std_dev_below
-
-    assert_equal expected, submitted
-  end
-
-  def test_merchants_below_one_std_dev
-    skip
-    expected = @sa.find_percentage_of_those_who_fall_one_std_dev_below.round(0)
-    submitted = @sa.merchants_below_one_std_dev
-
-    assert_equal expected.round(0), submitted.count
-  end
-
-  def test_merchants_with_low_item_count
-    skip
+  def test_merchants_with_high_item_count
     expected = 75
-    submitted = @sa.merchants_with_low_item_count
+    submitted = @sa.merchants_with_high_item_count
 
     assert_equal expected, submitted.count
   end
 
   def test_average_item_price_for_merchant
-    skip
-    # argument has you provide a specific merchant_id
     merchant_id = 12334194
-    submitted = "nope"
-    # binding.pry
-    expected = @sa.average_item_price_for_merchant(merchant_id.to_s)
+    expected = "0.30285714285714285714E2"
+    submitted = @sa.average_item_price_for_merchant(merchant_id)
 
-    # average_item_price_for_merchant(merchant_id)
-    # =>
-    # => BigDecimal of average price is returned for that specific merchant
-
-    assert_equal first, first
+    assert_equal expected, submitted.to_s
   end
 
-  def test_average_price_per_merchant
-    skip
-    # no arg
-    # => BigDecipmal of the average price across ALL merchants
+  def test_average_average_price_per_merchant
+    expected = "0.722510168421052631578947368419989473684210526316E3"
+    submitted = @sa.average_average_price_per_merchant
+
+    assert_equal expected, submitted.to_s
   end
 
   def test_golden_items
-    skip
-    # find items that are two standard_deviations ABOVE the average_item_price
+    expected = 30
+    submitted = @sa.golden_items
+
+    assert_equal expected, submitted.count
   end
 
 end

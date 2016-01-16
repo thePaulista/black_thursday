@@ -19,7 +19,7 @@ class SalesAnalyst
   def average_items_per_merchant
     # returns the average number of items offered by each merchant
     average = total_number_of_items / total_number_of_merchants.to_f
-    average.round(1)
+    average.round(2)
   end
 
   def all_merchant_id_numbers
@@ -32,11 +32,11 @@ class SalesAnalyst
 
   def item_counts_for_each_merchants
     id_count_pairs = all_merchant_id_numbers
-    id_count_pairs.inject(Hash.new(0)) { |hash, item| hash[item] += 1; hash }.values
+    id_count_pairs.inject(Hash.new(0)) { |hash, item| hash[item] += 1; hash }
   end
 
   def combined_merchant_item_count
-    item_counts = item_counts_for_each_merchants
+    item_counts = item_counts_for_each_merchants.values
     avg = average_items_per_merchant
     item_counts.map {|item| (item - avg) ** 2}
   end
@@ -45,7 +45,7 @@ class SalesAnalyst
     element = combined_merchant_item_count
     element_mean = element.inject(0,:+) / (element.count - 1)
     standard_deviation = (element_mean ** 0.5)
-    standard_deviation.round(1)
+    standard_deviation.round(2)
   end
 
   def get_number_of_merchants_one_stdv_away_from_mean
@@ -56,20 +56,16 @@ class SalesAnalyst
   end
 
   def sort_merchants_based_on_the_number_of_listings
-    # creates nested array, in order, of merchant_id and avg items sold
     items = item_counts_for_each_merchants
     items.sort_by { |key, value| value }
   end
 
   def get_merchants_one_stdv_above_mean
-    # this returns the merchant_ids with the item counts
-    # takes sorted nested array of merchants, and extracts those below one std dev
     sorted = sort_merchants_based_on_the_number_of_listings
     above_avg = get_number_of_merchants_one_stdv_away_from_mean
     sorted.last(above_avg).to_h.keys
-    # binding.pry
   end
-# WORK ON THIS
+
   def merchants_with_high_item_count
     merchant_ids = get_merchants_one_stdv_above_mean
     @sales_engine.merchants.all.select do |m|
@@ -92,7 +88,13 @@ class SalesAnalyst
     merchant_to_items
   end
 
-  def average_item_price_for_merchants(merchant_id) #required method
+  # def average_item_price_for_merchants(merchant_id) #required method
+  #   merchant_to_items = get_hash_of_merchants_to_items
+  #   item_prices = merchant_to_items[merchant_id].map {|x| x.unit_price}
+  #   (item_prices.inject(:+)/item_prices.count)#.to_s
+  # end
+
+  def average_item_price_for_merchant(merchant_id) #required method
     merchant_to_items = get_hash_of_merchants_to_items
     item_prices = merchant_to_items[merchant_id].map {|x| x.unit_price}
     (item_prices.inject(:+)/item_prices.count)#.to_s

@@ -75,7 +75,6 @@ class SalesAnalyst
     merchant_ids = get_merchants_one_stdv_above_mean
     @sales_engine.merchants.all.select do |m|
       merchant_ids.include?(m.id)
-      binding.pry
     end
   end
 
@@ -100,10 +99,16 @@ class SalesAnalyst
     (item_prices.inject(:+)/item_prices.count)#.to_s
   end
 
-  def average_price_per_merchant #required
+  def average_price_per_merchant
     all_items = @sales_engine.items.all
     all_items.map {|item| item.unit_price}.inject(:+)/all_items.count
     #result need to be .to_s??
+    # binding.pry
+    end
+
+  def average_average_price_per_merchant #required method new
+    avg_all = average_price_per_merchant
+    (avg_all * total_number_of_items)/ total_number_of_merchants #COME BACK TO THIS. USE REDUCE
   end
 #finished relationship question 3 above, start question 4 below.
   def sort_price_for_all_items
@@ -146,5 +151,7 @@ sa = SalesAnalyst.new(se)
 # puts sa.items_with_2_std_dev_above_avg_price.count
 # puts sa.golden_items.count
 # puts sa.get_merchants_one_stdv_above_mean
-sa.merchants_with_high_item_count
+# sa.average_price_per_merchant
+# sa.merchants_with_high_item_count
+# sa.average_average_price_per_merchant
 end

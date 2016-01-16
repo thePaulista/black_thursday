@@ -13,13 +13,6 @@ class InvoiceRepository
     "#<#{self.class} #{@merchants.size} rows>"
   end
 
-  # def parse_invoices(invoices)
-  #   @invoice_array = []
-  #   invoices.each do |row|
-  #     @invoice_array << Invoice.new(row)
-  #   end
-  # end
-
   def parse_invoices(invoices)
     @invoice_array = invoices.map { |row| Invoice.new(row) }
   end
@@ -27,14 +20,6 @@ class InvoiceRepository
   def all
     @invoice_array
   end
-
-  # def find_by_id(invoice_id)
-  #   if id_object = @invoice_array.find { |i| i.id == invoice_id}
-  #     id_object
-  #   else
-  #     nil
-  #   end
-  # end
 
   def find_by_id(invoice_id)
     @invoice_array.find { |i| i.id == invoice_id}

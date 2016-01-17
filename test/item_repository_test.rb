@@ -114,7 +114,6 @@ class ItemRepositoryTest < Minitest::Test
   end
 
   def test_find_all_by_price
-    # price     = 25.00
     price     = BigDecimal.new(2500)
     expected  = 79
     submitted = @item_repository.find_all_by_price(price)
@@ -123,7 +122,7 @@ class ItemRepositoryTest < Minitest::Test
   end
 
   def test_find_all_by_price
-    price     = 10.00
+    price     = BigDecimal.new(1000)
     expected  = 63
     submitted = @item_repository.find_all_by_price(price)
 
@@ -154,37 +153,33 @@ class ItemRepositoryTest < Minitest::Test
     assert_equal expected, submitted
   end
 
-  def test_find_all_by_price_in_range_lowest
-    skip
-    range     = (0..1)
+  def test_find_all_by_price_in_range_zero_to_ten
+    range     = (0..100)
     expected  = 6
     submitted = @item_repository.find_all_by_price_in_range(range)
 
     assert_equal expected, submitted.length
   end
 
-  def test_find_all_by_price_in_range_lower
-    skip
-    range     = (10..15)
+  def test_find_all_by_price_in_range_ten_to_fifteen
+    range     = (1000..1500)
     expected  = 205
     submitted = @item_repository.find_all_by_price_in_range(range)
 
     assert_equal expected, submitted.length
   end
 
-  def test_find_all_by_price_in_range_upper
-    skip
-    range     = (1000..1500)
-    expected  = 19
+  def test_find_all_by_price_in_range_ten_to_one_fifty
+    range     = (1000..15000)
+    expected  = 910
     submitted = @item_repository.find_all_by_price_in_range(range)
 
     assert_equal expected, submitted.count
   end
 
-  def test_find_all_by_price_in_range_mid
-    skip
-    range     = (10..150)
-    expected  = 910
+  def test_find_all_by_price_in_range_thousand_to_fifteen_hundred
+    range     = (100000..150000)
+    expected  = 19
     submitted = @item_repository.find_all_by_price_in_range(range)
 
     assert_equal expected, submitted.count

@@ -17,44 +17,50 @@ class SalesAnalyst
   end
 
   def average_items_per_merchant
-    # returns the average number of items offered by each merchant
     average = total_number_of_items / total_number_of_merchants.to_f
     average.round(2)
   end
 
   def all_merchant_id_numbers
-    # searches through Item Repo and returns array of all merchant_id strings
     all_items = @sales_engine.items.all
     all_items.map {|item| item.merchant_id}
   end
 
-  def item_counts_for_each_merchants
+  def item_counts_for_each_merchant
     id_count_pairs = all_merchant_id_numbers
     id_count_pairs.inject(Hash.new(0)) { |hash, item| hash[item] += 1; hash }
   end
 
-  def combined_merchant_item_count
-    item_counts = item_counts_for_each_merchants.values
+  def merchant_item_count_minus_average
+    item_counts = item_counts_for_each_merchant.values
     avg = average_items_per_merchant
     item_counts.map {|item| (item - avg) ** 2}
   end
 
-  def average_items_per_merchant_standard_deviation
-    element = combined_merchant_item_count
-    element_mean = element.inject(0,:+) / (element.count - 1)
-    standard_deviation = (element_mean ** 0.5)
-    standard_deviation.round(2)
+  def average_items_per_merchant_stdv
+   avg_subtracted_counts = merchant_item_count_minus_average
+   mean = avg_subtracted_counts.inject(0,:+) / (avg_subtracted_counts.count - 1)
+   stdv = Math.sqrt(mean).round(2)
   end
 
+  def merchants_with_high_item_count
+    avg_plus_stdv = average_items_per_merchant + average_items_per_merchant_stdv
+    item_counts_for_each_merchant.find_all do |merch_id, item_count|
+      merch_id if item_count > (avg_plus_stdv)
+    end
+  end
+
+  ## DIVIDE ##
+
   def get_number_of_merchants_one_stdv_away_from_mean
-    #changed method name to comform with the new spec, but method is the same
+    # changed method name to comform with the new spec, but method is the same
     total = total_number_of_merchants
     percentage = 0.158
     total * percentage
   end
 
   def sort_merchants_based_on_the_number_of_listings
-    items = item_counts_for_each_merchants
+    items = item_counts_for_each_merchant
     items.sort_by { |key, value| value }
   end
 
@@ -62,13 +68,6 @@ class SalesAnalyst
     sorted = sort_merchants_based_on_the_number_of_listings
     above_avg = get_number_of_merchants_one_stdv_away_from_mean
     sorted.last(above_avg).to_h.keys
-  end
-
-  def merchants_with_high_item_count
-    merchant_ids = get_merchants_one_stdv_above_mean
-    @sales_engine.merchants.all.select do |m|
-      merchant_ids.include?(m.id)
-    end
   end
 
 #below starts the solution to find average prices of items based on merchant_ids

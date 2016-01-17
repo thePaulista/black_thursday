@@ -17,7 +17,6 @@ class SalesAnalystTest < Minitest::Test
 
   def test_average_items_per_merchant
     expected = 2.88
-    # expected = 2.87
     submitted = @sa.average_items_per_merchant
 
     assert_equal expected, submitted
@@ -25,14 +24,14 @@ class SalesAnalystTest < Minitest::Test
 
   def test_average_items_per_merchant_standard_deviation
     std_deviation = 3.26
-    submitted = @sa.average_items_per_merchant_standard_deviation
+    submitted = @sa.average_items_per_merchant_stdv
 
     assert_equal std_deviation, submitted
   end
 
   def test_merchants_with_high_item_count
-    expected = 75
-    # expected = 52
+    # expected = 75
+    expected = 52
     submitted = @sa.merchants_with_high_item_count
 
     assert_equal expected, submitted.count
@@ -40,7 +39,8 @@ class SalesAnalystTest < Minitest::Test
 
   def test_average_item_price_for_merchant
     merchant_id = 12334105
-    expected = "0.3028571428571428571429E4"
+    # expected = "0.3028571428571428571429E4"
+    expected = "0.1665666666666666666667E4"
     # expected = 16.66
     submitted = @sa.average_item_price_for_merchant(merchant_id)
 

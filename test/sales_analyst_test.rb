@@ -45,12 +45,12 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_average_price_per_merchant
-    skip
-    # expected = "0.72251016842105263157893568421052631578947E5"
-    expected = 349.56
+    # skip
+    expected = 350.29
+    # expected = 349.56
     submitted = @sa.average_average_price_per_merchant
 
-    assert_equal expected, submitted.to_s
+    assert_equal expected, submitted
   end
 
   def test_golden_items

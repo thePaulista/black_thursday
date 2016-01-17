@@ -77,11 +77,7 @@ class SalesAnalyst
 
   def average_average_price_per_merchant
     avg_all = average_price_per_merchant
-    raw_num = avg_all.reduce(:+) / total_number_of_merchants
-    # (((raw_num.reduce(:+) / all_unit_prices.count).to_f) / 100)
-    pre_round = raw_num.reduce(:+) / (all_unit_prices.count) / 100
-    binding.pry
-    pre_round.round(0)
+    (avg_all.reduce(:+).to_f / total_number_of_merchants).round(2)
   end
 
   ## DIVIDE ##

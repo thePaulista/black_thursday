@@ -40,7 +40,7 @@ class TransactionRepositoryTest < Minitest::Test
   end
 
   def test_find_all_by_invoice_id
-    expected = 1
+    expected = 2
     invoice_id = 2179
     submitted = @transaction_repo.find_all_by_invoice_id(invoice_id)
 
@@ -93,5 +93,5 @@ class TransactionRepositoryTest < Minitest::Test
     assert_kind_of Transaction, submitted.first
     assert_equal result, submitted.first.result
   end
-  
+
 end

@@ -9,9 +9,9 @@ class InvoiceItemRepositoryTest < Minitest::Test
   end
 
   def test_can_create_a_repo_of_invoice_items
-    total_items = 21687
+    total_items = 21830
     first_id    = 1
-    last_id     = 21687
+    last_id     = 21830
 
     assert_equal total_items, @invoice_items_repo.all.count
     assert_equal first_id, @invoice_items_repo.all[0].id
@@ -19,7 +19,7 @@ class InvoiceItemRepositoryTest < Minitest::Test
   end
 
   def test_all_items
-    assert_equal 21687, @invoice_items_repo.all.count
+    assert_equal 21830, @invoice_items_repo.all.count
   end
 
   def test_find_by_id

@@ -2,6 +2,7 @@ require_relative 'merchant_repository'
 require_relative 'item_repository'
 require_relative 'invoice_repository'
 require_relative 'invoice_item_repository'
+require_relative 'transaction_repo'
 require 'pry'
 require 'csv'
 require 'bigdecimal'
@@ -41,8 +42,13 @@ class SalesEngine
   end
 
   def invoice_items
-    ir = InvoiceItemRepository.new
-    ir.from_csv("./data/invoice_items.csv")
+    invoice_repo = InvoiceItemRepository.new
+    invoice_repo.from_csv("./data/invoice_items.csv")
+  end
+
+  def transactions
+    transaction_repo = TransactionRepository.new
+    transaction_repo.from_csv("./data/transactions.csv")
   end
 
 end
@@ -78,5 +84,7 @@ invoice.merchant
 puts invoice
 
 sales_engine.invoice_items
+sales_engine.transactions
+
 ###ADD THE REST
 end

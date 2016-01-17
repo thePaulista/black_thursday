@@ -16,7 +16,7 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_items_per_merchant
-    expected = 2.88
+    expected = 2.87
     submitted = @sa.average_items_per_merchant
 
     assert_equal expected, submitted
@@ -62,7 +62,8 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_invoices_per_merchant
-    expected = 10.49
+    # expected = 10.49
+    expected = 10.47
     submitted = @sa.average_invoices_per_merchant
 
     assert_equal expected, submitted

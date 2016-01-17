@@ -52,22 +52,22 @@ sales_engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
 item_repo = sales_engine.items
 item = item_repo.find_by_name("510+ RealPush Icon Set")
 puts item
-puts "\n"
 
 merch_repo = sales_engine.merchants
 merchant = merch_repo.find_by_id(12335971)
 merchant.items
-puts "\n"
+
+item = sales_engine.items.find_by_id(263395237)
+item.merchant
+puts item.merchant
 
 merch_repo = sales_engine.merchants
 merchant = merch_repo.find_by_id(12334144)
 merchant.invoices
-puts "\n"
 
 invoice_repo = sales_engine.invoices
 invoice = invoice_repo.find_by_id(1)
 invoice.merchants
-puts "\n"
 
 puts invoice
 

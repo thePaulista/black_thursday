@@ -10,9 +10,9 @@ class InvoiceItemRepository
   #   parse_invoice_items(invoice_items)
   # end
 
-  def inspect
-    "#<#{self.class} #{@merchants.size} rows>"
-  end
+  # def inspect
+  #   "#<#{self.class} #{@merchants.size} rows>"
+  # end
 
   def from_csv(file)
     csv_file = CSV.open file, headers: true, header_converters: :symbol

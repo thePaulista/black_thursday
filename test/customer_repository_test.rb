@@ -112,12 +112,12 @@ class CustomerRepositoryTest < Minitest::Test
     assert_equal expected, submitted.count
   end
 
-  def test_find_by_all_last_names_returns_one_name
+  def test_find_by_all_last_names_returns_three_names
     last_name = "Osinski"
-    expected = last_name
+    expected = 3
     submitted = @cr.find_all_by_last_name(last_name)
 
-    assert_equal expected, submitted.last_name
+    assert_equal expected, submitted.count
   end
 
 end

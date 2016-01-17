@@ -4,12 +4,17 @@ require_relative 'customer'
 
 class CustomerRepository
 
-  def initialize(customers)
-    parse_customers(customers)
+  def initialize
   end
 
   def inspect
     "#<#{self.class} #{@merchants.size} rows>"
+  end
+
+  def from_csv(file)
+    csv_file = CSV.open file, headers: true, header_converters: :symbol
+    pre_parse = csv_file.map { |row| row.to_h }
+    parse_customers(pre_parse)
   end
 
   def parse_customers(customers)
@@ -24,12 +29,19 @@ class CustomerRepository
     @customers_array.find {|customer| customer.id == customer_id}
   end
 
-  def find_all_by_first_name(first_name)
-    @customer_array.find_all {|customer| customer.first_name == first_name}
+  def find_all_by_first_name(fragment)
+    fragment = fragment.downcase
+    @customer_array.find_all do |customer|
+      customer.first_name.downcase.include?(fragment)
+    end
   end
 
-  def find_all_by_last_name(last_name)
-    @customer_array.find_all {|customer| customer.last_name == last_name}
+  def find_all_by_last_name(fragment)
+    fragment = fragment.downcase
+    @customer_array.find_all do |customer|
+      customer.last_name.downcase.include?(fragment)
+    end
   end
+
 
 end

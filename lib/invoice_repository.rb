@@ -48,7 +48,7 @@ class InvoiceRepository
       inv.created_at.strftime("%A")
     end
   end
-
+  
 end
 
 if __FILE__ == $0

@@ -37,4 +37,8 @@ class ItemTest < Minitest::Test
     assert_equal Time.parse(@time), @i.created_at
   end
 
+  def test_item_initializes_with_updated_at
+    assert_equal Time.parse(@time), @i.updated_at
+  end
+
 end

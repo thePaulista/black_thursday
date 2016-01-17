@@ -50,5 +50,5 @@ if __FILE__ == $0
 tr = TransactionRepository.new
 tr.from_csv("./data/transactions.csv")
 transaction = tr.find_by_id(6)
-  # => <transaction>
+puts transaction
 end

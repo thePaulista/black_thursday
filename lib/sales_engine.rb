@@ -55,16 +55,20 @@ puts item
 puts "\n"
 
 merch_repo = sales_engine.merchants
+merchant = merch_repo.find_by_id(12335971)
+merchant.items
+puts "\n"
+
+merch_repo = sales_engine.merchants
 merchant = merch_repo.find_by_id(12334144)
 merchant.invoices
-
 puts "\n"
 
 invoice_repo = sales_engine.invoices
 invoice = invoice_repo.find_by_id(1)
 invoice.merchants
-
 puts "\n"
+
 puts invoice
 
 ###ADD THE REST

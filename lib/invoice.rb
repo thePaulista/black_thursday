@@ -13,7 +13,7 @@ class Invoice
 
   def merchants
     sales_engine = SalesEngine.from_csv({:merchants => './data/merchants.csv'})
-    puts sales_engine.merchants.find_by_id(@merchant_id)
+    return sales_engine.merchants.find_by_id(@merchant_id)
   end
 
 end

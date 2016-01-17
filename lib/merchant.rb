@@ -10,12 +10,12 @@ class Merchant
 
   def items
     sales_engine = SalesEngine.from_csv({:items => './data/items.csv'})
-    puts sales_engine.items.find_all_by_merchant_id(@id).to_a
+    return sales_engine.items.find_all_by_merchant_id(@id).to_a
   end
 
   def invoices
     sales_engine = SalesEngine.from_csv({:invoices => './data/invoices.csv'})
-    puts sales_engine.invoices.find_all_by_merchant_id(@id).to_a
+    return sales_engine.invoices.find_all_by_merchant_id(@id).to_a
   end
 
 end

@@ -44,9 +44,9 @@ class SalesAnalyst
   end
 
   def merchants_with_high_item_count
-    avg_plus_stdv = average_items_per_merchant + average_items_per_merchant_stdv
+    one_stdv_above_avg = average_items_per_merchant + average_items_per_merchant_stdv
     item_counts_for_each_merchant.find_all do |merch_id, item_count|
-      merch_id if item_count > (avg_plus_stdv)
+      merch_id if item_count > (one_stdv_above_avg)
     end
   end
 
@@ -57,22 +57,34 @@ class SalesAnalyst
     end
   end
 
-  def average_item_price_for_merchant(merchant_id) #required method
+  def average_item_price_for_merchant(merchant_id)
     merchants_items = merchants_with_all_their_items[merchant_id]
     all_unit_prices = merchants_items.map do |item|
       item.unit_price
     end
-    all_unit_prices.reduce(:+) / all_unit_prices.count
+    (((all_unit_prices.reduce(:+) / all_unit_prices.count)) / 100).round(2)
+  end
+
+  def average_price_per_merchant
+    all_items = @sales_engine.items.all
+    all_items_merchant_ids = all_items.map do |item|
+      item.merchant_id
+    end
+    (all_items_merchant_ids.uniq).map do |merch_id|
+      average_item_price_for_merchant(merch_id)
+    end
+  end
+
+  def average_average_price_per_merchant
+    avg_all = average_price_per_merchant
+    raw_num = avg_all.reduce(:+) / total_number_of_merchants
+    # (((raw_num.reduce(:+) / all_unit_prices.count).to_f) / 100)
+    pre_round = raw_num.reduce(:+) / (all_unit_prices.count) / 100
+    binding.pry
+    pre_round.round(0)
   end
 
   ## DIVIDE ##
-
-  def get_number_of_merchants_one_stdv_away_from_mean
-    # changed method name to comform with the new spec, but method is the same
-    total = total_number_of_merchants
-    percentage = 0.158
-    total * percentage
-  end
 
   def sort_merchants_based_on_the_number_of_listings
     items = item_counts_for_each_merchant
@@ -100,22 +112,17 @@ class SalesAnalyst
   #   merchant_to_items
   # end
 
-  def average_price_per_merchant
-    all_items = @sales_engine.items.all
-    all_items.map {|item| item.unit_price}.inject(:+)/all_items.count
-    #result need to be .to_s??
-    # binding.pry
-  end
+  # def average_price_per_merchant
+  #   all_items = @sales_engine.items.all
+  #   all_items.map {|item| item.unit_price}.inject(:+)/all_items.count
+  #   #result need to be .to_s??
+  #   # binding.pry
+  # end
 
-  def average_average_price_per_merchant #required method new
-    avg_all = average_price_per_merchant
-    (avg_all * total_number_of_items)/ total_number_of_merchants #COME BACK TO THIS. USE REDUCE
-  end
-
-  def average_average_price_per_merchant #required method new
-    avg_all = average_price_per_merchant
-    (avg_all * total_number_of_items)/ total_number_of_merchants #COME BACK TO THIS. USE REDUCE
-  end
+  # def average_average_price_per_merchant #required method new
+  #   avg_all = average_price_per_merchant
+  #   (avg_all * total_number_of_items)/ total_number_of_merchants #COME BACK TO THIS. USE REDUCE
+  # end
 
   #finished relationship question 3 above, start question 4 below.
   def sort_price_for_all_items

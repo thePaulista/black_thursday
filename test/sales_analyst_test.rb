@@ -30,7 +30,6 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_merchants_with_high_item_count
-    # expected = 75
     expected = 52
     submitted = @sa.merchants_with_high_item_count
 
@@ -39,17 +38,16 @@ class SalesAnalystTest < Minitest::Test
 
   def test_average_item_price_for_merchant
     merchant_id = 12334105
-    # expected = "0.3028571428571428571429E4"
-    expected = "0.1665666666666666666667E4"
-    # expected = 16.66
+    expected = 16.66
     submitted = @sa.average_item_price_for_merchant(merchant_id)
 
-    assert_equal expected, submitted.to_s
+    assert_equal expected, submitted
   end
 
   def test_average_average_price_per_merchant
-    expected = "0.72251016842105263157893568421052631578947E5"
-    # expected = 349.56
+    skip
+    # expected = "0.72251016842105263157893568421052631578947E5"
+    expected = 349.56
     submitted = @sa.average_average_price_per_merchant
 
     assert_equal expected, submitted.to_s

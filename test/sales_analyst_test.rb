@@ -70,9 +70,28 @@ class SalesAnalystTest < Minitest::Test
 
   def test_average_invoices_per_merchant_standard_deviation
     expected = 3.29
+    # expected = 3.32
     submitted = @sa.average_invoices_per_merchant_standard_deviation
 
     assert_equal expected, submitted
+  end
+
+  def test_top_merchants_by_invoice_count
+    skip
+    expected = 12
+    # currently: 10
+  end
+
+  def test_bottom_merchants_by_invoice_count
+    skip
+    expected = 5
+    # currently: 10
+  end
+
+  def test_top_days_by_invoice_count
+    skip
+    expected = 1
+    # currently = 6
   end
 
   def test_invoice_status_pending

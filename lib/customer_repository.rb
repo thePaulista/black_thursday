@@ -8,7 +8,7 @@ class CustomerRepository
   end
 
   def inspect
-    "#<#{self.class} #{@merchants.size} rows>"
+    "#<#{self.class} #{@customers.size} rows>"
   end
 
   def from_csv(file)

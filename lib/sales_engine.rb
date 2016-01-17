@@ -1,6 +1,7 @@
 require_relative 'merchant_repository'
 require_relative 'item_repository'
 require_relative 'invoice_repository'
+require_relative 'invoice_item_repository'
 require 'pry'
 require 'csv'
 require 'bigdecimal'
@@ -39,6 +40,11 @@ class SalesEngine
     CustomerRepository.new(@csv_repo[:customers])
   end
 
+  def invoice_items
+    ir = InvoiceItemRepository.new
+    ir.from_csv("./data/invoice_items.csv")
+  end
+
 end
 
 if __FILE__ == $0
@@ -67,9 +73,10 @@ merchant.invoices
 
 invoice_repo = sales_engine.invoices
 invoice = invoice_repo.find_by_id(1)
-invoice.merchants
+invoice.merchant
 
 puts invoice
 
+sales_engine.invoice_items
 ###ADD THE REST
 end

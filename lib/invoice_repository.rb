@@ -10,7 +10,7 @@ class InvoiceRepository
   end
 
   def inspect
-    "#<#{self.class} #{@merchants.size} rows>"
+    "#<#{self.class} #{@invoices.size} rows>"
   end
 
   def parse_invoices(invoices)
@@ -48,7 +48,7 @@ class InvoiceRepository
       inv.created_at.strftime("%A")
     end
   end
-  
+
 end
 
 if __FILE__ == $0

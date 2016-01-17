@@ -6,10 +6,6 @@ class MerchantRepositoryTest < Minitest::Test
   def setup
     csv_object_of_merchants = CSV.open './data/merchants.csv', headers: true, header_converters: :symbol
     @mr = MerchantRepository.new(csv_object_of_merchants)
-    #expected
-    #expected buy weird
-    #2nd kind of weird
-    #totally wrong
   end
 
   def test_can_create_a_repo_of_merchants

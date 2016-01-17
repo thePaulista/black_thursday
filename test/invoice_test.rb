@@ -48,10 +48,12 @@ class InvoiceTest < Minitest::Test
     assert_equal Time.parse(@time), @invoice.created_at
   end
 
-  def test_merchants
+  def test_merchant
     merchant_id = @invoice.merchant_id
-    submitted = @sales_engine.merchants.find_by_id(merchant_id)
+    expected = @sales_engine.merchants.find_by_id(merchant_id)
+    submitted = @invoice.merchant
 
+    assert_equal expected.id, submitted.id
     assert submitted.to_s.include?("Merchant:0")
     assert_kind_of Merchant, submitted
   end

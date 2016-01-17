@@ -50,6 +50,21 @@ class SalesAnalyst
     end
   end
 
+  def merchants_with_all_their_items
+    all_items = @sales_engine.items.all
+    all_items.group_by do |item|
+      item.merchant_id
+    end
+  end
+
+  def average_item_price_for_merchant(merchant_id) #required method
+    merchants_items = merchants_with_all_their_items[merchant_id]
+    all_unit_prices = merchants_items.map do |item|
+      item.unit_price
+    end
+    all_unit_prices.reduce(:+) / all_unit_prices.count
+  end
+
   ## DIVIDE ##
 
   def get_number_of_merchants_one_stdv_away_from_mean
@@ -71,33 +86,26 @@ class SalesAnalyst
   end
 
 #below starts the solution to find average prices of items based on merchant_ids
-  def get_hash_of_merchants_to_items
-    all_items = @sales_engine.items.all
-    merchant_to_items = {}
-    all_items.each do |item|
-      id = item.merchant_id
-      if !merchant_to_items.has_key?(id)
-        merchant_to_items[id] = [item]
-      else
-        merchant_to_items[id] << item
-      end
-    end
-    merchant_to_items
-  end
-
-  def average_item_price_for_merchant(merchant_id) #required method
-    merchant_to_items = get_hash_of_merchants_to_items
-    item_prices = merchant_to_items[merchant_id].map {|x| x.unit_price}
-    # (item_prices.inject(:+)/item_prices.count)#.to_s
-    (item_prices.inject(:+)/item_prices.count)
-  end
+  # def get_hash_of_merchants_to_items
+  #   all_items = @sales_engine.items.all
+  #   merchant_to_items = {}
+  #   all_items.each do |item|
+  #     id = item.merchant_id
+  #     if !merchant_to_items.has_key?(id)
+  #       merchant_to_items[id] = [item]
+  #     else
+  #       merchant_to_items[id] << item
+  #     end
+  #   end
+  #   merchant_to_items
+  # end
 
   def average_price_per_merchant
     all_items = @sales_engine.items.all
     all_items.map {|item| item.unit_price}.inject(:+)/all_items.count
     #result need to be .to_s??
     # binding.pry
-    end
+  end
 
   def average_average_price_per_merchant #required method new
     avg_all = average_price_per_merchant

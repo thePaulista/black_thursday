@@ -39,36 +39,25 @@ class SalesAnalyst
     item_counts.map {|item| (item - avg) ** 2}
   end
 
-  def average_items_per_merchant_standard_deviation
+  def average_items_per_merchant_stdv
     element = combined_merchant_item_count
     element_mean = element.inject(0,:+) / (element.count - 1)
     standard_deviation = (element_mean ** 0.5)
     standard_deviation.round(2)
+    # binding.pry
   end
 
-  def get_number_of_merchants_one_stdv_away_from_mean
-    #changed method name to comform with the new spec, but method is the same
-    total = total_number_of_merchants
-    percentage = 0.158
-    total * percentage
-  end
-
-  def sort_merchants_based_on_the_number_of_listings
-    items = item_counts_for_each_merchants
-    items.sort_by { |key, value| value }
-  end
-
-  def get_merchants_one_stdv_above_mean
-    sorted = sort_merchants_based_on_the_number_of_listings
-    above_avg = get_number_of_merchants_one_stdv_away_from_mean
-    sorted.last(above_avg).to_h.keys
-  end
+# Work on getting this percentage
+  def get_number_one_stdv_away_from_mean
+    stdv = average_items_per_merchant_stdv
+    avg = average_items_per_merchant
+    avg + stdv
+    # binding.pry
+  end #returns #6.14
 
   def merchants_with_high_item_count
-    merchant_ids = get_merchants_one_stdv_above_mean
-    @sales_engine.merchants.all.select do |m|
-      merchant_ids.include?(m.id)
-    end
+    items = item_counts_for_each_merchants
+    items.select {|k,v| v > 6.14}
   end
 
 #below starts the solution to find average prices of items based on merchant_ids
@@ -271,6 +260,7 @@ sa = SalesAnalyst.new(se)
 # puts sa.golden_items.count
 # puts sa.get_merchants_one_stdv_above_mean
 # sa.average_price_per_merchant
+sa.merchants_with_high_item_count
 # sa.merchants_with_high_item_count
 # sa.average_average_price_per_merchant
 # sa.average_invoices_per_merchant
@@ -296,4 +286,5 @@ sa = SalesAnalyst.new(se)
 # sa.find_all_dates
 # sa.get_hash_of_days_of_the_week_to_frequency
 # sa.top_days_by_invoice_count
+# sa.get_number_one_stdv_away_from_mean
 end

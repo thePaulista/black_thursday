@@ -37,16 +37,26 @@ class SalesAnalyst
     item_counts.map {|item| (item - avg) ** 2}
   end
 
-  def average_items_per_merchant_stdv
+  def average_items_per_merchant_standard_deviation
    avg_subtracted_counts = merchant_item_count_minus_average
-   mean = avg_subtracted_counts.inject(0,:+) / (avg_subtracted_counts.count - 1)
-   stdv = Math.sqrt(mean).round(2)
+   variance = avg_subtracted_counts.inject(0,:+) / (avg_subtracted_counts.count - 1)
+   stdv = Math.sqrt(variance).round(2)
+  end
+
+  def merchants_with_high_item_count_ids_only
+    one_stdv_above_avg = average_items_per_merchant + average_items_per_merchant_standard_deviation
+    merch_count_pairs = item_counts_for_each_merchant.find_all do |merch_id, item_count|
+      merch_id if item_count > (one_stdv_above_avg)
+    end
+    merch_count_pairs.map do |pair|
+      pair[0]
+    end
   end
 
   def merchants_with_high_item_count
-    one_stdv_above_avg = average_items_per_merchant + average_items_per_merchant_stdv
-    item_counts_for_each_merchant.find_all do |merch_id, item_count|
-      merch_id if item_count > (one_stdv_above_avg)
+    merchants = merchants_with_high_item_count_ids_only
+    merchants.map do |id|
+      @sales_engine.merchants.find_by_id(id)
     end
   end
 
@@ -78,6 +88,41 @@ class SalesAnalyst
   def average_average_price_per_merchant
     avg_all = average_price_per_merchant
     (avg_all.reduce(:+).to_f / total_number_of_merchants).round(2)
+  end
+
+  def all_items_unit_prices
+    all_items = @sales_engine.items.all
+    all_items.map { |item| item.unit_price }
+  end
+
+  def calc_average_unit_price_all_items
+    # returns BigDecimal of average unit price for all items
+    all_prices = all_items_unit_prices
+    (all_prices.reduce(:+) / total_number_of_items)
+  end
+
+  def items_unit_price_minus_average
+    avg = calc_average_unit_price_all_items
+    all_prices = all_items_unit_prices
+    all_prices.map { |price| ((price - avg) ** 2) }
+  end
+
+  def items_unit_price_standard_deviation
+    avg_subtracted_items = items_unit_price_minus_average
+    variance = avg_subtracted_items.inject(0,:+) / (avg_subtracted_items.count - 1)
+    stdv = Math.sqrt(variance).round(2)
+  end
+
+  def items_unit_price_above_two_standard_deviation
+    calc_average_unit_price_all_items + (items_unit_price_standard_deviation * 2)
+  end
+
+  def golden_items
+    two_stdv = items_unit_price_above_two_standard_deviation
+    all_unit_prices = @sales_engine.items.all
+    all_items_unit_prices.find_all do |unit_price|
+      unit_price > two_stdv
+    end
   end
 
   ## DIVIDE ##
@@ -121,30 +166,30 @@ class SalesAnalyst
   # end
 
   #finished relationship question 3 above, start question 4 below.
-  def sort_price_for_all_items
-    all_items = @sales_engine.items.all
-    all_items.map {|item| item.unit_price}.sort.reverse
-    #MAKE SURE THE SORT IS CORRECT
-  end
-
-  def get_number_of_items_that_are_within_2_stdv_above
-    percentage_for_two_stdv_abv = 0.022
-    (total_number_of_items * 0.022).round(0)  #=>30
-  end
-
-  def items_with_2_std_dev_above_avg_price
-    sorted_prices = sort_price_for_all_items
-    top_priced = get_number_of_items_that_are_within_2_stdv_above
-    sorted_prices.first(top_priced)
-  end  #THIS RETURNS 30 ITEMS
-
-  def golden_items
-    top_priced = items_with_2_std_dev_above_avg_price
-    @sales_engine.items.all.select do |item|
-      top_priced.include?(item.unit_price)
-    end.first(top_priced.count)
-  end  #THIS RETURNS 32 ITEMS INSTEAD OF 30. NEEDED TO ADD .FIRST()
-  #finished iteration 1
+  # def sort_price_for_all_items
+  #   all_items = @sales_engine.items.all
+  #   all_items.map {|item| item.unit_price}.sort.reverse
+  #   #MAKE SURE THE SORT IS CORRECT
+  # end
+  #
+  # def get_number_of_items_that_are_within_2_stdv_above
+  #   percentage_for_two_stdv_abv = 0.022
+  #   (total_number_of_items * 0.022).round(0)  #=>30
+  # end
+  #
+  # def items_with_2_std_dev_above_avg_price
+  #   sorted_prices = sort_price_for_all_items
+  #   top_priced = get_number_of_items_that_are_within_2_stdv_above
+  #   sorted_prices.first(top_priced)
+  # end  #THIS RETURNS 30 ITEMS
+  #
+  # def golden_items
+  #   top_priced = items_with_2_std_dev_above_avg_price
+  #   @sales_engine.items.all.select do |item|
+  #     top_priced.include?(item.unit_price)
+  #   end.first(top_priced.count)
+  # end  #THIS RETURNS 32 ITEMS INSTEAD OF 30. NEEDED TO ADD .FIRST()
+  # #finished iteration 1
 
   def invoice_status(status)
     status_count = @sales_engine.invoices.find_all_by_status(status).count

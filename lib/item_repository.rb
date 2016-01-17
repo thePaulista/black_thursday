@@ -1,6 +1,7 @@
 require 'pry'
 require 'csv'
 require 'set'
+require 'bigdecimal'
 require_relative 'items'
 
 class ItemRepository
@@ -29,7 +30,9 @@ class ItemRepository
   end
 
   def find_all_by_price(price)
+    price = BigDecimal.new(price)
     @items_array.find_all do |item|
+      # binding.pry
       item.unit_price == price
     end
   end

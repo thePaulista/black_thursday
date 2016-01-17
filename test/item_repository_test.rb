@@ -137,6 +137,19 @@ class ItemRepositoryTest < Minitest::Test
     assert_equal expected, submitted.count
   end
 
+  def test_find_all_by_price
+    # price     = BigDecimal.new(2500)
+    price = 2500
+    expected  = 79
+    submitted = @item_repository.find_all_by_price(price)
+    assert_equal expected, submitted.count
+
+  # price = BigDecimal.new(2500)
+  # expected = engine.items.find_all_by_price(price)
+  #
+  # expect(expected.length).to eq 79
+  end
+
   def test_find_all_by_price_empty_array
     price     = "0"
     expected  = []

@@ -11,7 +11,7 @@ class Items
     if args_hash[:unit_price].is_a?(BigDecimal)
       @unit_price = args_hash[:unit_price]
     else
-      @unit_price = BigDecimal.new(args_hash[:unit_price].insert(-3, "."),4)
+      @unit_price = BigDecimal.new(args_hash[:unit_price])
     end
 
     @created_at  = Time.parse(args_hash[:created_at])

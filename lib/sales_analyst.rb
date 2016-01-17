@@ -90,7 +90,6 @@ class SalesAnalyst
     merchant_to_items = get_hash_of_merchants_to_items
     item_prices = merchant_to_items[merchant_id].map {|x| x.unit_price}
     # (item_prices.inject(:+)/item_prices.count)#.to_s
-    binding.pry
     (item_prices.inject(:+)/item_prices.count)
   end
 

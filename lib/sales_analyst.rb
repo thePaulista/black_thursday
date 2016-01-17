@@ -89,7 +89,9 @@ class SalesAnalyst
   def average_item_price_for_merchant(merchant_id) #required method
     merchant_to_items = get_hash_of_merchants_to_items
     item_prices = merchant_to_items[merchant_id].map {|x| x.unit_price}
-    (item_prices.inject(:+)/item_prices.count)#.to_s
+    # (item_prices.inject(:+)/item_prices.count)#.to_s
+    binding.pry
+    (item_prices.inject(:+)/item_prices.count)
   end
 
   def average_price_per_merchant

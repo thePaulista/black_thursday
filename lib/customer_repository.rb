@@ -31,14 +31,14 @@ class CustomerRepository
 
   def find_all_by_first_name(fragment)
     fragment = fragment.downcase
-    @customer_array.find_all do |customer|
+    @customers_array.find_all do |customer|
       customer.first_name.downcase.include?(fragment)
     end
   end
 
   def find_all_by_last_name(fragment)
     fragment = fragment.downcase
-    @customer_array.find_all do |customer|
+    @customers_array.find_all do |customer|
       customer.last_name.downcase.include?(fragment)
     end
   end

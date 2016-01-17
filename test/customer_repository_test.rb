@@ -27,7 +27,6 @@ class CustomerRepositoryTest < Minitest::Test
     id = 2
     expected = id
     submitted = @cr.find_by_id(id)
-binding.pry
     assert_equal expected, submitted.id
   end
 
@@ -36,7 +35,7 @@ binding.pry
     expected = first_name
     submitted = @cr.find_all_by_first_name(first_name)
 
-    assert_equal expected, submitted.first_name
+    assert_equal expected, submitted.first.first_name
   end
 
 end

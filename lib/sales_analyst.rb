@@ -294,7 +294,7 @@ class SalesAnalyst
   end
 
   def merchants_with_high_invoice_count
-    merchant_ids = get_merchants_two_stdv_above_mean
+    merchant_ids = merchant_id_for_two_stdv_above_mean
     @sales_engine.invoices.all.select do |inv|
       merchant_ids.include?(inv.merchant_id)
     end #this returns 194 invoices belonging to top merchants
@@ -303,18 +303,19 @@ class SalesAnalyst
 
   def find_all_sales_days_for_invoices_two_stdv_above_mean
     merchants_with_high_invoice_count.map do |inv|
-      inv.created_at.strftime("%A")
+      inv.created_at.strftime("%A").to_sym
+      # binding.pry
     end
   end
 
   def get_hash_of_days_of_the_week_to_frequency
     top_days = find_all_sales_days_for_invoices_two_stdv_above_mean
     top_days.inject(Hash.new(0)) {|hash, days| hash[days] += 1; hash}
-  end #{"Friday"=>30, "Tuesday"=>32, "Sunday"=>32, "Saturday"=>23, "Wednesday"=>20, "Thursday"=>33, "Monday"=>24}
+  end
 
   def top_days_by_invoice_count
-    get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.last(1).flatten[0]
-  end  #returns "Thursday", a string, and not array
+    get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.max.first(1)
+  end
 
 end
 
@@ -362,5 +363,7 @@ sa = SalesAnalyst.new(se)
 # sa.merchants_id_for_two_stdv_below_mean
 # sa.two_stdv_below_from_mean
 # sa.bottom_merchants_by_invoice_count
-sa.golden_items
+# sa.golden_items
+# sa.find_all_sales_days_for_invoices_two_stdv_above_mean
+# sa.top_days_by_invoice_count
 end

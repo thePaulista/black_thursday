@@ -1,7 +1,7 @@
 require 'bigdecimal'
 
 class Items
-  attr_accessor :id, :name, :description, :unit_price, :updated_at, :created_at, :merchant_id
+  attr_reader :id, :name, :description, :unit_price, :updated_at, :created_at, :merchant_id, :merchant
 
   def initialize(args_hash)
     @id          = args_hash[:id].to_i
@@ -19,9 +19,8 @@ class Items
     @merchant_id = args_hash[:merchant_id].to_i
   end
 
-  # def merchant
-  #   sales_engine = SalesEngine.from_csv({:merchants => './data/merchants.csv'})
-  #   return sales_engine.merchants.find_by_id(@merchant_id)
-  # end
+  def specific_merchant(merchant)
+    @merchant = merchant
+  end
 
 end

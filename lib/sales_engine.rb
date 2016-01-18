@@ -11,74 +11,60 @@ require 'time'
 
 
 class SalesEngine
-  attr_reader :csv_repo
-  # attr_accessor :items
+  attr_reader :csv_repo, :merchants, :items, :invoices,
+              :invoice_items, :transactions, :customers
 
   def initialize(csv_repo)
     @csv_repo = csv_repo
+    @merchants = MerchantRepository.new(@csv_repo[:merchants])
+    @items = ItemRepository.new(@csv_repo[:items])
+    @invoices = InvoiceRepository.new(@csv_repo[:invoices])
+    @invoice_items = InvoiceItemRepository.new(@csv_repo[:invoice_items])
+    @transactions = TransactionRepository.new(@csv_repo[:transactions])
+    @customers = CustomerRepository.new(@csv_repo[:customers])
+    merchant_items_connection
+    item_merchant_connection
   end
 
   def self.from_csv(file_path)
     @csv_files = {}
     file_path.each do |key, value|
-      csv_file_object = CSV.open value, headers: true, header_converters: :symbol
-      @csv_files[key] = csv_file_object.map { |row| row.to_h }
+      csv_file = CSV.open value, headers: true, header_converters: :symbol
+      @csv_files[key] = csv_file.map { |row| row.to_h }
     end
     SalesEngine.new(@csv_files)
   end
 
-  def merchants
-    MerchantRepository.new(@csv_repo[:merchants])
+  def merchant_items_connection
+    merchants.all.map do |merchant|
+      merchant_items = items.find_all_by_merchant_id(merchant.id)
+      merchant.specific_items(merchant_items)
+    end
   end
 
-  def items
-    ItemRepository.new(@csv_repo[:items])
-  end
-
-  def invoices
-    InvoiceRepository.new(@csv_repo[:invoices])
-  end
-
-  def invoice_items
-    InvoiceItemRepository.new(@csv_repo[:invoice_items])
-  end
-
-  def transactions
-    TransactionRepository.new(@csv_repo[:transactions])
-  end
-
-  def customers
-    CustomerRepository.new(@csv_repo[:customers])
+  def item_merchant_connection
+    items.all.map do |item|
+      items_offered = merchants.find_by_id(item.merchant_id)
+      item.specific_merchant(items_offered)
+    end
   end
 
 end
 
 if __FILE__ == $0
-sales_engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
-                                     :items         => './data/items.csv',
-                                     :invoices      => './data/invoices.csv',
-                                     :invoice_items => './data/invoice_items.csv',
-                                     :transactions  => './data/transactions.csv',
-                                     :customers     => './data/customers.csv'})
+engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
+                               :items         => './data/items.csv',
+                               :invoices      => './data/invoices.csv',
+                               :invoice_items => './data/invoice_items.csv',
+                               :transactions  => './data/transactions.csv',
+                               :customers     => './data/customers.csv'})
 
-item_repo = sales_engine.items
-item = item_repo.find_by_name("510+ RealPush Icon Set")
-puts item
+# merchant = engine.merchants.find_by_id(12335971)
+merchant = engine.merchants.find_by_id(12334195)
+merchant.items
+puts merchant.items.count
 
-merch_repo = sales_engine.merchants
-merchant = merch_repo.find_by_id(12335971)
-puts merchant.items
-
-item = sales_engine.items.find_by_id(263395237)
-# item.merchant
-
-merch_repo = sales_engine.merchants
-merchant = merch_repo.find_by_id(12334144)
-# merchant.invoices
-
-invoice_repo = sales_engine.invoices
-invoice = invoice_repo.find_by_id(1)
-# invoice.merchant
-
-###ADD THE REST
+item = engine.items.find_by_id(263538760)
+expected = item.merchant
+puts expected.name
 end

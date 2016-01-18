@@ -219,42 +219,39 @@ class SalesAnalyst
     inv_count.inject(Hash.new(0)) { |hash, inv| hash[inv] += 1; hash }
   end
 
-  def combined_merchant_invoice_count #to get stdv for inv
+  def invoice_count_minus_average #to get stdv for inv
     merch_invoices = invoice_count_for_each_merchants.values
     avg = average_invoices_per_merchant
     merch_invoices.map {|inv| (inv - avg) ** 2}
   end
 
   def average_invoices_per_merchant_standard_deviation #required method
-    combo = combined_merchant_invoice_count
+    combo = invoice_count_minus_average
     diff_mean = combo.inject(0,:+) / (combo.count - 1)
-    stdv_invoice = (diff_mean ** 0.5)
+    stdv_invoice = Math.sqrt(diff_mean)
     stdv_invoice.round(2) #answer = 3.29
+    # binding.pry
   end
  ######finished std dev above for invoices
 
 ######question 2 - who are our top performing merchants?
-  def get_merchant_count_two_stdv_from_mean
-    total = total_number_of_merchants
-    percentage = 0.022
-    total * percentage #answer = 10.45
+  def two_stdv_away_from_mean #NEW
+    avg = average_invoices_per_merchant
+    stdv = average_invoices_per_merchant_standard_deviation
+    avg + stdv + stdv
   end
 
-  def sort_merchants_based_on_the_number_of_invoices
+
+  def merchant_id_for_two_stdv_above_mean NEW
     invoices = invoice_count_for_each_merchants
-    invoices.sort_by {|key, value| value}
-  end
-
-  def get_merchants_two_stdv_above_mean
-    sorted = sort_merchants_based_on_the_number_of_invoices
-    above_avg = get_merchant_count_two_stdv_from_mean
-    sorted.last(above_avg).to_h.keys
-  end
+    two_stdv = two_stdv_away_from_mean
+    invoices.select {|key, value| value > two_stdv }.keys
+  end #returns an array of 12 merchant_ids
 
 ####this method is essentially >invoice.merchant Answer to Q2
 
-  def top_merchants_by_invoice_count  #required method
-    merchants = get_merchants_two_stdv_above_mean
+  def top_merchants_by_invoice_count  #required method NEW
+    merchants = merchant_id_for_two_stdv_above_mean
     merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
   end
 
@@ -352,4 +349,5 @@ sa = SalesAnalyst.new(se)
 # sa.find_all_dates
 # sa.get_hash_of_days_of_the_week_to_frequency
 # sa.top_days_by_invoice_count
+sa.top_merchants_by_invoice_count
 end

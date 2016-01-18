@@ -127,12 +127,6 @@ class SalesAnalyst
 
   ## DIVIDE ##
 
-  def get_merchants_one_stdv_above_mean
-    sorted = sort_merchants_based_on_the_number_of_listings
-    above_avg = get_number_of_merchants_one_stdv_away_from_mean
-    sorted.last(above_avg).to_h.keys
-  end
-
   def invoice_status(status)
     status_count = @sales_engine.invoices.find_all_by_status(status).count
     all_invoices = @sales_engine.invoices.all.count

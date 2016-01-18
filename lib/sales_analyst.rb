@@ -1,5 +1,6 @@
 require_relative 'sales_engine'
 require 'bigdecimal'
+require 'pry'
 
 class SalesAnalyst
   attr_reader :sales_engine
@@ -19,7 +20,7 @@ class SalesAnalyst
   def average_items_per_merchant
     average = total_number_of_items / total_number_of_merchants.to_f
     average.round(2)
-  end
+  end #2.87 with new num of merchants
 
   def all_merchant_id_numbers
     all_items = @sales_engine.items.all
@@ -35,7 +36,7 @@ class SalesAnalyst
     item_counts = item_counts_for_each_merchant.values
     avg = average_items_per_merchant
     item_counts.map {|item| (item - avg) ** 2}
-  end
+  end #5034.9475
 
   def average_items_per_merchant_standard_deviation
    avg_subtracted_counts = merchant_item_count_minus_average
@@ -72,7 +73,7 @@ class SalesAnalyst
     all_unit_prices = merchants_items.map do |item|
       item.unit_price
     end
-    (((all_unit_prices.reduce(:+) / all_unit_prices.count)) / 100).round(2)
+    (((all_unit_prices.reduce(:+).round(2) / all_unit_prices.count)) / 100).round(2)
   end
 
   def average_price_per_merchant
@@ -117,15 +118,36 @@ class SalesAnalyst
     calc_average_unit_price_all_items + (items_unit_price_standard_deviation * 2)
   end
 
-  def golden_items
-    all_items = @sales_engine.items.all
+  def prices_of_golden_items
     two_stdv = items_unit_price_above_two_standard_deviation
-    all_items.find_all do |item|
-      item.unit_price > two_stdv
+    all_unit_prices = @sales_engine.items.all
+    all_items_unit_prices.find_all do |unit_price|
+      unit_price > two_stdv
     end
   end
 
+   def array_of_golden_priced_items
+     prices_of_golden_items.map do |p|
+        priced = @sales_engine.items.find_all_by_price(p)
+     end
+   end
+
+   def golden_items
+     array_of_golden_priced_items.collect {|g| g.first}
+   end
+
   ## DIVIDE ##
+
+  def sort_merchants_based_on_the_number_of_listings
+    items = item_counts_for_each_merchant
+    items.sort_by { |key, value| value }
+  end
+
+  def get_merchants_one_stdv_above_mean
+    sorted = sort_merchants_based_on_the_number_of_listings
+    above_avg = get_number_of_merchants_one_stdv_away_from_mean
+    sorted.last(above_avg).to_h.keys
+  end
 
   def invoice_status(status)
     status_count = @sales_engine.invoices.find_all_by_status(status).count
@@ -142,23 +164,6 @@ class SalesAnalyst
     avg = @sales_engine.invoices.all.count/total_number_of_merchants.to_f
     avg.round(2)
   end #answer = 10.49
-
-  def two_stdv_away_from_mean #NEW
-    avg = average_invoices_per_merchant
-    stdv = average_invoices_per_merchant_standard_deviation
-    avg + stdv + stdv
-  end
-
-  def merchant_id_for_two_stdv_above_mean #NEW
-    invoices = invoice_count_for_each_merchants
-    two_stdv = two_stdv_away_from_mean
-    invoices.select {|key, value| value > two_stdv }.keys
-  end #returns an array of 12 merchant_ids
-
-  def top_merchants_by_invoice_count  #NEW
-    merchants = merchant_id_for_two_stdv_above_mean
-    merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
-  end
 
 #######find stdv
   def all_the_merchant_id_numbers
@@ -223,18 +228,12 @@ class SalesAnalyst
     merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
   end #returns four merchant objects
 
-  def get_merchants_two_stdv_above_mean
-    invoices = invoice_count_for_each_merchants
-    two_stdv = two_stdv_below_from_mean
-    invoices.select {|key, value| value > two_stdv}.keys
-  end
-
   def collect_the_day_with_most_sales_among_top_sellers
       merchant_id = get_merchants_two_stdv_above_mean
   end
 
   def merchants_with_high_invoice_count
-    merchant_ids = get_merchants_two_stdv_above_mean
+    merchant_ids = merchant_id_for_two_stdv_above_mean
     @sales_engine.invoices.all.select do |inv|
       merchant_ids.include?(inv.merchant_id)
     end #this returns 194 invoices belonging to top merchants
@@ -243,30 +242,127 @@ class SalesAnalyst
 
   def find_all_sales_days_for_invoices_two_stdv_above_mean
     merchants_with_high_invoice_count.map do |inv|
-      inv.created_at.strftime("%A")
+      inv.created_at.strftime("%A").to_sym
+      # binding.pry
     end
   end
 
   def get_hash_of_days_of_the_week_to_frequency
     top_days = find_all_sales_days_for_invoices_two_stdv_above_mean
     top_days.inject(Hash.new(0)) {|hash, days| hash[days] += 1; hash}
-  end #{"Friday"=>30, "Tuesday"=>32, "Sunday"=>32, "Saturday"=>23, "Wednesday"=>20, "Thursday"=>33, "Monday"=>24}
+  end
 
   def top_days_by_invoice_count
-    get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.last(1).flatten[0]
-  end  #returns "Thursday", a string, and not array
+    get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.max.first(1)
+  end
 
 end
 
 if __FILE__ == $0
-se = SalesEngine.from_csv({:merchants      => './data/merchants.csv',
-                           :items          => './data/items.csv',
-                           :invoices       => './data/invoices.csv',
-                           :invoice_items  => './data/invoice_items.csv',
-                           :transactions  => './data/transactions.csv',
-                           :customers     => './data/customers.csv'
-                          })
+se = SalesEngine.from_csv({:merchants => './data/merchants.csv',
+                           :items     => './data/items.csv',
+                           :invoices  => './data/invoices.csv'})
 
 sa = SalesAnalyst.new(se)
-
+# sa.get_hash_of_merchants_to_items
+# sa.average_item_price_for_merchants(12334275)
+# sa.get_total_price_for_all_items
+# sa.sort_price_for_all_items
+# sa.get_number_of_items_that_fall_2_stdv_above
+# puts sa.items_with_2_std_dev_above_avg_price.count
+# puts sa.golden_items.count
+# puts sa.get_merchants_one_stdv_above_mean
+# sa.average_price_per_merchant
+# sa.merchants_with_high_item_count
+# sa.average_average_price_per_merchant
+# sa.average_invoices_per_merchant
+# sa.all_merchant_id_numbers
+# sa.invoice_count_for_each_merchants
+# sa.total_invoice_count_for_each_merchants
+# sa.all_merchant_id_numbers_on_invoice
+# sa.subtract_mean_from_each_value
+# sa.average_invoices_per_merchant_standard_deviation
+# sa.sort_merchants_by_invoice
+# sa.get_number_of_merchants_two_stdv_above_mean
+# sa.sort_merchants_based_on_the_number_of_invoices
+# sa.get_merchants_one_stdv_above_mean
+# sa.get_merchants_two_stdv_above_mean
+# sa.top_merchants_by_invoice_count
+# sa.bottom_merchants_by_invoice_count
+# sa.top_merchants_by_invoice
+# sa.get_merchants_two_stdv_below_mean
+# sa.find_days_that_see_most_sales
+# sa.get_hash_of_merchants_to_inv
+# sa.merchants_with_high_invoice_count
+# sa.sales_dates_from_invoice
+# sa.find_all_dates
+# sa.get_hash_of_days_of_the_week_to_frequency
+# sa.top_days_by_invoice_count
+# sa.top_merchants_by_invoice_count
+# sa.merchants_id_for_two_stdv_below_mean
+# sa.two_stdv_below_from_mean
+# sa.bottom_merchants_by_invoice_count
+# sa.golden_items
+# sa.find_all_sales_days_for_invoices_two_stdv_above_mean
+# sa.top_days_by_invoice_count
+# sa.number_of_items_per_merchant
+# sa.average_price_per_merchant
+# sa.item_counts_for_merchants_sum
+# sa.merchant_item_count_minus_average
+sa.golden_items
+# sa.prices_of_golden_items
 end
+
+
+#below starts the solution to find average prices of items based on merchant_ids
+  # def get_hash_of_merchants_to_items
+  #   all_items = @sales_engine.items.all
+  #   merchant_to_items = {}
+  #   all_items.each do |item|
+  #     id = item.merchant_id
+  #     if !merchant_to_items.has_key?(id)
+  #       merchant_to_items[id] = [item]
+  #     else
+  #       merchant_to_items[id] << item
+  #     end
+  #   end
+  #   merchant_to_items
+  # end
+
+  # def average_price_per_merchant
+  #   all_items = @sales_engine.items.all
+  #   all_items.map {|item| item.unit_price}.inject(:+)/all_items.count
+  #   #result need to be .to_s??
+  #   # binding.pry
+  # end
+
+  # def average_average_price_per_merchant #required method new
+  #   avg_all = average_price_per_merchant
+  #   (avg_all * total_number_of_items)/ total_number_of_merchants #COME BACK TO THIS. USE REDUCE
+  # end
+
+  #finished relationship question 3 above, start question 4 below.
+  # def sort_price_for_all_items
+  #   all_items = @sales_engine.items.all
+  #   all_items.map {|item| item.unit_price}.sort.reverse
+  #   #MAKE SURE THE SORT IS CORRECT
+  # end
+  #
+  # def get_number_of_items_that_are_within_2_stdv_above
+  #   percentage_for_two_stdv_abv = 0.022
+  #   (total_number_of_items * 0.022).round(0)  #=>30
+  # end
+  #
+  # def items_with_2_std_dev_above_avg_price
+  #   sorted_prices = sort_price_for_all_items
+  #   top_priced = get_number_of_items_that_are_within_2_stdv_above
+  #   sorted_prices.first(top_priced)
+  # end  #THIS RETURNS 30 ITEMS
+  #
+  # def golden_items
+  #   top_priced = items_with_2_std_dev_above_avg_price
+  #   @sales_engine.items.all.select do |item|
+  #     top_priced.include?(item.unit_price)
+  #   end.first(top_priced.count)
+  # end  #THIS RETURNS 32 ITEMS INSTEAD OF 30. NEEDED TO ADD .FIRST()
+  # #finished iteration 1

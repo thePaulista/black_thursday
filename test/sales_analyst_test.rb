@@ -16,11 +16,55 @@ class SalesAnalystTest < Minitest::Test
     assert_kind_of SalesAnalyst, @@sales_analyst
   end
 
+  def test_total_number_of_merchants
+    expected = 476
+    submitted = @@sales_analyst.total_number_of_merchants
+
+    assert_equal expected, submitted
+  end
+
+  def test_total_number_of_items_returned_from_item_repo
+    expected = 1367
+    submitted = @@sales_analyst.total_number_of_items
+
+    assert_equal expected, submitted
+  end
+
   def test_average_items_per_merchant
     expected = 2.87
     submitted = @@sales_analyst.average_items_per_merchant
 
     assert_equal expected, submitted
+  end
+
+  def test_total_number_of_merchant_ids_are_returned_from_item_repo
+    expected = 1367
+    submitted = @@sales_analyst.all_merchant_id_numbers
+
+    assert_equal expected, submitted.count
+  end
+
+  def test_merchant_id_numbers_returns_first_merchant_id
+    expected_1 = 12334141
+    expected_2 = 12334871
+    submitted = @@sales_analyst.all_merchant_id_numbers
+
+    assert_equal expected_1, submitted.first
+    assert_equal expected_2, submitted.last
+  end
+
+  def test_merchant_ids_with_their_item_counts
+    expected = [12334141, 1]
+    submitted = @@sales_analyst.item_counts_for_each_merchant
+
+    assert_equal expected, submitted.first
+  end
+
+  def test_merchant_variance_count_returns_correct_merchant_count
+    expected =  475
+    submitted = @@sales_analyst.merchant_item_count_minus_average
+
+    assert_equal expected, submitted.count
   end
 
   def test_average_items_per_merchant_standard_deviation
@@ -46,9 +90,9 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_average_price_per_merchant
-    skip
+    # skip
     expected = 350.29
-    # expected = 349.56
+    # returning= 349.56
     submitted = @@sales_analyst.average_average_price_per_merchant
 
     assert_equal expected, submitted
@@ -62,12 +106,26 @@ class SalesAnalystTest < Minitest::Test
     assert_equal expected, submitted.count
   end
 
+  def test_total_number_of_invoices
+    expected = 4985
+    submitted = @@sales_analyst.total_number_of_invoices
+
+    assert_equal expected, submitted
+  end
+
   def test_average_invoices_per_merchant
     # expected = 10.49
     expected = 10.47
     submitted = @@sales_analyst.average_invoices_per_merchant
 
     assert_equal expected, submitted
+  end
+
+  def test_all_the_merchant_id_numbers_in_invoice_data_count
+    expected = 4985
+    submitted = @@sales_analyst.all_the_merchant_id_numbers
+
+    assert_equal expected, submitted.count
   end
 
   def test_average_invoices_per_merchant_standard_deviation
@@ -79,21 +137,63 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_top_merchants_by_invoice_count
-    skip
     expected = 12
-    # currently: 10
+    submitted = @@sales_analyst.top_merchants_by_invoice_count
+
+    assert_equal expected, submitted.count
+  end
+
+  def test_invoice_count_for_each_merchants_return_their_invoices
+    expected = 475
+    submitted = @@sales_analyst.invoice_count_for_each_merchants
+
+    assert_equal expected, submitted.count
+  end
+
+  def test_merchant_to_inoice_return_total_inv_count_for_the_first_merchant
+    expected = [12335938, 16]
+    submitted = @@sales_analyst.invoice_count_for_each_merchants
+
+    assert_equal expected, submitted.first
+  end
+
+  def test_pre_variance_count_of_merchant_invoices
+    expected = 475
+    submitted = @@sales_analyst.invoice_count_minus_average
+
+    assert_equal expected, submitted.count
+  end
+
+  def test_standard_deviation_of_invoices_per_merchants
+    expected = 3.29
+    submitted = @@sales_analyst.average_invoices_per_merchant_standard_deviation
+
+    assert_equal expected, submitted
+  end
+
+  def test_two_stdv_above_from_mean
+    expected = 17.05
+    submitted = @@sales_analyst.two_stdv_above_from_mean
+
+    assert_equal expected, submitted
   end
 
   def test_bottom_merchants_by_invoice_count
     skip
     expected = 5
-    # currently: 10
+    # returning = 4
+    submitted = @@sales_analyst.bottom_merchants_by_invoice_count
+
+    assert_equal expected, submitted.count
   end
 
+  def
+
   def test_top_days_by_invoice_count
-    skip
-    expected = 1
-    # currently = 6
+    expected = [:Wednesday]
+    submitted = @@sales_analyst.top_days_by_invoice_count
+
+    assert_equal expected, submitted
   end
 
   def test_invoice_status_pending

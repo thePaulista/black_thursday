@@ -235,20 +235,17 @@ class SalesAnalyst
  ######finished std dev above for invoices
 
 ######question 2 - who are our top performing merchants?
-  def two_stdv_away_from_mean #NEW
+  def two_stdv_above_from_mean #NEW
     avg = average_invoices_per_merchant
     stdv = average_invoices_per_merchant_standard_deviation
     avg + stdv + stdv
   end
 
-
-  def merchant_id_for_two_stdv_above_mean NEW
+  def merchant_id_for_two_stdv_above_mean #NEW
     invoices = invoice_count_for_each_merchants
-    two_stdv = two_stdv_away_from_mean
+    two_stdv = two_stdv_above_from_mean
     invoices.select {|key, value| value > two_stdv }.keys
   end #returns an array of 12 merchant_ids
-
-####this method is essentially >invoice.merchant Answer to Q2
 
   def top_merchants_by_invoice_count  #required method NEW
     merchants = merchant_id_for_two_stdv_above_mean
@@ -256,16 +253,22 @@ class SalesAnalyst
   end
 
 ###above is question 2, below anwers question 3
-  def get_merchants_two_stdv_below_mean
-    sorted = sort_merchants_based_on_the_number_of_invoices
-    below_avg = get_merchant_count_two_stdv_from_mean
-    sorted.first(below_avg).to_h.keys
-  end
+  def two_stdv_below_from_mean
+    avg = average_invoices_per_merchant
+    stdv = average_invoices_per_merchant_standard_deviation
+    avg - stdv - stdv
+  end #returns 3.89
+
+  def merchants_id_for_two_stdv_below_mean
+    invoices = invoice_count_for_each_merchants
+    two_stdv = two_stdv_below_from_mean
+    invoices.select {|key, value| value < two_stdv}.keys
+  end #returning four merchants for now, expected 5
 
   def bottom_merchants_by_invoice_count #required method
-    merchants = get_merchants_two_stdv_below_mean
+    merchants = merchants_id_for_two_stdv_below_mean
     merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
-  end
+  end #returns four merchant objects
 
 ####################################
   #question 4, which days are more than 2 stdv above mean
@@ -349,5 +352,8 @@ sa = SalesAnalyst.new(se)
 # sa.find_all_dates
 # sa.get_hash_of_days_of_the_week_to_frequency
 # sa.top_days_by_invoice_count
-sa.top_merchants_by_invoice_count
+# sa.top_merchants_by_invoice_count
+# sa.merchants_id_for_two_stdv_below_mean
+# sa.two_stdv_below_from_mean
+sa.bottom_merchants_by_invoice_count
 end

@@ -1,7 +1,8 @@
 require 'bigdecimal'
 
 class Item
-  attr_reader :id, :name, :description, :unit_price, :updated_at, :created_at, :merchant_id, :merchant
+  attr_reader :id, :name, :description, :unit_price, :updated_at,
+              :created_at, :merchant_id, :merchant
 
   def initialize(args_hash)
     @id          = args_hash[:id].to_i

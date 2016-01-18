@@ -22,13 +22,6 @@ class ItemTest < Minitest::Test
       :updated_at  => @time,
       :merchant_id => 12334105
     })
-    # @sales_engine = SalesEngine.from_csv({
-    #   :merchants     => './data/merchants.csv',
-    #   :items         => './data/items.csv',
-    #   :invoices      => './data/invoices.csv',
-    #   :invoice_items => './data/invoice_items.csv',
-    #   :transactions  => './data/transactions.csv',
-    #   :customers     => './data/customers.csv'})
   end
 
   def test_item_initializes_with_id
@@ -57,13 +50,14 @@ class ItemTest < Minitest::Test
     assert_equal Time.parse(@time), @item.updated_at
   end
 
-  def test_merchant
-    skip
-    merchant_id = @item.merchant_id
-    submitted = @sales_engine.merchants.find_by_id(merchant_id)
-
-    assert submitted.to_s.include?("Merchant:0")
+  def test_specific_merchant
+    @@sales_engine.item_merchant_connection
+    item = @@sales_engine.items.find_by_id(263538760)
+    submitted = item.merchant
+  
     assert_kind_of Merchant, submitted
+    assert_equal 12334812, submitted.id
+    assert_equal "Blankiesandfriends", submitted.name
   end
 
 end

@@ -44,17 +44,17 @@ class SalesEngine
     end
   end
 
-  def merchant_invoices_connection
-    merchants.all.map do |merchant|
-      merchant_invoices = invoices.find_all_by_merchant_id(merchant.id)
-      merchant.specific_invoices(merchant_invoices)
-    end
-  end
-
   def item_merchant_connection
     items.all.map do |item|
       items_offered = merchants.find_by_id(item.merchant_id)
       item.specific_merchant(items_offered)
+    end
+  end
+
+  def merchant_invoices_connection
+    merchants.all.map do |merchant|
+      merchant_invoices = invoices.find_all_by_merchant_id(merchant.id)
+      merchant.specific_invoices(merchant_invoices)
     end
   end
 

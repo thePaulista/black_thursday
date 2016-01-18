@@ -23,18 +23,6 @@ class InvoiceTest < Minitest::Test
     :updated_at  => @@time,
   })
 
-  # def setup
-  #   @time = Time.now.to_s
-  #   @invoice = Invoice.new({
-  #     :id          => 6,
-  #     :customer_id => 7,
-  #     :merchant_id => 12335938,
-  #     :status      => :pending,
-  #     :created_at  => @time,
-  #     :updated_at  => @time,
-  #   })
-  # end
-
   def test_invoice_kind_of?
     assert_kind_of Invoice, @@invoice
   end
@@ -63,14 +51,14 @@ class InvoiceTest < Minitest::Test
     assert_equal Time.parse(@@time), @@invoice.created_at
   end
 
-  def test_merchant
-    merchant_id = @@invoice.merchant_id
-    expected = @@sales_engine.merchants.find_by_id(merchant_id)
-    submitted = @@invoice.merchant
+  def test_specific_merchant
+    @@sales_engine.invoice_merchant_connection
+    invoice = @@sales_engine.invoices.find_by_id(20)
+    submitted = invoice.merchant
 
-    assert_equal expected.id, submitted.id
-    assert submitted.to_s.include?("Merchant:0")
     assert_kind_of Merchant, submitted
+    assert_equal 12336163, submitted.id
+    assert_equal "RnRGuitarPicks", submitted.name
   end
 
 end

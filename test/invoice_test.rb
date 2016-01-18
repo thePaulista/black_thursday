@@ -61,4 +61,20 @@ class InvoiceTest < Minitest::Test
     assert_equal "RnRGuitarPicks", submitted.name
   end
 
+  def test_specific_items
+    @@sales_engine.invoice_items_connection
+    invoice = @@sales_engine.invoices.find_by_id(20)
+    submitted = invoice.items
+    binding.pry
+
+    assert_kind_of Array, submitted
+    assert_kind_of Item, submitted.first
+    # assert_equal 12336163, submitted.id
+    # assert_equal "RnRGuitarPick s", submitted.name
+  end
+
+# invoice.items # => [item, item, item]
+# invoice.transactions # => [transaction, transaction]
+# invoice.customer # => customer
+
 end

@@ -26,6 +26,7 @@ class SalesEngine
     item_merchant_connection
     merchant_invoices_connection
     invoice_merchant_connection
+    invoice_items_connection
   end
 
   def self.from_csv(file_path)
@@ -59,11 +60,43 @@ class SalesEngine
   end
 
   def invoice_merchant_connection
-    invoices.all.map do |item|
-      invoices_offered = merchants.find_by_id(item.merchant_id)
-      item.specific_merchant(invoices_offered)
+    invoices.all.map do |invoice|
+      merchant = merchants.find_by_id(invoice.merchant_id)
+      invoice.specific_merchant(merchant)
     end
   end
+
+  def invoice_items_connection
+    # we map through invoices to collect connected invoice_items
+
+    # we map through invoice_items to collect item_ids
+
+    # we map through invoices and match item_ids on invoice.specific_items(item_ids)
+
+    invoice_items_that_match = invoices.all.map do |invoice|
+      invoice_items.find_all_by_invoice_id(invoice.id)
+    end
+
+    invoice_items_that_match.flatten!
+
+    invoice_items_that_match.map do |inv_item|
+      final_item = items.find_by_id(inv_item.item_id)
+      binding.pry
+      invoices.all.map do |invoice|
+        invoice.specific_items(final_item)
+      end
+    end
+  end
+
+  # def invoice_items_connection
+  #   invoices.all.map do |invoice|
+  #     invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
+  #     invoice_item_check.map do |inv_item|
+  #       items_offered = items.find_by_id(inv_item.item_id)
+  #       invoice.specific_items(items_offered)
+  #     end
+  #   end
+  # end
 
 end
 
@@ -83,4 +116,7 @@ puts merchant.items.count
 item = engine.items.find_by_id(263538760)
 expected = item.merchant
 puts expected.name
+
+invoice = engine.invoices.find_by_id(20)
+puts invoice.items
 end

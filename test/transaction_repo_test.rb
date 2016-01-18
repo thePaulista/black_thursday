@@ -4,8 +4,8 @@ require_relative '../lib/transaction_repo'
 class TransactionRepositoryTest < Minitest::Test
 
   def setup
-    @transaction_repo = TransactionRepository.new
-    @transaction_repo.from_csv("./data/transactions.csv")
+    csv_object_of_transactions = CSV.open './data/transactions.csv', headers: true, header_converters: :symbol
+    @transaction_repo = TransactionRepository.new(csv_object_of_transactions)
   end
 
   def test_can_create_a_repo_of_transactions

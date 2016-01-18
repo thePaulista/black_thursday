@@ -5,19 +5,19 @@ require_relative 'transaction'
 
 class TransactionRepository
 
-  # def initialize(invoice_items)
-  #   parse_invoice_items(invoice_items)
-  # end
+  def initialize(transactions)
+    parse_transactions(transactions)
+  end
 
   def inspect
     "#<#{self.class} #{@transactions.size} rows>"
   end
 
-  def from_csv(file)
-    csv_file = CSV.open file, headers: true, header_converters: :symbol
-    pre_parse = csv_file.map { |row| row.to_h }
-    parse_transactions(pre_parse)
-  end
+  # def from_csv(file)
+  #   csv_file = CSV.open file, headers: true, header_converters: :symbol
+  #   pre_parse = csv_file.map { |row| row.to_h }
+  #   parse_transactions(pre_parse)
+  # end
 
   def parse_transactions(transactions)
     @transactions = transactions.map { |row| Transaction.new(row) }
@@ -46,8 +46,8 @@ class TransactionRepository
 end
 
 if __FILE__ == $0
-tr = TransactionRepository.new
-tr.from_csv("./data/transactions.csv")
-transaction = tr.find_by_id(6)
-puts transaction
+# tr = TransactionRepository.new
+# tr.from_csv("./data/transactions.csv")
+# transaction = tr.find_by_id(6)
+# puts transaction
 end

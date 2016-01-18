@@ -6,20 +6,20 @@ require_relative 'invoice_item'
 
 class InvoiceItemRepository
 
-  # def initialize(invoice_items)
-  #   parse_invoice_items(invoice_items)
-  # end
+  def initialize(invoice_items)
+    parse_invoice_items(invoice_items)
+  end
 
   def inspect
     "#<#{self.class} #{@invoice_items.size} rows>"
   end
 
-  def from_csv(file)
-    csv_file = CSV.open file, headers: true, header_converters: :symbol
-    pre_parse = csv_file.map { |row| row.to_h }
-    parse_invoice_items(pre_parse)
-    # parse_invoice_items(csv_file.map { |row| row.to_h })
-  end
+  # def from_csv(file)
+  #   csv_file = CSV.open file, headers: true, header_converters: :symbol
+  #   pre_parse = csv_file.map { |row| row.to_h }
+  #   parse_invoice_items(pre_parse)
+  #   # parse_invoice_items(csv_file.map { |row| row.to_h })
+  # end
 
   def parse_invoice_items(invoice_items)
     @invoice_items_array = invoice_items.map { |row| InvoiceItem.new(row) }
@@ -44,8 +44,8 @@ class InvoiceItemRepository
 end
 
 if __FILE__ == $0
-ir = InvoiceItemRepository.new
-ir.from_csv("./data/invoice_items.csv")
-invoice = ir.find_by_id(10)
-puts invoice
+# ir = InvoiceItemRepository.new
+# ir.from_csv("./data/invoice_items.csv")
+# invoice = ir.find_by_id(10)
+# puts invoice
 end

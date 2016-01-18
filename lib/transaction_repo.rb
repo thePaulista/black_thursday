@@ -16,12 +16,11 @@ class TransactionRepository
   def from_csv(file)
     csv_file = CSV.open file, headers: true, header_converters: :symbol
     pre_parse = csv_file.map { |row| row.to_h }
-    parse_invoice_items(pre_parse)
-    # parse_invoice_items(csv_file.map { |row| row.to_h })
+    parse_transactions(pre_parse)
   end
 
-  def parse_invoice_items(invoice_items)
-    @transactions = invoice_items.map { |row| Transaction.new(row) }
+  def parse_transactions(transactions)
+    @transactions = transactions.map { |row| Transaction.new(row) }
   end
 
   def all

@@ -11,7 +11,7 @@ require 'time'
 
 
 class SalesEngine
-  # attr_reader :csv_repo
+  # attr_accessor :items
 
   def initialize(csv_repo)
     @csv_repo = csv_repo
@@ -66,7 +66,7 @@ puts item
 
 merch_repo = sales_engine.merchants
 merchant = merch_repo.find_by_id(12335971)
-# merchant.items
+puts merchant.items
 
 item = sales_engine.items.find_by_id(263395237)
 # item.merchant

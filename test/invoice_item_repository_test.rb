@@ -4,8 +4,8 @@ require_relative '../lib/invoice_item_repository'
 class InvoiceItemRepositoryTest < Minitest::Test
 
   def setup
-    @invoice_items_repo = InvoiceItemRepository.new
-    @invoice_items_repo.from_csv("./data/invoice_items.csv")
+    csv_object_of_invoice_items = CSV.open './data/invoice_items.csv', headers: true, header_converters: :symbol
+    @invoice_items_repo = InvoiceItemRepository.new(csv_object_of_invoice_items)
   end
 
   def test_can_create_a_repo_of_invoice_items

@@ -22,23 +22,23 @@ class InvoiceItemRepository
   # end
 
   def parse_invoice_items(invoice_items)
-    @invoice_items_array = invoice_items.map { |row| InvoiceItem.new(row) }
+    @invoice_items = invoice_items.map { |row| InvoiceItem.new(row) }
   end
 
   def all
-    @invoice_items_array
+    @invoice_items
   end
 
   def find_by_id(inv_id)
-    @invoice_items_array.find { |inv_item| inv_item.id == inv_id }
+    @invoice_items.find { |inv_item| inv_item.id == inv_id }
   end
 
   def find_all_by_item_id(item_id)
-    @invoice_items_array.find_all { |inv_item| inv_item.item_id == item_id }
+    @invoice_items.find_all { |inv_item| inv_item.item_id == item_id }
   end
 
   def find_all_by_invoice_id(invoice_id)
-    @invoice_items_array.find_all { |inv_item| inv_item.invoice_id == invoice_id }
+    @invoice_items.find_all { |inv_item| inv_item.invoice_id == invoice_id }
   end
 
 end

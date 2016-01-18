@@ -13,51 +13,61 @@ class InvoiceTest < Minitest::Test
     :transactions  => './data/transactions.csv',
     :customers     => './data/customers.csv'})
 
-  def setup
-    @time = Time.now.to_s
-    @invoice = Invoice.new({
-      :id          => 6,
-      :customer_id => 7,
-      :merchant_id => 12335938,
-      :status      => :pending,
-      :created_at  => @time,
-      :updated_at  => @time,
-    })
-  end
+  @@time = Time.now.to_s
+  @@invoice = Invoice.new({
+    :id          => 6,
+    :customer_id => 7,
+    :merchant_id => 12335938,
+    :status      => :pending,
+    :created_at  => @@time,
+    :updated_at  => @@time,
+  })
+
+  # def setup
+  #   @time = Time.now.to_s
+  #   @invoice = Invoice.new({
+  #     :id          => 6,
+  #     :customer_id => 7,
+  #     :merchant_id => 12335938,
+  #     :status      => :pending,
+  #     :created_at  => @time,
+  #     :updated_at  => @time,
+  #   })
+  # end
 
   def test_invoice_kind_of?
-    assert_kind_of Invoice, @invoice
+    assert_kind_of Invoice, @@invoice
   end
 
   def test_invoice_initializes_with_id
     id = 6
-    assert_equal id, @invoice.id
+    assert_equal id, @@invoice.id
   end
 
   def test_invoice_initializes_with_customer_id
     customer_id = 7
-    assert_equal customer_id, @invoice.customer_id
+    assert_equal customer_id, @@invoice.customer_id
   end
 
   def test_invoice_initializes_with_merchant_id
     merchant_id = 12335938
-    assert_equal merchant_id, @invoice.merchant_id
+    assert_equal merchant_id, @@invoice.merchant_id
   end
 
   def test_invoice_initializes_with_status
     status  = :pending
-    assert_equal status, @invoice.status
+    assert_equal status, @@invoice.status
   end
 
   def test_item_initializes_with_created_at
-    assert_equal Time.parse(@time), @invoice.created_at
+    assert_equal Time.parse(@@time), @@invoice.created_at
   end
 
   def test_merchant
-    skip
-    merchant_id = @invoice.merchant_id
-    expected = @sales_engine.merchants.find_by_id(merchant_id)
-    submitted = @invoice.merchant
+    merchant_id = @@invoice.merchant_id
+    expected = @@sales_engine.merchants.find_by_id(merchant_id)
+    submitted = @@invoice.merchant
+    binding.pry
 
     assert_equal expected.id, submitted.id
     assert submitted.to_s.include?("Merchant:0")

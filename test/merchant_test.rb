@@ -13,29 +13,25 @@ class MerchantTest < Minitest::Test
     :transactions  => './data/transactions.csv',
     :customers     => './data/customers.csv'})
 
-  def setup
-    @merchant = Merchant.new({:id => 12335971, :name => "Turing School"})
-  end
+  @@merchant = Merchant.new({:id => 12335971, :name => "Turing School"})
 
   def test_inputs_are_name_and_id
-    assert_equal 12335971, @merchant.id
-    assert_equal "Turing School", @merchant.name
+    assert_equal 12335971, @@merchant.id
+    assert_equal "Turing School", @@merchant.name
   end
 
-  def test_items
-    skip
-    merchant_id = @merchant.id
-    submitted = @sales_engine.items.find_all_by_merchant_id(merchant_id).to_a
+  def test_specific_items
+    merchant_id = @@merchant.id
+    submitted = @@sales_engine.items.find_all_by_merchant_id(merchant_id).to_a
 
     assert_equal 1, submitted.count
     assert_kind_of Array, submitted
-    assert_kind_of Items, submitted.first
+    assert_kind_of Item, submitted.first
   end
 
-  def test_invoices
-    skip
-    merchant_id = @merchant.id
-    submitted = @sales_engine.invoices.find_all_by_merchant_id(merchant_id).to_a
+  def test_specific_invoices
+    merchant_id = @@merchant.id
+    submitted = @@sales_engine.invoices.find_all_by_merchant_id(merchant_id).to_a
 
     assert_equal 14, submitted.count
     assert_kind_of Array, submitted

@@ -143,6 +143,23 @@ class SalesAnalyst
     avg.round(2)
   end #answer = 10.49
 
+  def two_stdv_away_from_mean #NEW
+    avg = average_invoices_per_merchant
+    stdv = average_invoices_per_merchant_standard_deviation
+    avg + stdv + stdv
+  end
+
+  def merchant_id_for_two_stdv_above_mean #NEW
+    invoices = invoice_count_for_each_merchants
+    two_stdv = two_stdv_away_from_mean
+    invoices.select {|key, value| value > two_stdv }.keys
+  end #returns an array of 12 merchant_ids
+
+  def top_merchants_by_invoice_count  #NEW
+    merchants = merchant_id_for_two_stdv_above_mean
+    merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
+  end 
+
 #######find stdv
   def all_the_merchant_id_numbers
     # searches through Item Repo and returns array of all merchant_id strings

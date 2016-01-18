@@ -117,13 +117,19 @@ class SalesAnalyst
     calc_average_unit_price_all_items + (items_unit_price_standard_deviation * 2)
   end
 
-  def golden_items
+  def prices_of_golden_items
     two_stdv = items_unit_price_above_two_standard_deviation
     all_unit_prices = @sales_engine.items.all
     all_items_unit_prices.find_all do |unit_price|
       unit_price > two_stdv
     end
   end
+
+   def golden_items
+     prices_of_golden_items.map do |p|
+     @sales_engine.items.find_all_by_price(p)
+    end
+   end
 
   ## DIVIDE ##
 
@@ -355,5 +361,6 @@ sa = SalesAnalyst.new(se)
 # sa.top_merchants_by_invoice_count
 # sa.merchants_id_for_two_stdv_below_mean
 # sa.two_stdv_below_from_mean
-sa.bottom_merchants_by_invoice_count
+# sa.bottom_merchants_by_invoice_count
+sa.golden_items
 end

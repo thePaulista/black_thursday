@@ -9,9 +9,9 @@ class MerchantRepositoryTest < Minitest::Test
   end
 
   def test_can_create_a_repo_of_merchants
-    total_merchants = 475
+    total_merchants = 476
     first_id        = 12334105
-    last_id         = 12337411
+    last_id         = 12337412
 
     assert_equal total_merchants, @mr.all.count
     assert_equal first_id, @mr.all[0].id
@@ -19,7 +19,7 @@ class MerchantRepositoryTest < Minitest::Test
   end
 
   def test_all_merchants
-    assert_equal 475, @mr.all.count
+    assert_equal 476, @mr.all.count
   end
 
   def test_find_by_name_exact_search
@@ -71,7 +71,7 @@ class MerchantRepositoryTest < Minitest::Test
 
   def test_find_all_by_name_given_single_character
     name_fragment = "S"
-    expected      = 328
+    expected      = 329
     submitted     = @mr.find_all_by_name(name_fragment)
 
     assert_equal expected, submitted.count

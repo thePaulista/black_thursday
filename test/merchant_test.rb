@@ -1,14 +1,19 @@
 require './test/test_helper'
 require './lib/merchant'
+require './lib/items'
+require './lib/invoice'
 require './lib/sales_engine'
 
 class MerchantTest < Minitest::Test
 
   def setup
     @merchant = Merchant.new({:id => 12335971, :name => "Turing School"})
-    @sales_engine = SalesEngine.from_csv({:invoices => './data/invoices.csv',
-                                          :items => './data/items.csv'
-                                         })
+    @sales_engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
+                                          :items         => './data/items.csv',
+                                          :invoices      => './data/invoices.csv',
+                                          :invoice_items => './data/invoice_items.csv',
+                                          :transactions  => './data/transactions.csv',
+                                          :customers     => './data/customers.csv'})
   end
 
   def test_inputs_are_name_and_id

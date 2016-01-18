@@ -319,9 +319,13 @@ class SalesAnalyst
 end
 
 if __FILE__ == $0
-se = SalesEngine.from_csv({:merchants => './data/merchants.csv',
-                           :items     => './data/items.csv',
-                           :invoices  => './data/invoices.csv'})
+se = SalesEngine.from_csv({:merchants      => './data/merchants.csv',
+                           :items          => './data/items.csv',
+                           :invoices       => './data/invoices.csv',
+                           :invoice_items  => './data/invoice_items.csv',
+                           :transactions  => './data/transactions.csv',
+                           :customers     => './data/customers.csv'
+                          })
 
 sa = SalesAnalyst.new(se)
 # sa.get_hash_of_merchants_to_items

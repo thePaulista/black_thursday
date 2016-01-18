@@ -4,6 +4,7 @@ require 'set'
 require_relative 'merchant'
 
 class MerchantRepository
+  attr_reader :merchant_array
 
   def initialize(merchants)
     parse_merchants(merchants)
@@ -31,7 +32,6 @@ class MerchantRepository
   def find_by_name(merchant_name)
     @merchant_array.find { |n| n.name.downcase == merchant_name.downcase}
   end
-
 
   def find_by_id(merchant_id)
     @merchant_array.find { |i| i.id == merchant_id}

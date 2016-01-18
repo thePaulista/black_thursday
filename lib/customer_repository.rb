@@ -4,18 +4,19 @@ require_relative 'customer'
 
 class CustomerRepository
 
-  def initialize
+  def initialize(customers)
+    parse_customers(customers)
   end
 
   def inspect
     "#<#{self.class} #{@customers.size} rows>"
   end
 
-  def from_csv(file)
-    csv_file = CSV.open file, headers: true, header_converters: :symbol
-    pre_parse = csv_file.map { |row| row.to_h }
-    parse_customers(pre_parse)
-  end
+  # def from_csv(file)
+  #   csv_file = CSV.open file, headers: true, header_converters: :symbol
+  #   pre_parse = csv_file.map { |row| row.to_h }
+  #   parse_customers(pre_parse)
+  # end
 
   def parse_customers(customers)
     @customers_array = customers.map { |row| Customer.new(row) }

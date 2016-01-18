@@ -38,18 +38,16 @@ class SalesEngine
     InvoiceRepository.new(@csv_repo[:invoices])
   end
 
-  def customers
-    CustomerRepository.new(@csv_repo[:customers])
-  end
-
   def invoice_items
-    invoice_repo = InvoiceItemRepository.new
-    invoice_repo.from_csv("./data/invoice_items.csv")
+    InvoiceItemRepository.new(@csv_repo[:invoice_items])
   end
 
   def transactions
-    transaction_repo = TransactionRepository.new
-    transaction_repo.from_csv("./data/transactions.csv")
+    TransactionRepository.new(@csv_repo[:transactions])
+  end
+
+  def customers
+    CustomerRepository.new(@csv_repo[:customers])
   end
 
 end
@@ -68,24 +66,18 @@ puts item
 
 merch_repo = sales_engine.merchants
 merchant = merch_repo.find_by_id(12335971)
-merchant.items
+# merchant.items
 
 item = sales_engine.items.find_by_id(263395237)
-item.merchant
-puts item.merchant
+# item.merchant
 
 merch_repo = sales_engine.merchants
 merchant = merch_repo.find_by_id(12334144)
-merchant.invoices
+# merchant.invoices
 
 invoice_repo = sales_engine.invoices
 invoice = invoice_repo.find_by_id(1)
-invoice.merchant
-
-puts invoice
-
-sales_engine.invoice_items
-sales_engine.transactions
+# invoice.merchant
 
 ###ADD THE REST
 end

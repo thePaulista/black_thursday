@@ -19,9 +19,9 @@ class Items
     @merchant_id = args_hash[:merchant_id].to_i
   end
 
-  def merchant
-    sales_engine = SalesEngine.from_csv({:merchants => './data/merchants.csv'})
-    return sales_engine.merchants.find_by_id(@merchant_id)
-  end
+  # def merchant
+  #   sales_engine = SalesEngine.from_csv({:merchants => './data/merchants.csv'})
+  #   return sales_engine.merchants.find_by_id(@merchant_id)
+  # end
 
 end

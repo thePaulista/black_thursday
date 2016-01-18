@@ -127,11 +127,6 @@ class SalesAnalyst
 
   ## DIVIDE ##
 
-  def sort_merchants_based_on_the_number_of_listings
-    items = item_counts_for_each_merchant
-    items.sort_by { |key, value| value }
-  end
-
   def get_merchants_one_stdv_above_mean
     sorted = sort_merchants_based_on_the_number_of_listings
     above_avg = get_number_of_merchants_one_stdv_away_from_mean
@@ -216,6 +211,12 @@ class SalesAnalyst
     merchants = merchants_id_for_two_stdv_below_mean
     merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
   end #returns four merchant objects
+
+  def get_merchants_two_stdv_above_mean
+    invoices = invoice_count_for_each_merchants
+    two_stdv = two_stdv_below_from_mean
+    invoices.select {|key, value| value > two_stdv}.keys
+  end
 
   def collect_the_day_with_most_sales_among_top_sellers
       merchant_id = get_merchants_two_stdv_above_mean

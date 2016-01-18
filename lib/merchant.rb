@@ -10,6 +10,10 @@ class Merchant
     @name = args_hash[:name]
   end
 
+  def items
+
+  end
+
   # def items
   #   binding.pry
   #   # sales_engine = SalesEngine.from_csv({:items => './data/items.csv'})

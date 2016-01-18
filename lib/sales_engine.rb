@@ -11,6 +11,7 @@ require 'time'
 
 
 class SalesEngine
+  attr_reader :csv_repo
   # attr_accessor :items
 
   def initialize(csv_repo)

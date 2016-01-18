@@ -158,7 +158,7 @@ class SalesAnalyst
   def top_merchants_by_invoice_count  #NEW
     merchants = merchant_id_for_two_stdv_above_mean
     merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
-  end 
+  end
 
 #######find stdv
   def all_the_merchant_id_numbers

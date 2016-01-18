@@ -1,6 +1,6 @@
 
 class Invoice
-  attr_accessor :id, :customer_id, :merchant_id, :status, :created_at, :updated_at, :merchant
+  attr_reader :id, :customer_id, :merchant_id, :status, :created_at, :updated_at, :merchant
 
   def initialize(args_hash)
     @id          = args_hash[:id].to_i

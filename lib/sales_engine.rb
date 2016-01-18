@@ -65,13 +65,6 @@ class SalesEngine
     end
   end
 
-
-# merchant = se.merchants.find_by_id(10)
-# merchant.invoices
-# # => [<invoice>, <invoice>, <invoice>]
-# invoice = se.invoices.find_by_id(20)
-# invoice.merchant
-
 end
 
 if __FILE__ == $0

@@ -15,7 +15,7 @@ class ItemRepository
   end
 
   def parse_items(items)
-    @items = items.map { |row| Items.new(row) }
+    @items = items.map { |row| Item.new(row) }
   end
 
   def all

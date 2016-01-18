@@ -1,6 +1,6 @@
 require 'bigdecimal'
 
-class Items
+class Item
   attr_reader :id, :name, :description, :unit_price, :updated_at, :created_at, :merchant_id, :merchant
 
   def initialize(args_hash)

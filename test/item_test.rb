@@ -13,7 +13,7 @@ class ItemTest < Minitest::Test
 
   def setup
     @time = Time.now.to_s
-    @item = Items.new({
+    @item = Item.new({
       :id          => 123456,
       :name        => "Pencil",
       :description => "You can use it to write things",

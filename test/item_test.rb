@@ -15,7 +15,13 @@ class ItemTest < Minitest::Test
       :updated_at  => @time,
       :merchant_id => 12334105
     })
-    @sales_engine = SalesEngine.from_csv({:merchants => './data/merchants.csv'})
+    @sales_engine = SalesEngine.from_csv({
+      :merchants     => './data/merchants.csv',
+      :items         => './data/items.csv',
+      :invoices      => './data/invoices.csv',
+      :invoice_items => './data/invoice_items.csv',
+      :transactions  => './data/transactions.csv',
+      :customers     => './data/customers.csv'})
   end
 
   def test_item_initializes_with_id

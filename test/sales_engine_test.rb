@@ -5,10 +5,12 @@ class SalesEngineTest < Minitest::Test
 
   def setup
     @sales_engine = SalesEngine.from_csv({
-      :items     => "./data/items.csv",
-      :merchants => "./data/merchants.csv",
-      :invoices  => './data/invoices.csv'
-      })
+      :merchants     => './data/merchants.csv',
+      :items         => './data/items.csv',
+      :invoices      => './data/invoices.csv',
+      :invoice_items => './data/invoice_items.csv',
+      :transactions  => './data/transactions.csv',
+      :customers     => './data/customers.csv'})
   end
 
   def test_to_create_a_sales_engine_object_we_use_the_factory
@@ -16,6 +18,7 @@ class SalesEngineTest < Minitest::Test
   end
 
   def test_sales_engine_can_receive_one_csv_file
+    skip
     sales_engine = SalesEngine.from_csv({:items => "./data/items.csv"})
     submitted = sales_engine.items
 
@@ -23,6 +26,7 @@ class SalesEngineTest < Minitest::Test
   end
 
   def test_sales_engine_can_receive_two_csv_files
+    skip
     sales_engine = SalesEngine.from_csv({:items => "./data/items.csv",
                                          :merchants => "./data/merchants.csv"
                                         })

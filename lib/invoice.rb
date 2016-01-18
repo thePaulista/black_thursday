@@ -1,6 +1,6 @@
 
 class Invoice
-  attr_accessor :id, :customer_id, :merchant_id, :status, :created_at, :updated_at
+  attr_accessor :id, :customer_id, :merchant_id, :status, :created_at, :updated_at, :merchant
 
   def initialize(args_hash)
     @id          = args_hash[:id].to_i
@@ -11,9 +11,8 @@ class Invoice
     @updated_at  = Time.parse(args_hash[:updated_at])
   end
 
-  def merchant
-    sales_engine = SalesEngine.from_csv({:merchants => './data/merchants.csv'})
-    return sales_engine.merchants.find_by_id(@merchant_id)
+  def specific_merchant(merchant)
+    @merchant = merchant
   end
 
 end

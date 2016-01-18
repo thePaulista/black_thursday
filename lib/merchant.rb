@@ -13,4 +13,8 @@ class Merchant
     @items = items
   end
 
+  def specific_invoices(invoices)
+    @invoices = invoices
+  end
+
 end

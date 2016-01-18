@@ -24,6 +24,8 @@ class SalesEngine
     @customers = CustomerRepository.new(@csv_repo[:customers])
     merchant_items_connection
     item_merchant_connection
+    merchant_invoices_connection
+    invoice_merchant_connection
   end
 
   def self.from_csv(file_path)
@@ -48,6 +50,27 @@ class SalesEngine
       item.specific_merchant(items_offered)
     end
   end
+
+  def merchant_invoices_connection
+    merchants.all.map do |merchant|
+      merchant_invoices = invoices.find_all_by_merchant_id(merchant.id)
+      merchant.specific_invoices(merchant_invoices)
+    end
+  end
+
+  def invoice_merchant_connection
+    invoices.all.map do |item|
+      invoices_offered = merchants.find_by_id(item.merchant_id)
+      item.specific_merchant(invoices_offered)
+    end
+  end
+
+
+# merchant = se.merchants.find_by_id(10)
+# merchant.invoices
+# # => [<invoice>, <invoice>, <invoice>]
+# invoice = se.invoices.find_by_id(20)
+# invoice.merchant
 
 end
 

@@ -3,9 +3,15 @@ require './lib/invoice'
 require './lib/sales_engine'
 require 'date'
 require 'time'
-# require 'bigdecimal'
 
 class InvoiceTest < Minitest::Test
+  @@sales_engine = SalesEngine.from_csv({
+    :merchants     => './data/merchants.csv',
+    :items         => './data/items.csv',
+    :invoices      => './data/invoices.csv',
+    :invoice_items => './data/invoice_items.csv',
+    :transactions  => './data/transactions.csv',
+    :customers     => './data/customers.csv'})
 
   def setup
     @time = Time.now.to_s
@@ -17,12 +23,6 @@ class InvoiceTest < Minitest::Test
       :created_at  => @time,
       :updated_at  => @time,
     })
-    @sales_engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
-                                          :items         => './data/items.csv',
-                                          :invoices      => './data/invoices.csv',
-                                          :invoice_items => './data/invoice_items.csv',
-                                          :transactions  => './data/transactions.csv',
-                                          :customers     => './data/customers.csv'})
   end
 
   def test_invoice_kind_of?

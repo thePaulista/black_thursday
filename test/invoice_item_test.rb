@@ -14,7 +14,6 @@ class InvoiceItemTest < Minitest::Test
       :created_at  => @time,
       :updated_at  => @time,
     })
-    #1,263519844,1,5,13635,2012-03-27 14:54:09 UTC,2012-03-27 14:54:09 UTC
   end
 
   def test_invoice_item_initializes_with_id

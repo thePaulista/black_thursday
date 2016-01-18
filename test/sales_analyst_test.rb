@@ -3,6 +3,13 @@ require_relative '../lib/sales_analyst'
 # require 'bigdecimal'
 
 class SalesAnalystTest < Minitest::Test
+  # @@se = SalesEngine.from_csv({
+  #   :merchants     => './data/merchants.csv',
+  #   :items         => './data/items.csv',
+  #   :invoices      => './data/invoices.csv',
+  #   :invoice_items => './data/invoice_items.csv',
+  #   :transactions  => './data/transactions.csv',
+  #   :customers     => './data/customers.csv'})
 
   def setup
     @se = SalesEngine.from_csv({:merchants      => './data/merchants.csv',

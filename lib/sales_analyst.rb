@@ -119,6 +119,7 @@ class SalesAnalyst
 
   def prices_of_golden_items
     two_stdv = items_unit_price_above_two_standard_deviation
+    binding.pry
     all_unit_prices = @sales_engine.items.all
     all_items_unit_prices.find_all do |unit_price|
       unit_price > two_stdv

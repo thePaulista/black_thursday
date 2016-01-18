@@ -67,7 +67,6 @@ class InvoiceTest < Minitest::Test
     merchant_id = @@invoice.merchant_id
     expected = @@sales_engine.merchants.find_by_id(merchant_id)
     submitted = @@invoice.merchant
-    binding.pry
 
     assert_equal expected.id, submitted.id
     assert submitted.to_s.include?("Merchant:0")

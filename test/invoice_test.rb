@@ -78,11 +78,24 @@ class InvoiceTest < Minitest::Test
 
     assert_kind_of Array, submitted
     assert_kind_of Transaction, submitted.first
-    # assert_equal 7, submitted.count
   end
 
+  def test_specific_transactions
+    @@sales_engine.invoice_transactions_connection
+    invoice = @@sales_engine.invoices.find_by_id(106)
+    submitted = invoice.transactions
 
-# invoice.transactions # => [transaction, transaction]
-# invoice.customer # => customer
+    assert_kind_of Array, submitted
+    assert_kind_of Transaction, submitted.first
+  end
+
+  def test_specific_customer
+    @@sales_engine.invoice_customer_connection
+    invoice = @@sales_engine.invoices.find_by_id(106)
+    submitted = invoice.customer
+
+    assert_kind_of Customer, submitted
+    assert_equal 22, submitted.id
+  end
 
 end

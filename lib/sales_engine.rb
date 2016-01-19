@@ -28,6 +28,7 @@ class SalesEngine
     invoice_merchant_connection
     invoice_items_connection
     invoice_transactions_connection
+    invoice_customer_connection
   end
 
   def self.from_csv(file_path)
@@ -84,6 +85,13 @@ class SalesEngine
     end
   end
 
+  def invoice_customer_connection
+    invoices.all.map do |invoice|
+      invoice_customer = customers.find_by_id(invoice.customer_id)
+      invoice.specific_customer(invoice_customer)
+    end
+  end
+
 end
 
 if __FILE__ == $0
@@ -109,5 +117,6 @@ invoice = engine.invoices.find_by_id(106)
 puts invoice.items
 
 puts invoice.transactions
+puts invoice.customer
 
 end

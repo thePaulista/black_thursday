@@ -3,6 +3,10 @@ class Invoice
   attr_reader :id, :customer_id, :merchant_id, :status, :created_at,
               :updated_at, :merchant, :items, :transactions, :customer
 
+  def inspect
+    "#<#{self.class}>"
+  end
+
   def initialize(args_hash)
     @id          = args_hash[:id].to_i
     @customer_id = args_hash[:customer_id].to_i

@@ -6,6 +6,10 @@ class Transaction
                 :credit_card_expiration_date, :result,
                 :unit_price, :created_at, :updated_at
 
+  def inspect
+    "#<#{self.class}>"
+  end
+
   def initialize(args_hash)
     @id                 = args_hash[:id].to_i
     @invoice_id         = args_hash[:invoice_id].to_i

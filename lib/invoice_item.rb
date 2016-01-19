@@ -3,7 +3,12 @@ require 'time'
 require 'date'
 
 class InvoiceItem
-  attr_accessor :id, :item_id, :invoice_id, :quantity, :unit_price, :created_at, :updated_at
+  attr_accessor :id, :item_id, :invoice_id, :quantity,
+                :unit_price, :created_at, :updated_at
+
+  def inspect
+    "#<#{self.class}>"
+  end
 
   def initialize(args_hash)
     @id         = args_hash[:id].to_i

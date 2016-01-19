@@ -39,4 +39,13 @@ class MerchantTest < Minitest::Test
     assert_kind_of Array, submitted
     assert_kind_of Invoice, submitted.first
   end
+
+  def test_specific_customers
+    @@sales_engine.merchant_customers_connection
+    merchant = @@sales_engine.merchants.find_by_id(12334194)
+    submitted = merchant.customers
+
+    assert_kind_of Customer, submitted.first
+    assert_equal 13, submitted.length
+  end
 end

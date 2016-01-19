@@ -27,6 +27,7 @@ class SalesEngine
     merchant_invoices_connection
     invoice_merchant_connection
     invoice_items_connection
+    invoice_transactions_connection
   end
 
   def self.from_csv(file_path)
@@ -76,6 +77,13 @@ class SalesEngine
     end
   end
 
+  def invoice_transactions_connection
+    invoices.all.map do |invoice|
+      invoice_transactions = transactions.find_all_by_invoice_id(invoice.id)
+      invoice.specific_transactions(invoice_transactions)
+    end
+  end
+
 end
 
 if __FILE__ == $0
@@ -99,4 +107,7 @@ invoice = engine.invoices.find_by_id(106)
 # expected.length to eq 7
 # expect(expected.first.class).to eq Item
 puts invoice.items
+
+puts invoice.transactions
+
 end

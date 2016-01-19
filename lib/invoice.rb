@@ -1,7 +1,7 @@
 
 class Invoice
   attr_reader :id, :customer_id, :merchant_id, :status, :created_at,
-              :updated_at, :merchant, :items
+              :updated_at, :merchant, :items, :transactions
 
   def initialize(args_hash)
     @id          = args_hash[:id].to_i
@@ -18,6 +18,10 @@ class Invoice
 
   def specific_items(items)
     @items = items
+  end
+
+  def specific_transactions(transactions)
+    @transactions = transactions
   end
 
 end

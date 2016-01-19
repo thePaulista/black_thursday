@@ -66,28 +66,6 @@ class SalesEngine
     end
   end
 
-  def invoice_items_connection
-    # we map through invoices to collect connected invoice_items
-
-    # we map through invoice_items to collect item_ids
-
-    # we map through invoices and match item_ids on invoice.specific_items(item_ids)
-
-    invoice_items_that_match = invoices.all.map do |invoice|
-      invoice_items.find_all_by_invoice_id(invoice.id)
-    end
-
-    invoice_items_that_match.flatten!
-
-    invoice_items_that_match.map do |inv_item|
-      final_item = items.find_by_id(inv_item.item_id)
-      binding.pry
-      invoices.all.map do |invoice|
-        invoice.specific_items(final_item)
-      end
-    end
-  end
-
   # def invoice_items_connection
   #   invoices.all.map do |invoice|
   #     invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
@@ -97,6 +75,31 @@ class SalesEngine
   #     end
   #   end
   # end
+
+  # def invoice_items_connection
+  #   step_one = invoice_items.all.group_by do |inv_item|
+  #     invoices.find_by_id(inv_item.invoice_id)
+  #   end
+  #
+  #   binding.pry
+  #
+  #   step_one.values.map do |inv_item_arr|
+  #     inv_item_arr.each do |inv_item|
+  #       invoice.specific_items(inv_item.item_id)
+  #     end
+  #   end
+  #
+  # end
+
+  def invoice_items_connection
+    invoices.all.map do |invoice|
+      invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
+      invoice_item_check.map do |inv_item|
+        items_offered = items.find_by_id(inv_item.item_id)
+        invoice.specific_items(items_offered)
+      end
+    end
+  end
 
 end
 
@@ -117,6 +120,8 @@ item = engine.items.find_by_id(263538760)
 expected = item.merchant
 puts expected.name
 
-invoice = engine.invoices.find_by_id(20)
+invoice = engine.invoices.find_by_id(106)
+# expected.length to eq 7
+# expect(expected.first.class).to eq Item
 puts invoice.items
 end

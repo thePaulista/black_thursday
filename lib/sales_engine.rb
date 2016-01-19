@@ -43,6 +43,8 @@ class SalesEngine
     invoice_transactions_connection
     invoice_customer_connection
     transaction_invoice_connection
+    # merchant_customers_connection
+    customer_merchants_connection
   end
 
   def merchant_items_connection
@@ -104,17 +106,25 @@ class SalesEngine
     end
   end
 
-  # def invoice_items_connection
-  #   invoices.all.map do |invoice|
-  #     invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
-  #     items_offered = invoice_item_check.each.map do |inv_item|
-  #       items.find_by_id(inv_item.item_id)
+  # def merchant_customers_connection
+  #   customers.all.map do |customer|
+  #     invoice_check = invoices.find_all_by_customer_id(customer.id)
+  #     customer_merchant = invoice_check.each.map do |invoice|
+  #       merchants.find_by_id(invoice.merchant_id)
   #     end
-  #     invoice.specific_items(items_offered)
+  #     customer.specific_merchants(customer_merchant)
   #   end
   # end
 
-
+  def customer_merchants_connection
+    customers.all.map do |customer|
+      invoice_check = invoices.find_all_by_customer_id(customer.id)
+      customer_merchant = invoice_check.each.map do |invoice|
+        merchants.find_by_id(invoice.merchant_id)
+      end
+      customer.specific_merchants(customer_merchant)
+    end
+  end
 
 end
 
@@ -128,8 +138,4 @@ engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
 
 
 
-transaction = engine.transactions.find_by_id(1)
-puts transaction
-puts transaction.invoice_id
-puts transaction.invoice
 end

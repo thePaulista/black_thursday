@@ -1,5 +1,6 @@
 class Customer
-  attr_accessor :id, :first_name, :last_name, :created_at, :updated_at
+  attr_accessor :id, :first_name, :last_name, :created_at, :updated_at,
+                :merchants
 
   def inspect
     "#<#{self.class}>"
@@ -11,6 +12,10 @@ class Customer
     @last_name    = args_hash[:last_name]
     @created_at   = Time.parse(args_hash[:created_at])
     @updated_at   = Time.parse(args_hash[:updated_at])
+  end
+
+  def specific_merchants(merchants)
+    @merchants = merchants
   end
 
 end

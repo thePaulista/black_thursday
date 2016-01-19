@@ -69,9 +69,8 @@ class SalesEngine
   def invoice_items_connection
     invoices.all.map do |invoice|
       invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
-      items_offered = []
-      invoice_item_check.each.map do |inv_item|
-        items_offered << items.find_by_id(inv_item.item_id)
+      items_offered = invoice_item_check.each.map do |inv_item|
+        items.find_by_id(inv_item.item_id)
       end
       invoice.specific_items(items_offered)
     end

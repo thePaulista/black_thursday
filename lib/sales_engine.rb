@@ -66,38 +66,14 @@ class SalesEngine
     end
   end
 
-  # def invoice_items_connection
-  #   invoices.all.map do |invoice|
-  #     invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
-  #     invoice_item_check.map do |inv_item|
-  #       items_offered = items.find_by_id(inv_item.item_id)
-  #       invoice.specific_items(items_offered)
-  #     end
-  #   end
-  # end
-
-  # def invoice_items_connection
-  #   step_one = invoice_items.all.group_by do |inv_item|
-  #     invoices.find_by_id(inv_item.invoice_id)
-  #   end
-  #
-  #   binding.pry
-  #
-  #   step_one.values.map do |inv_item_arr|
-  #     inv_item_arr.each do |inv_item|
-  #       invoice.specific_items(inv_item.item_id)
-  #     end
-  #   end
-  #
-  # end
-
   def invoice_items_connection
     invoices.all.map do |invoice|
       invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
-      invoice_item_check.map do |inv_item|
-        items_offered = items.find_by_id(inv_item.item_id)
-        invoice.specific_items(items_offered)
+      items_offered = []
+      invoice_item_check.each.map do |inv_item|
+        items_offered << items.find_by_id(inv_item.item_id)
       end
+      invoice.specific_items(items_offered)
     end
   end
 

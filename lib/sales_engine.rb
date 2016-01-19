@@ -22,14 +22,7 @@ class SalesEngine
     @invoice_items = InvoiceItemRepository.new(@csv_repo[:invoice_items])
     @transactions = TransactionRepository.new(@csv_repo[:transactions])
     @customers = CustomerRepository.new(@csv_repo[:customers])
-    merchant_items_connection
-    item_merchant_connection
-    merchant_invoices_connection
-    invoice_merchant_connection
-    invoice_items_connection
-    invoice_transactions_connection
-    invoice_customer_connection
-    transaction_invoice_connection
+    relationships
   end
 
   def self.from_csv(file_path)
@@ -39,6 +32,17 @@ class SalesEngine
       @csv_files[key] = csv_file.map { |row| row.to_h }
     end
     SalesEngine.new(@csv_files)
+  end
+
+  def relationships
+    merchant_items_connection
+    item_merchant_connection
+    merchant_invoices_connection
+    invoice_merchant_connection
+    invoice_items_connection
+    invoice_transactions_connection
+    invoice_customer_connection
+    transaction_invoice_connection
   end
 
   def merchant_items_connection
@@ -99,6 +103,16 @@ class SalesEngine
       transaction.specific_invoice(transaction_invoice)
     end
   end
+
+  # def invoice_items_connection
+  #   invoices.all.map do |invoice|
+  #     invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
+  #     items_offered = invoice_item_check.each.map do |inv_item|
+  #       items.find_by_id(inv_item.item_id)
+  #     end
+  #     invoice.specific_items(items_offered)
+  #   end
+  # end
 
 
 

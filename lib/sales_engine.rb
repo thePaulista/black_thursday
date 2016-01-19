@@ -140,7 +140,7 @@ class SalesEngine
       total = price_and_quantity.map do |pair|
         pair.reduce(1, :*)
       end
-      invoice.total = total.reduce(:+)
+      invoice.total = (total.reduce(:+) / 100)
     end
   end
 
@@ -156,4 +156,7 @@ engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
 
 invoice = engine.invoices.all.first
 expected = invoice.total
+
+# expected: 21067.77
+# got:      2106777.0 (#<BigDecimal:7fae510b2438,'0.2106777E7',9(18)>)
 end

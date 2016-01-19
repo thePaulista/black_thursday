@@ -115,7 +115,7 @@ class InvoiceTest < Minitest::Test
 
   def test_total
     invoice = @@sales_engine.invoices.all.first
-    expected = BigDecimal.new(2106777)
+    expected = 21067.77
     submitted = invoice.total
 
     assert_equal expected, submitted

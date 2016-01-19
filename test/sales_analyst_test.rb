@@ -194,8 +194,6 @@ class SalesAnalystTest < Minitest::Test
     assert_equal expected, submitted.count
   end
 
-
-
   def test_top_days_by_invoice_count
     expected = "Wednesday"
     submitted = @@sales_analyst.top_days_by_invoice_count

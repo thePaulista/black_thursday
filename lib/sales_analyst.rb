@@ -38,6 +38,7 @@ class SalesAnalyst
     item_counts.map {|item| (item - avg) ** 2}
   end #5034.9475
 
+<<<<<<< HEAD
   def average_items_per_merchant_standard_deviation
    avg_subtracted_counts = merchant_item_count_minus_average
    variance = avg_subtracted_counts.inject(0,:+) / (avg_subtracted_counts.count - 1)
@@ -59,6 +60,27 @@ class SalesAnalyst
     merchants.map do |id|
       @sales_engine.merchants.find_by_id(id)
     end
+=======
+  def average_items_per_merchant_stdv
+    element = combined_merchant_item_count
+    element_mean = element.inject(0,:+) / (element.count - 1)
+    standard_deviation = (element_mean ** 0.5)
+    standard_deviation.round(2)
+    # binding.pry
+  end
+
+# Work on getting this percentage
+  def get_number_one_stdv_away_from_mean
+    stdv = average_items_per_merchant_stdv
+    avg = average_items_per_merchant
+    avg + stdv
+    # binding.pry
+  end #returns #6.14
+
+  def merchants_with_high_item_count
+    items = item_counts_for_each_merchants
+    items.select {|k,v| v > 6.14}
+>>>>>>> 2da8cfc6a742bbe12d81cea1344e2f8d5b9cd42c
   end
 
   def merchants_with_all_their_items
@@ -251,6 +273,45 @@ se = SalesEngine.from_csv({:merchants => './data/merchants.csv',
                            :invoices  => './data/invoices.csv'})
 
 sa = SalesAnalyst.new(se)
+<<<<<<< HEAD
+=======
+# sa.get_hash_of_merchants_to_items
+# sa.average_item_price_for_merchants(12334275)
+# sa.get_total_price_for_all_items
+# sa.sort_price_for_all_items
+# sa.get_number_of_items_that_fall_2_stdv_above
+# puts sa.items_with_2_std_dev_above_avg_price.count
+# puts sa.golden_items.count
+# puts sa.get_merchants_one_stdv_above_mean
+# sa.average_price_per_merchant
+sa.merchants_with_high_item_count
+# sa.merchants_with_high_item_count
+# sa.average_average_price_per_merchant
+# sa.average_invoices_per_merchant
+# sa.all_merchant_id_numbers
+# sa.invoice_count_for_each_merchants
+# sa.total_invoice_count_for_each_merchants
+# sa.all_merchant_id_numbers_on_invoice
+# sa.subtract_mean_from_each_value
+# sa.average_invoices_per_merchant_standard_deviation
+# sa.sort_merchants_by_invoice
+# sa.get_number_of_merchants_two_stdv_above_mean
+# sa.sort_merchants_based_on_the_number_of_invoices
+# sa.get_merchants_one_stdv_above_mean
+# sa.get_merchants_two_stdv_above_mean
+# sa.top_merchants_by_invoice_count
+# sa.bottom_merchants_by_invoice_count
+# sa.top_merchants_by_invoice
+# sa.get_merchants_two_stdv_below_mean
+# sa.find_days_that_see_most_sales
+# sa.get_hash_of_merchants_to_inv
+# sa.merchants_with_high_invoice_count
+# sa.sales_dates_from_invoice
+# sa.find_all_dates
+# sa.get_hash_of_days_of_the_week_to_frequency
+# sa.top_days_by_invoice_count
+# sa.get_number_one_stdv_away_from_mean
+>>>>>>> 2da8cfc6a742bbe12d81cea1344e2f8d5b9cd42c
 end
 
 # can delete this later

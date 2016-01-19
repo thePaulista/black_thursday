@@ -14,26 +14,6 @@ class SalesEngineTest < Minitest::Test
     assert_kind_of SalesEngine, @@sales_engine
   end
 
-  def test_sales_engine_can_receive_one_csv_file
-    skip
-    sales_engine = SalesEngine.from_csv({:items => "./data/items.csv"})
-    submitted = sales_engine.items
-
-    assert_kind_of ItemRepository, submitted
-  end
-
-  def test_sales_engine_can_receive_two_csv_files
-    skip
-    sales_engine = SalesEngine.from_csv({:items => "./data/items.csv",
-                                         :merchants => "./data/merchants.csv"
-                                        })
-    items = sales_engine.items
-    merchants = sales_engine.merchants
-
-    assert_kind_of ItemRepository, items
-    assert_kind_of MerchantRepository, merchants
-  end
-
   def test_sales_engine_can_create_Merchant_Repos
     merch_repo = @@sales_engine.merchants
     expected = "#<Merchant:0"

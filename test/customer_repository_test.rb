@@ -2,7 +2,8 @@ require_relative 'test_helper'
 require_relative '../lib/customer_repository'
 
 class CustomerRepositoryTest < Minitest::Test
-  csv_object_of_customers = CSV.open './data/customers.csv', headers: true, header_converters: :symbol
+  csv_object_of_customers = CSV.open './data/customers.csv',
+                            headers: true, header_converters: :symbol
   @@customer_repo = CustomerRepository.new(csv_object_of_customers)
 
   def test_can_create_a_repo_of_customer_attributes

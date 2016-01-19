@@ -4,7 +4,8 @@ require 'pry'
 require 'bigdecimal'
 
 class ItemRepositoryTest < Minitest::Test
-  csv_object_of_items = CSV.open './data/items.csv', headers: true, header_converters: :symbol
+  csv_object_of_items = CSV.open './data/items.csv',
+                        headers: true, header_converters: :symbol
   @@item_repository = ItemRepository.new(csv_object_of_items)
 
   def test_can_create_a_repo_of_items

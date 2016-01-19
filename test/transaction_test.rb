@@ -44,4 +44,13 @@ class TransactionTest < Minitest::Test
   def test_transaction_initializes_with_updated_at
     assert_equal Time.parse(@time), @transaction.updated_at
   end
+
+  def test_specific_invoice
+    @@sales_engine.transaction_invoice_connection
+    transaction = @@sales_engine.transactions.find_by_id(1452)
+    submitted = transaction.invoice
+
+    assert_kind_of Invoice, submitted
+    assert_equal 4746, submitted.id
+  end
 end

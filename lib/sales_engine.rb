@@ -29,6 +29,7 @@ class SalesEngine
     invoice_items_connection
     invoice_transactions_connection
     invoice_customer_connection
+    transaction_invoice_connection
   end
 
   def self.from_csv(file_path)
@@ -92,6 +93,15 @@ class SalesEngine
     end
   end
 
+  def transaction_invoice_connection
+    trans_invoices = transactions.all.map do |transaction|
+      transaction_invoice = invoices.find_by_id(transaction.invoice_id)
+      transaction.specific_invoice(transaction_invoice)
+    end
+  end
+
+
+
 end
 
 if __FILE__ == $0
@@ -102,21 +112,22 @@ engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
                                :transactions  => './data/transactions.csv',
                                :customers     => './data/customers.csv'})
 
-# merchant = engine.merchants.find_by_id(12335971)
-merchant = engine.merchants.find_by_id(12334195)
-merchant.items
-puts merchant.items.count
 
-item = engine.items.find_by_id(263538760)
-expected = item.merchant
-puts expected.name
+# transaction = se.transactions.find_by_id(40)
+# transaction.invoice # => invoice
 
-invoice = engine.invoices.find_by_id(106)
-# expected.length to eq 7
-# expect(expected.first.class).to eq Item
-puts invoice.items
+# transaction = engine.transactions.find_by_id(1452)
+transaction = engine.transactions.find_by_id(1)
+puts transaction
+puts transaction.invoice_id
+puts transaction.invoice
 
-puts invoice.transactions
-puts invoice.customer
+# expect(expected.id).to eq  4746
+# expect(expected.class).to eq Invoice
+
+# invoices.all.map do |invoice|
+#   transaction_invoice = transactions.find_all_by_invoice_id(invoice.id)
+#   transaction.specific_invoice(transaction_invoice)
+# end
 
 end

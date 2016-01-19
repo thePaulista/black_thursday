@@ -4,7 +4,7 @@ require 'date'
 class Transaction
   attr_accessor :id, :invoice_id, :credit_card_number,
                 :credit_card_expiration_date, :result,
-                :unit_price, :created_at, :updated_at
+                :unit_price, :created_at, :updated_at, :invoice
 
   def inspect
     "#<#{self.class}>"
@@ -18,5 +18,9 @@ class Transaction
     @result     = args_hash[:result]
     @created_at = Time.parse(args_hash[:created_at])
     @updated_at = Time.parse(args_hash[:updated_at])
+  end
+
+  def specific_invoice(invoice)
+    @invoice = invoice
   end
 end

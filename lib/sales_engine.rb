@@ -113,21 +113,9 @@ engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
                                :customers     => './data/customers.csv'})
 
 
-# transaction = se.transactions.find_by_id(40)
-# transaction.invoice # => invoice
 
-# transaction = engine.transactions.find_by_id(1452)
 transaction = engine.transactions.find_by_id(1)
 puts transaction
 puts transaction.invoice_id
 puts transaction.invoice
-
-# expect(expected.id).to eq  4746
-# expect(expected.class).to eq Invoice
-
-# invoices.all.map do |invoice|
-#   transaction_invoice = transactions.find_all_by_invoice_id(invoice.id)
-#   transaction.specific_invoice(transaction_invoice)
-# end
-
 end

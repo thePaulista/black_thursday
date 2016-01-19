@@ -1,19 +1,28 @@
 require './test/test_helper'
+require './lib/sales_engine'
 require './lib/transaction'
 require 'date'
 
 class TransactionTest < Minitest::Test
+  @@sales_engine = SalesEngine.from_csv({
+    :merchants     => './data/merchants.csv',
+    :items         => './data/items.csv',
+    :invoices      => './data/invoices.csv',
+    :invoice_items => './data/invoice_items.csv',
+    :transactions  => './data/transactions.csv',
+    :customers     => './data/customers.csv'})
 
   def setup
     @time = Time.now.to_s
-    @transaction = Transaction.new({:id => 6,
-                                    :invoice_id => 8,
-                                    :credit_card_number => "4242424242424242",
-                                    :credit_card_expiration_date => "0220",
-                                    :result => "success",
-                                    :created_at => @time,
-                                    :updated_at => @time
-                                   })
+    @transaction = Transaction.new({
+      :id => 6,
+      :invoice_id => 8,
+      :credit_card_number => "4242424242424242",
+      :credit_card_expiration_date => "0220",
+      :result => "success",
+      :created_at => @time,
+      :updated_at => @time
+     })
   end
 
   def test_transaction_initializes_with_id

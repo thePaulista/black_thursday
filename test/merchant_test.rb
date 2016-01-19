@@ -46,6 +46,6 @@ class MerchantTest < Minitest::Test
     submitted = merchant.customers
 
     assert_kind_of Customer, submitted.first
-    assert_equal 13, submitted.length
+    assert_equal 12, submitted.length
   end
 end

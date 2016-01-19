@@ -112,7 +112,7 @@ class SalesEngine
       merchant_customers = invoice_check.each.map do |invoice|
         customers.find_by_id(invoice.customer_id)
       end
-      merchant.specific_customers(merchant_customers)
+      merchant.specific_customers(merchant_customers.uniq)
     end
   end
 
@@ -137,6 +137,7 @@ engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
                                :customers     => './data/customers.csv'})
 
 merchant = engine.merchants.find_by_id(12334194)
+binding.pry
 puts merchant.customers
 puts merchant.customers.first.class
 puts merchant.customers.length

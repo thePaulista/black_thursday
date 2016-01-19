@@ -45,6 +45,7 @@ class SalesEngine
     transaction_invoice_connection
     merchant_customers_connection
     customer_merchants_connection
+    invoices_to_invoice_items_connection
   end
 
   def merchant_items_connection
@@ -126,14 +127,22 @@ class SalesEngine
     end
   end
 
-  # invoice.transactions.each do |transaction|
-  #   if transaction.result[-1] == "success"
-  #     true
-  #   else
-  #     false
-  #   end
-  # end
-
+  def invoices_to_invoice_items_connection
+    invoices.all.map do |invoice|
+      invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
+      quantity = invoice_item_check.map do |inv_item|
+        inv_item.quantity.to_i
+      end
+      units = invoice_item_check.map do |inv_item|
+        inv_item.unit_price
+      end
+      price_and_quantity = quantity.zip(units)
+      total = price_and_quantity.map do |pair|
+        pair.reduce(1, :*)
+      end
+      invoice.total = total.reduce(:+)
+    end
+  end
 
 end
 
@@ -145,4 +154,6 @@ engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
                                :transactions  => './data/transactions.csv',
                                :customers     => './data/customers.csv'})
 
+invoice = engine.invoices.all.first
+expected = invoice.total
 end

@@ -2,6 +2,7 @@
 class Invoice
   attr_reader :id, :customer_id, :merchant_id, :status, :created_at,
               :updated_at, :merchant, :items, :transactions, :customer
+  attr_accessor :total
 
   def inspect
     "#<#{self.class}>"
@@ -34,6 +35,11 @@ class Invoice
 
   def is_paid_in_full?
     @transactions.any? { |transaction| transaction.result == "success" }
+  end
+
+  def total
+    @total
+    # @total = total
   end
 
 end

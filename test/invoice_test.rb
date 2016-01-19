@@ -3,6 +3,7 @@ require './lib/invoice'
 require './lib/sales_engine'
 require 'date'
 require 'time'
+require 'bigdecimal'
 
 class InvoiceTest < Minitest::Test
   @@sales_engine = SalesEngine.from_csv({
@@ -110,6 +111,15 @@ class InvoiceTest < Minitest::Test
     submitted = invoice.is_paid_in_full?
 
     refute submitted
+  end
+
+  def test_total
+    invoice = @@sales_engine.invoices.all.first
+    expected = BigDecimal.new(2106777)
+    submitted = invoice.total
+
+    assert_equal expected, submitted
+    assert_kind_of BigDecimal, submitted
   end
 
 end

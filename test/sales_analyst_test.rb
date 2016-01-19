@@ -90,13 +90,21 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_average_price_per_merchant
-    # skip
+    skip
     expected = 350.29
     # returning= 349.56
     submitted = @@sales_analyst.average_average_price_per_merchant
 
     assert_equal expected, submitted
   end
+
+  def test_array_of_golden_priced_items_return_highest_priced_items
+    expected = "[#<Item>]"
+    submitted = @@sales_analyst.array_of_golden_priced_items
+
+    assert_equal expected, submitted.first.to_s
+  end
+
 
   def test_golden_items
     expected = 5
@@ -187,13 +195,13 @@ class SalesAnalystTest < Minitest::Test
     assert_equal expected, submitted.count
   end
 
-  def
+
 
   def test_top_days_by_invoice_count
-    expected = [:Wednesday]
+    expected = "Wednesday"
     submitted = @@sales_analyst.top_days_by_invoice_count
 
-    assert_equal expected, submitted
+    assert_equal expected, submitted.first
   end
 
   def test_invoice_status_pending

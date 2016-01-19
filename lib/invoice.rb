@@ -32,4 +32,8 @@ class Invoice
     @customer = customer
   end
 
+  def is_paid_in_full?
+    @transactions.any? { |transaction| transaction.result == "success" }
+  end
+
 end

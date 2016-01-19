@@ -98,4 +98,18 @@ class InvoiceTest < Minitest::Test
     assert_equal 22, submitted.id
   end
 
+  def test_is_paid_in_full?
+    invoice = @@sales_engine.invoices.find_by_id(200)
+    submitted = invoice.is_paid_in_full?
+
+    assert submitted
+  end
+
+  def test_is_paid_in_full_false
+    invoice = @@sales_engine.invoices.find_by_id(203)
+    submitted = invoice.is_paid_in_full?
+
+    refute submitted
+  end
+
 end

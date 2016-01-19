@@ -126,6 +126,15 @@ class SalesEngine
     end
   end
 
+  # invoice.transactions.each do |transaction|
+  #   if transaction.result[-1] == "success"
+  #     true
+  #   else
+  #     false
+  #   end
+  # end
+
+
 end
 
 if __FILE__ == $0
@@ -136,9 +145,4 @@ engine = SalesEngine.from_csv({:merchants     => './data/merchants.csv',
                                :transactions  => './data/transactions.csv',
                                :customers     => './data/customers.csv'})
 
-merchant = engine.merchants.find_by_id(12334194)
-binding.pry
-puts merchant.customers
-puts merchant.customers.first.class
-puts merchant.customers.length
 end

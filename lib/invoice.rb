@@ -39,7 +39,6 @@ class Invoice
 
   def total
     @total
-    # @total = total
   end
 
 end

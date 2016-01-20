@@ -166,7 +166,7 @@ class SalesAnalyst
 
   def invoice_count_minus_average #to get stdv for inv
     merch_invoices = invoice_count_for_each_merchants.values
-    avg = average_invoices_per_merchant
+    avg = (@sales_engine.invoices.all.count / total_number_of_merchants)
     merch_invoices.map {|inv| (inv - avg) ** 2}
   end
 
@@ -309,6 +309,14 @@ class SalesAnalyst
   #   end
   #
   # end
+
+  def merchants_with_only_one_item_regsitered_in_month(month)
+    merchants_with_one_item = merchants_with_only_one_item
+    merchants_with_only_one_item.map do |merchant|
+      @sales_engine.items.find_all_by_merchant_id(merchant.id)
+    end
+
+  end
 
 end
 

@@ -282,4 +282,12 @@ class SalesAnalystTest < Minitest::Test
     assert_equal expected, submitted.first.class
   end
 
+  def test_merchants_with_only_one_item_registered_in_month
+    month = "March"
+    submitted = @@sales_analyst.merchants_with_only_one_item_regsitered_in_month(month)
+
+    assert_equal 21, submitted.count
+    assert_kind_of Merchant, submitted.first.class
+  end
+
 end

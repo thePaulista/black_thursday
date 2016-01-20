@@ -49,6 +49,10 @@ class InvoiceRepository
     end
   end
 
+  def find_all_by_updated_at_date(submitted_date)
+    @all_invoices.find_all {|invoice| invoice.updated_at.strftime("%F") == submitted_date.strftime("%F")}
+  end
+
 end
 
 if __FILE__ == $0

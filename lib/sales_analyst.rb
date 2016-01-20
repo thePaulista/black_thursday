@@ -243,26 +243,43 @@ class SalesAnalyst
     get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.max.first(1)
   end
 
+  def total_revenue_by_date(date)
+    date_match_invoices = @sales_engine.invoices.find_all_by_updated_at_date(date)
+
+    qualified_payments = date_match_invoices.select do |invoice|
+      invoice.is_paid_in_full? == true
+    end
+
+    invoice_item_match = qualified_payments.map do |invoice|
+      @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
+    end
+
+    invoice_item_match.flatten!
+
+    prices = invoice_item_match.map do |inv_item|
+      inv_item.unit_price * inv_item.quantity.to_i
+    end
+
+    final = prices.reduce(:+)
+    BigDecimal.new(final) / 100
+  end
+
 end
 
 if __FILE__ == $0
-se = SalesEngine.from_csv({:merchants => './data/merchants.csv',
-                           :items     => './data/items.csv',
-                           :invoices  => './data/invoices.csv'})
+se = SalesEngine.from_csv({
+  :merchants     => './data/merchants.csv',
+  :items         => './data/items.csv',
+  :invoices      => './data/invoices.csv',
+  :invoice_items => './data/invoice_items.csv',
+  :transactions  => './data/transactions.csv',
+  :customers     => './data/customers.csv'})
 
 sa = SalesAnalyst.new(se)
+
+date = Time.parse("2011-02-27")
+# date = Time.parse("2012-03-27")
+# date = Time.parse("2016-01-06")
+puts sa.total_revenue_by_date(date)
+puts sa.total_revenue_by_date(date).class
 end
-
-# can delete this later
-## DIVIDE ##
-
-# def sort_merchants_based_on_the_number_of_listings
-#   items = item_counts_for_each_merchant
-#   items.sort_by { |key, value| value }
-# end
-
-# def get_merchants_one_stdv_above_mean
-#   sorted = sort_merchants_based_on_the_number_of_listings
-#   above_avg = get_number_of_merchants_one_stdv_away_from_mean
-#   sorted.last(above_avg).to_h.keys
-# end

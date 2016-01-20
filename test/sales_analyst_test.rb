@@ -225,4 +225,12 @@ class SalesAnalystTest < Minitest::Test
     assert_equal expected, submitted
   end
 
+  def test_total_revenue_by_date
+    date = Time.parse("2011-02-27")
+    expected = 13010.46
+    submitted = @@sales_analyst.total_revenue_by_date(date)
+
+    assert_equal expected, submitted
+    assert_kind_of BigDecimal, expected
+  end
 end

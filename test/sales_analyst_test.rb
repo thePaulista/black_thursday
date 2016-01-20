@@ -252,4 +252,34 @@ class SalesAnalystTest < Minitest::Test
     # expect(expected.last.id).to eq 12335747
 
   end
+
+  def test_merchant_ids_with_pending_invoices_return_count
+    submitted = @@sales_analyst.merchant_ids_with_pending_invoices
+    expected = 448
+    # spec_harness = 467 - don't take out the nils????
+
+    assert_equal expected, submitted.count
+  end
+
+  def test_merchant_ids_with_pending_invoices_return_first_merchant
+    submitted = @@sales_analyst.merchant_ids_with_pending_invoices
+    expected = 12335938
+
+    assert_equal expected, submitted.first
+  end
+
+  def test_merchant_ids_with_only_one_item_returns_merchant_count
+    submitted = @@sales_analyst.merchants_ids_with_only_one_item
+    expected = 243
+
+    assert_equal expected, submitted.count
+  end
+
+  def test_merchant_with_only_one_item_can_returns_merchant
+    submitted = @@sales_analyst.merchants_with_only_one_item
+    expected = Merchant
+
+    assert_equal expected, submitted.first.class
+  end
+
 end

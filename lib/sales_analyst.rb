@@ -238,31 +238,31 @@ class SalesAnalyst
     top_days = find_all_sales_days_for_invoices_two_stdv_above_mean
     top_days.inject(Hash.new(0)) {|hash, days| hash[days] += 1; hash}
   end
-
-  def top_days_by_invoice_count
-    get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.max.first(1)
-  end
-
-  def total_revenue_by_date(date)
-    date_match_invoices = @sales_engine.invoices.find_all_by_created_at_date(date)
-
-    qualified_payments = date_match_invoices.select do |invoice|
-      invoice.is_paid_in_full? == true
-    end
-
-    invoice_item_match = qualified_payments.map do |invoice|
-      @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
-    end
-
-    invoice_item_match.flatten!
-
-    prices = invoice_item_match.map do |inv_item|
-      inv_item.unit_price * inv_item.quantity.to_i
-    end
-
-    final = prices.reduce(:+)
-    BigDecimal.new(final) / 100
-  end
+  #
+  # def top_days_by_invoice_count
+  #   get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.max.first(1)
+  # end
+  #
+  # def total_revenue_by_date(date)
+  #   date_match_invoices = @sales_engine.invoices.find_all_by_created_at_date(date)
+  #
+  #   qualified_payments = date_match_invoices.select do |invoice|
+  #     invoice.is_paid_in_full? == true
+  #   end
+  #
+  #   invoice_item_match = qualified_payments.map do |invoice|
+  #     @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
+  #   end
+  #
+  #   invoice_item_match.flatten!
+  #
+  #   prices = invoice_item_match.map do |inv_item|
+  #     inv_item.unit_price * inv_item.quantity.to_i
+  #   end
+  #
+  #   final = prices.reduce(:+)
+  #   BigDecimal.new(final) / 100
+  # end
 
 ###these two methods find merchants_with_pending_invoices
   def merchant_ids_with_pending_invoices
@@ -274,28 +274,41 @@ class SalesAnalyst
   def merchants_with_pending_invoices
     merchant_ids_with_pending_invoices.map do |id|
       @sales_engine.merchants.find_by_id(id)
+      # binding.pry
     end
-###
-  def top_revenue_earners(count=20)
-    inv_merchants = @sales_engine.invoices.all.map do |invoice|
-      invoice.merchant_id
-    end
-
-    # qualified_invoice_ids = @sales_engine.invoices.all.map do |invoice|
-    #   invoice.id if invoice.is_paid_in_full? == true
-    # end - [nil]
-    #
-    # merch_inv_items = qualified_invoice_ids.map do |invoice|
-    #   inv_item = @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
-    #   [invoice.merchant_id, inv_item]
-    # end.to_h
-
-    prices = invoice_item_match.map do |inv_item|
-      inv_item.unit_price * inv_item.quantity.to_i
-    end
-
->>>>>>> a330a6ba824bda4a986ca9a7712e8720fe67266c
   end
+  ##### the follow is for sa.merchants_with_only_one_item
+  def merchants_ids_with_only_one_item
+    item_counts_for_each_merchant.select {|k,v| v < 2}.keys
+  end
+
+  def merchants_with_only_one_item
+    merchants_ids_with_only_one_item.map do |id|
+      @sales_engine.merchants.find_by_id(id)
+      # binding.pry
+    end
+  end
+
+###
+  # def top_revenue_earners(count=20)
+  #   inv_merchants = @sales_engine.invoices.all.map do |invoice|
+  #     invoice.merchant_id
+  #   end
+  #
+  #   # qualified_invoice_ids = @sales_engine.invoices.all.map do |invoice|
+  #   #   invoice.id if invoice.is_paid_in_full? == true
+  #   # end - [nil]
+  #   #
+  #   # merch_inv_items = qualified_invoice_ids.map do |invoice|
+  #   #   inv_item = @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
+  #   #   [invoice.merchant_id, inv_item]
+  #   # end.to_h
+  #
+  #   prices = invoice_item_match.map do |inv_item|
+  #     inv_item.unit_price * inv_item.quantity.to_i
+  #   end
+  #
+  # end
 
 end
 
@@ -310,15 +323,14 @@ se = SalesEngine.from_csv({
 
 sa = SalesAnalyst.new(se)
 
-<<<<<<< HEAD
 date = Time.parse("2011-02-27")
 # date = Time.parse("2012-03-27")
 # date = Time.parse("2016-01-06")
-puts sa.total_revenue_by_date(date)
-puts sa.total_revenue_by_date(date).class
+# puts sa.total_revenue_by_date(date)
+# puts sa.total_revenue_by_date(date).class
 
-sa.merchants_with_pending_invoices
-=======
-sa.top_revenue_earners
->>>>>>> a330a6ba824bda4a986ca9a7712e8720fe67266c
+sa.merchants_with_only_one_item
+# =======
+# sa.top_revenue_earners
+
 end

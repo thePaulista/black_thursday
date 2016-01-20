@@ -264,6 +264,18 @@ class SalesAnalyst
     BigDecimal.new(final) / 100
   end
 
+  def merchant_ids_with_pending_invoices
+    invoices = @sales_engine.invoices.all
+    ids = invoices.map {|inv| inv.merchant_id if inv.status == :pending} - [nil]
+    ids.uniq
+  end
+
+  def merchants_with_pending_invoices
+    merchant_ids_with_pending_invoices.map do |id|
+      @sales_engine.merchants.find_by_id(id)
+    end
+  end
+
 end
 
 if __FILE__ == $0
@@ -282,4 +294,6 @@ date = Time.parse("2011-02-27")
 # date = Time.parse("2016-01-06")
 puts sa.total_revenue_by_date(date)
 puts sa.total_revenue_by_date(date).class
+
+sa.merchants_with_pending_invoices
 end

@@ -265,8 +265,22 @@ class SalesAnalyst
   end
 
   def top_revenue_earners(count=20)
-    # create array of invoice.merchant_ids
-    # group_by invoice =>
+    inv_merchants = @sales_engine.invoices.all.map do |invoice|
+      invoice.merchant_id
+    end
+
+    # qualified_invoice_ids = @sales_engine.invoices.all.map do |invoice|
+    #   invoice.id if invoice.is_paid_in_full? == true
+    # end - [nil]
+    #
+    # merch_inv_items = qualified_invoice_ids.map do |invoice|
+    #   inv_item = @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
+    #   [invoice.merchant_id, inv_item]
+    # end.to_h
+
+    prices = invoice_item_match.map do |inv_item|
+      inv_item.unit_price * inv_item.quantity.to_i
+    end
 
   end
 
@@ -283,9 +297,5 @@ se = SalesEngine.from_csv({
 
 sa = SalesAnalyst.new(se)
 
-date = Time.parse("2011-02-27")
-# date = Time.parse("2012-03-27")
-# date = Time.parse("2016-01-06")
-puts sa.total_revenue_by_date(date)
-puts sa.total_revenue_by_date(date).class
+sa.top_revenue_earners
 end

@@ -26,7 +26,13 @@ class Merchant
     @customers = customers
   end
 
-  def revenue(revenue)
+  def specific_invoice_items
+    confirmed_inv_ids = @invoices.select do |invoice|
+      invoice.is_paid_in_full?
+    end
+  end
+
+  def total_revenue
     @revenue = revenue
   end
 

@@ -2,7 +2,8 @@ require 'pry'
 require_relative 'sales_engine'
 
 class Merchant
-  attr_reader :id, :name, :items, :invoices, :customers
+  attr_reader :id, :name, :items, :invoices,
+              :customers, :revenue
 
   def inspect
     "#<#{self.class}>"
@@ -23,6 +24,16 @@ class Merchant
 
   def specific_customers(customers)
     @customers = customers
+  end
+
+  def specific_invoice_items
+    confirmed_inv_ids = @invoices.select do |invoice|
+      invoice.is_paid_in_full?
+    end
+  end
+
+  def total_revenue
+    @revenue = revenue
   end
 
 end

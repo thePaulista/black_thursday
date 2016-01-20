@@ -2,7 +2,8 @@ require 'pry'
 require_relative 'sales_engine'
 
 class Merchant
-  attr_reader :id, :name, :items, :invoices, :customers
+  attr_reader :id, :name, :items, :invoices,
+              :customers, :revenue
 
   def inspect
     "#<#{self.class}>"
@@ -23,6 +24,10 @@ class Merchant
 
   def specific_customers(customers)
     @customers = customers
+  end
+
+  def revenue(revenue)
+    @revenue = revenue
   end
 
 end

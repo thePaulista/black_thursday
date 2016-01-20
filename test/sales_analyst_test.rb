@@ -231,6 +231,25 @@ class SalesAnalystTest < Minitest::Test
     submitted = @@sales_analyst.total_revenue_by_date(date)
 
     assert_equal expected, submitted
-    assert_kind_of BigDecimal, expected
+    assert_kind_of BigDecimal, submitted
+  end
+
+  def test_top_revenue_earners
+    skip
+    submitted = @@sales_analyst.top_revenue_earners(10)
+
+    # first = submitted.first.revenue
+    # last = submitted.last.revenue
+
+    assert_equal 10, submitted.length
+    assert_kind_of Merchant, submitted.first
+    assert_equal 12335747, submitted.first.id
+
+    # expect(expected.first.class).to eq Merchant
+    # expect(expected.first.id).to eq 12334634
+    #
+    # expect(expected.last.class).to eq Merchant
+    # expect(expected.last.id).to eq 12335747
+
   end
 end

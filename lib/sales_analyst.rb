@@ -264,6 +264,12 @@ class SalesAnalyst
     BigDecimal.new(final) / 100
   end
 
+  def top_revenue_earners(count=20)
+    # create array of invoice.merchant_ids
+    # group_by invoice =>
+
+  end
+
 end
 
 if __FILE__ == $0

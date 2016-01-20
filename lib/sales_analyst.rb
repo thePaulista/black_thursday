@@ -244,7 +244,7 @@ class SalesAnalyst
   end
 
   def total_revenue_by_date(date)
-    date_match_invoices = @sales_engine.invoices.find_all_by_updated_at_date(date)
+    date_match_invoices = @sales_engine.invoices.find_all_by_created_at_date(date)
 
     qualified_payments = date_match_invoices.select do |invoice|
       invoice.is_paid_in_full? == true

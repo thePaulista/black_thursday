@@ -251,19 +251,18 @@ class SalesAnalystTest < Minitest::Test
     assert_equal 21, submitted.count
   end
 
-  # def test_top_revenue_earners_return_a_specific_number_of_merchants
-  #   count = 4
-  #   submitted = @@sales_analyst.top_revenue_earners(count)
-  #
-  #   assert_equal 4, submitted.count
-  # end
+  def test_top_revenue_earners_return_a_specific_number_of_merchants
+    count = 4
+    submitted = @@sales_analyst.top_revenue_earners(count)
+
+    assert_equal 4, submitted.count
+  end
 
   def test_top_revenue_earners_return_a_default_number_of_20_merchants
     submitted = @@sales_analyst.top_revenue_earners(count = 20)
 
     assert_equal 20, submitted.count
   end
-
 
   def test_top_revenue_earners_return_a_specific_number_of_merchants
     count = 4
@@ -272,28 +271,36 @@ class SalesAnalystTest < Minitest::Test
     assert_equal 4, submitted.count
   end
 
-
-  def test_most_sold_item_for_a_given_merchant
-  merchant_id = 12334189
-  expected = sales_analyst.most_sold_item_for_merchant(merchant_id)
-  expect(expected.map(&:id).include?(263524984)).to eq true
-
-  expect(expected.map(&:name).include?("Adult Princess Leia Hat")).to eq true
-  expect(expected.first.class).to eq Item
+  def test_merchants_with_only_one_item_registered_in_month
+    month = "March"
+    submitted = @@sales_analyst.merchants_with_only_one_item_registered_in_month(month)
+    assert_equal 21, submitted.count
   end
 
+  def test_top_revenue_earners_return_a_default_number_of_20_merchants
+    submitted = @@sales_analyst.top_revenue_earners(count = 20)
+    assert_equal 20, submitted.count
+  end
 
+  def test_top_revenue_earners_return_a_specific_number_of_merchants
+    count = 4
+    submitted = @@sales_analyst.top_revenue_earners(count)
+    assert_equal 4, submitted.count
+  end
 
-  # merchant_id = 12334189
-  # expected = sales_analyst.best_item_for_merchant(merchant_id)
-  #
-  # expect(expected.id).to eq 263516130
-  # expect(expected.class).to eq Item
-  #
-  # merchant_id = 12337105
-  # expected = sales_analyst.best_item_for_merchant(merchant_id)
-  #
-  # expect(expected.id).to eq 263463003
-  # expect(expected.class).to eq Item
+  def test_most_sold_item_for_a_given_merchant
+    merchant_id = 12334189
+    expected = 263524984
+    submitted = @@sales_analyst.most_sold_item_for_merchant(merchant_id)
+
+    assert_equal expected, submitted.first.id
+    assert_equal "Adult Princess Leia Hat", submitted.first..name
+  end
+
+  def test_best_item_for_merchant
+    merchant_id = 12334189
+    submitted = @@sales_analyst.best_item_for_merchant(merchant_id)
+    assert_equal 263516130, submitted.id
+  end
 
 end

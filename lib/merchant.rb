@@ -2,8 +2,8 @@ require 'pry'
 require_relative 'sales_engine'
 
 class Merchant
-  attr_reader :id, :name, :items, :invoices,
-              :customers, :revenue
+  attr_reader :id, :name, :items, :created_at, :invoices,
+              :customers
 
   def inspect
     "#<#{self.class}>"
@@ -12,6 +12,7 @@ class Merchant
   def initialize(args_hash)
     @id = args_hash[:id].to_i
     @name = args_hash[:name]
+    @created_at = Time.parse(args_hash[:created_at])
   end
 
   def specific_items(items)
@@ -33,7 +34,7 @@ class Merchant
   end
 
   def total_revenue
-    @revenue = revenue
+    @invoices.inject(0) { |sum, invoice| sum + invoice.total }
   end
 
 end

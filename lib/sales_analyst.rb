@@ -285,12 +285,14 @@ class SalesAnalyst
     end
   end
 
-###
-  # def top_revenue_earners(count=20)
-  #   inv_merchants = @sales_engine.invoices.all.map do |invoice|
-  #     invoice.merchant_id
-  #   end
-  #
+  def top_revenue_earners(count=20)
+    merchants_sorted_by_revenue = @sales_engine.merchants.all.sort_by do |merchant|
+      merchant.total_revenue
+    end.reverse
+    merchants_sorted_by_revenue.take(count)
+  end
+
+
   #   # qualified_invoice_ids = @sales_engine.invoices.all.map do |invoice|
   #   #   invoice.id if invoice.is_paid_in_full? == true
   #   # end - [nil]
@@ -306,12 +308,25 @@ class SalesAnalyst
   #
   # end
 
+  def merchants_with_pending_invoices
+    @sales_engine.merchants.all.select do |merchant|
+      merchant.invoices.any? do |invoice|
+        !invoice.is_paid_in_full?
+      end
+    end
+  end
+
   def merchants_with_only_one_item_regsitered_in_month(month)
     merchants_with_one_item = merchants_with_only_one_item
-    merchants_with_only_one_item.map do |merchant|
-      @sales_engine.items.find_all_by_merchant_id(merchant.id)
-    end
 
+    # merchants_with_only_one_item.map do |merchant|
+    #   @sales_engine.items.find_all_by_merchant_id(merchant.id)
+    # end
+    merchants_with_only_one_item.map do |merchant|
+      merchant.items.map do |item|
+        puts "#{item.id} and #{item.created_at.month}"
+      end
+    end
   end
 
 end
@@ -333,8 +348,9 @@ date = Time.parse("2011-02-27")
 # puts sa.total_revenue_by_date(date)
 # puts sa.total_revenue_by_date(date).class
 
-sa.merchants_with_only_one_item
+# sa.merchants_with_only_one_item
+# sa.merchants_with_only_one_item_regsitered_in_month("March")
 # =======
-# sa.top_revenue_earners
+sa.top_revenue_earners
 
 end

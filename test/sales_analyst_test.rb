@@ -294,7 +294,7 @@ class SalesAnalystTest < Minitest::Test
     submitted = @@sales_analyst.most_sold_item_for_merchant(merchant_id)
 
     assert_equal expected, submitted.first.id
-    assert_equal "Adult Princess Leia Hat", submitted.first..name
+    assert_equal "Adult Princess Leia Hat", submitted.first.name
   end
 
   def test_best_item_for_merchant

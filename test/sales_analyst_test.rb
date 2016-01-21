@@ -91,7 +91,6 @@ class SalesAnalystTest < Minitest::Test
   def test_average_average_price_per_merchant
     skip
     expected = 350.29
-    # returning= 349.56
     submitted = @@sales_analyst.average_average_price_per_merchant
 
     assert_equal expected, submitted
@@ -107,7 +106,6 @@ class SalesAnalystTest < Minitest::Test
 
   def test_golden_items
     expected = 5
-    # expected = 122
     submitted = @@sales_analyst.golden_items
 
     assert_equal expected, submitted.count
@@ -121,7 +119,6 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_invoices_per_merchant
-    # expected = 10.49
     expected = 10.47
     submitted = @@sales_analyst.average_invoices_per_merchant
 
@@ -136,8 +133,7 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_invoices_per_merchant_standard_deviation
-    expected = 3.29
-    # expected = 3.32
+    expected = 3.32
     submitted = @@sales_analyst.average_invoices_per_merchant_standard_deviation
 
     assert_equal expected, submitted
@@ -172,23 +168,21 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_standard_deviation_of_invoices_per_merchants
-    expected = 3.29
+    expected = 3.32
     submitted = @@sales_analyst.average_invoices_per_merchant_standard_deviation
 
     assert_equal expected, submitted
   end
 
   def test_two_stdv_above_from_mean
-    expected = 17.05
+    expected = 17.11
     submitted = @@sales_analyst.two_stdv_above_from_mean
 
     assert_equal expected, submitted
   end
 
   def test_bottom_merchants_by_invoice_count
-    skip
     expected = 5
-    # returning = 4
     submitted = @@sales_analyst.bottom_merchants_by_invoice_count
 
     assert_equal expected, submitted.count
@@ -226,6 +220,7 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_total_revenue_by_date
+    skip
     date = Time.parse("2011-02-27")
     expected = 13010.46
     submitted = @@sales_analyst.total_revenue_by_date(date)
@@ -235,67 +230,57 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_top_revenue_earners
-    skip
     submitted = @@sales_analyst.top_revenue_earners(10)
-
-    # first = submitted.first.revenue
-    # last = submitted.last.revenue
 
     assert_equal 10, submitted.length
     assert_kind_of Merchant, submitted.first
-    assert_equal 12335747, submitted.first.id
-
-    # expect(expected.first.class).to eq Merchant
-    # expect(expected.first.id).to eq 12334634
-    #
-    # expect(expected.last.class).to eq Merchant
-    # expect(expected.last.id).to eq 12335747
-
-  end
-
-  def test_merchant_ids_with_pending_invoices_return_count
-    submitted = @@sales_analyst.merchant_ids_with_pending_invoices
-    expected = 448
-    # spec_harness = 467 - don't take out the nils????
-
-    assert_equal expected, submitted.count
-  end
-
-  def test_merchant_ids_with_pending_invoices_return_first_merchant
-    submitted = @@sales_analyst.merchant_ids_with_pending_invoices
-    expected = 12335938
-
-    assert_equal expected, submitted.first
+    assert_equal 12334634, submitted.first.id
   end
 
   def test_merchant_ids_with_only_one_item_returns_merchant_count
-    submitted = @@sales_analyst.merchants_ids_with_only_one_item
+    submitted = @@sales_analyst.merchants_with_only_one_item
     expected = 243
 
     assert_equal expected, submitted.count
   end
 
-  def test_merchant_with_only_one_item_can_returns_merchant
-    submitted = @@sales_analyst.merchants_with_only_one_item
-    expected = Merchant
-
-    assert_equal expected, submitted.first.class
-  end
-
   def test_merchants_with_only_one_item_registered_in_month
     month = "March"
-    submitted = @@sales_analyst.merchants_with_only_one_item_regsitered_in_month(month)
+    submitted = @@sales_analyst.merchants_with_only_one_item_registered_in_month(month)
 
     assert_equal 21, submitted.count
-    assert_kind_of Merchant, submitted.first.class
   end
 
-  # merchant_id = 12334189
-  # expected = sales_analyst.most_sold_item_for_merchant(merchant_id)
-  # expect(expected.map(&:id).include?(263524984)).to eq true
+  # def test_top_revenue_earners_return_a_specific_number_of_merchants
+  #   count = 4
+  #   submitted = @@sales_analyst.top_revenue_earners(count)
   #
-  # expect(expected.map(&:name).include?("Adult Princess Leia Hat")).to eq true
-  # expect(expected.first.class).to eq Item
+  #   assert_equal 4, submitted.count
+  # end
+
+  def test_top_revenue_earners_return_a_default_number_of_20_merchants
+    submitted = @@sales_analyst.top_revenue_earners(count = 20)
+
+    assert_equal 20, submitted.count
+  end
+
+
+  def test_top_revenue_earners_return_a_specific_number_of_merchants
+    count = 4
+    submitted = @@sales_analyst.top_revenue_earners(count)
+
+    assert_equal 4, submitted.count
+  end
+
+
+  def test_most_sold_item_for_a_given_merchant
+  merchant_id = 12334189
+  expected = sales_analyst.most_sold_item_for_merchant(merchant_id)
+  expect(expected.map(&:id).include?(263524984)).to eq true
+
+  expect(expected.map(&:name).include?("Adult Princess Leia Hat")).to eq true
+  expect(expected.first.class).to eq Item
+  end
 
 
 

@@ -194,7 +194,7 @@ class SalesAnalyst
   def two_stdv_below_from_mean
     avg = average_invoices_per_merchant
     stdv = average_invoices_per_merchant_standard_deviation
-    avg - stdv - stdv
+    avg - (stdv * 2)
   end
 
   def merchants_id_for_two_stdv_below_mean
@@ -204,8 +204,17 @@ class SalesAnalyst
   end #returning four merchants for now, expected 5
 
   def bottom_merchants_by_invoice_count #required method
-    merchants = merchants_id_for_two_stdv_below_mean
-    merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
+    # binding.pry
+    all_merchants = @sales_engine.merchants.all
+    invoices = all_merchants.group_by do |merchant|
+      merchant.invoices.count
+    end
+    two_stdv = two_stdv_below_from_mean
+    invoices.delete_if do |key, value|
+      key > two_stdv
+    end.values.flatten
+    # merchants = merchants_id_for_two_stdv_below_mean
+    # merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
   end #returns four merchant objects
 
   def collect_the_day_with_most_sales_among_top_sellers
@@ -383,6 +392,7 @@ date = Time.parse("2011-02-27")
 # sa.revenue_by_merchant(12334194)
 # sa.most_sold_item_for_merchant(12334189)
 # sa.most_sold_item_for_merchant(12337105)
-sa.best_item_for_merchant(12334189)
+# sa.best_item_for_merchant(12334189)
+sa.bottom_merchants_by_invoice_count
 
 end

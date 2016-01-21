@@ -20,7 +20,7 @@ class SalesAnalyst
   def average_items_per_merchant
     average = total_number_of_items / total_number_of_merchants.to_f
     average.round(2)
-  end #2.87 with new num of merchants
+  end
 
   def all_merchant_id_numbers
     all_items = @sales_engine.items.all
@@ -36,7 +36,7 @@ class SalesAnalyst
     item_counts = item_counts_for_each_merchant.values
     avg = average_items_per_merchant
     item_counts.map {|item| (item - avg) ** 2}
-  end #5034.9475
+  end
 
   def average_items_per_merchant_standard_deviation
    avg_subtracted_counts = merchant_item_count_minus_average
@@ -97,7 +97,6 @@ class SalesAnalyst
   end
 
   def calc_average_unit_price_all_items
-    # returns BigDecimal of average unit price for all items
     all_prices = all_items_unit_prices
     (all_prices.reduce(:+) / total_number_of_items)
   end
@@ -144,65 +143,59 @@ class SalesAnalyst
   end
 
   def total_number_of_invoices
-    @sales_engine.invoices.all.count  #count = 4985
+    @sales_engine.invoices.all.count
   end
 
-  def average_invoices_per_merchant  #required method
+  def average_invoices_per_merchant
     avg = @sales_engine.invoices.all.count/total_number_of_merchants.to_f
     avg.round(2)
-  end #answer = 10.49
+  end
 
-#######find stdv
   def all_the_merchant_id_numbers
-    # searches through Item Repo and returns array of all merchant_id strings
     all_invoices = @sales_engine.invoices.all
     all_invoices.map {|inv| inv.merchant_id}
   end
 
-  def invoice_count_for_each_merchants #to get stdv for inv
+  def invoice_count_for_each_merchants
     inv_count = all_the_merchant_id_numbers
     inv_count.inject(Hash.new(0)) { |hash, inv| hash[inv] += 1; hash }
   end
 
-  def invoice_count_minus_average #to get stdv for inv
+  def invoice_count_minus_average
     merch_invoices = invoice_count_for_each_merchants.values
     avg = (@sales_engine.invoices.all.count / total_number_of_merchants)
     merch_invoices.map {|inv| (inv - avg) ** 2}
   end
 
-  def average_invoices_per_merchant_standard_deviation #required method
+  def average_invoices_per_merchant_standard_deviation
     combo = invoice_count_minus_average
     diff_mean = combo.inject(0,:+) / (combo.count - 1)
     stdv_invoice = Math.sqrt(diff_mean)
-    stdv_invoice.round(2) #answer = 3.29
-    # binding.pry
+    stdv_invoice.round(2)
   end
- ######finished std dev above for invoices
 
-######question 2 - who are our top performing merchants?
-  def two_stdv_above_from_mean #NEW
+  def two_stdv_above_from_mean
     avg = average_invoices_per_merchant
     stdv = average_invoices_per_merchant_standard_deviation
     avg + stdv + stdv
   end
 
-  def merchant_id_for_two_stdv_above_mean #NEW
+  def merchant_id_for_two_stdv_above_mean
     invoices = invoice_count_for_each_merchants
     two_stdv = two_stdv_above_from_mean
     invoices.select {|key, value| value > two_stdv }.keys
-  end #returns an array of 12 merchant_ids
+  end
 
-  def top_merchants_by_invoice_count  #required method NEW
+  def top_merchants_by_invoice_count
     merchants = merchant_id_for_two_stdv_above_mean
     merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
   end
 
-###above is question 2, below anwers question 3
   def two_stdv_below_from_mean
     avg = average_invoices_per_merchant
     stdv = average_invoices_per_merchant_standard_deviation
     avg - stdv - stdv
-  end #returns 3.89
+  end
 
   def merchants_id_for_two_stdv_below_mean
     invoices = invoice_count_for_each_merchants
@@ -223,14 +216,12 @@ class SalesAnalyst
     merchant_ids = merchant_id_for_two_stdv_above_mean
     @sales_engine.invoices.all.select do |inv|
       merchant_ids.include?(inv.merchant_id)
-    end #this returns 194 invoices belonging to top merchants
-    # sort from highest sales to least
+    end
   end
 
   def find_all_sales_days_for_invoices_two_stdv_above_mean
     merchants_with_high_invoice_count.map do |inv|
       inv.created_at.strftime("%A")
-      # binding.pry
     end
   end
 
@@ -264,8 +255,6 @@ class SalesAnalyst
     BigDecimal.new(final) / 100
   end
 
-###these two methods find merchants_with_pending_invoices
-
   def merchants_with_pending_invoices
     @sales_engine.merchants.all.select do |merchant|
       merchant.invoices.any? do |invoice|
@@ -274,7 +263,6 @@ class SalesAnalyst
     end
   end
 
-  ##### the follow is for sa.merchants_with_only_one_item
   def merchants_ids_with_only_one_item
     item_counts_for_each_merchant.select {|k,v| v < 2}.keys
   end
@@ -358,7 +346,6 @@ class SalesAnalyst
   def best_item_for_merchant(merchant_id)
     qualified_inv_items = find_qualified_invoices_for_merchant_id(merchant_id)
 
-    # binding.pry
     item_quantities = qualified_inv_items.map do |inv_item|
       item = @sales_engine.items.find_by_id(inv_item.item_id)
       {item => (inv_item.quantity.to_i * inv_item.unit_price)}
@@ -367,43 +354,7 @@ class SalesAnalyst
     item_quantities.max_by do |pairs|
       pairs.values
     end.keys.first
-
-    # top = item_quantities.max_by do |pairs|
-    #   pairs.values
-    # end
-    #
-    # final_pairs = item_quantities.select do |pairs|
-    #   pairs.values == top.values
-    # end
-    #
-    # final_pairs.map do |pair|
-    #   pair.keys
-    # end.flatten!
   end
-
-
-
-
-# merchant_id = 12334189
-# expected = sales_analyst.most_sold_item_for_merchant(merchant_id)
-# expect(expected.map(&:id).include?(263524984)).to eq true
-#
-# expect(expected.map(&:name).include?("Adult Princess Leia Hat")).to eq true
-# expect(expected.first.class).to eq Item
-
-
-
-# merchant_id = 12334189
-# expected = sales_analyst.best_item_for_merchant(merchant_id)
-#
-# expect(expected.id).to eq 263516130
-# expect(expected.class).to eq Item
-#
-# merchant_id = 12337105
-# expected = sales_analyst.best_item_for_merchant(merchant_id)
-#
-# expect(expected.id).to eq 263463003
-# expect(expected.class).to eq Item
 
 end
 

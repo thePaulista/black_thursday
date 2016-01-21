@@ -308,13 +308,14 @@ class SalesAnalyst
 
   def merchants_with_only_one_item_regsitered_in_month(month)
     merchants_with_one_item = merchants_with_only_one_item
+    # binding.pry
     merchants_with_only_one_item.select do |merchant|
       merchant.created_at.strftime("%B") == month
     end
   end
 
   def revenue_by_merchant(merchant_id)
-    merchant = @sales_engine.merchants.all.find_by_id(merchant_id)
+    merchant = @sales_engine.merchants.find_by_id(merchant_id)
     merchant.total_revenue
   end
 
@@ -342,6 +343,6 @@ date = Time.parse("2011-02-27")
 # =======
 # sa.top_revenue_earners
 # sa.merchants_ranked_by_revenue
-sa.revenue_by_merchant
+sa.revenue_by_merchant(12334194)
 
 end

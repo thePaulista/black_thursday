@@ -318,9 +318,23 @@ class SalesAnalyst
     merchant.total_revenue
   end
 
-  def most_sold_item_for_merchant
-
+  def most_sold_item_for_merchant(merchant_id)
+    merchant_items = @sales_engine.items.find_all_by_merchant_id(merchant_id)
+    merchant_items.map do |item|
+      inv_items = @sales_engine.invoice_items.find_all_by_item_id(item.id)
+      inv_items.map do |inv_item|
+        inv_item.quantity.to_i
+      end.reduce(:+)
+    end
+    # binding.pry
   end
+
+# merchant_id = 12334189
+#   expected = sales_analyst.most_sold_item_for_merchant(merchant_id)
+#   expect(expected.map(&:id).include?(263524984)).to eq true
+#
+#   expect(expected.map(&:name).include?("Adult Princess Leia Hat")).to eq true
+#   expect(expected.first.class).to eq Item
 
 end
 
@@ -347,5 +361,6 @@ date = Time.parse("2011-02-27")
 # sa.top_revenue_earners
 # sa.merchants_ranked_by_revenue
 # sa.revenue_by_merchant(12334194)
+sa.most_sold_item_for_merchant(12334189)
 
 end

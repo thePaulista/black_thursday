@@ -238,11 +238,11 @@ class SalesAnalyst
     top_days = find_all_sales_days_for_invoices_two_stdv_above_mean
     top_days.inject(Hash.new(0)) {|hash, days| hash[days] += 1; hash}
   end
-  #
-  # def top_days_by_invoice_count
-  #   get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.max.first(1)
-  # end
-  #
+
+  def top_days_by_invoice_count
+    get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.max.first(1)
+  end
+
   # def total_revenue_by_date(date)
   #   date_match_invoices = @sales_engine.invoices.find_all_by_created_at_date(date)
   #
@@ -265,16 +265,12 @@ class SalesAnalyst
   # end
 
 ###these two methods find merchants_with_pending_invoices
-  def merchant_ids_with_pending_invoices
-    invoices = @sales_engine.invoices.all
-    ids = invoices.map {|inv| inv.merchant_id if inv.status == :pending} - [nil]
-    ids.uniq
-  end
 
   def merchants_with_pending_invoices
-    merchant_ids_with_pending_invoices.map do |id|
-      @sales_engine.merchants.find_by_id(id)
-      # binding.pry
+    @sales_engine.merchants.all.select do |merchant|
+      merchant.invoices.any? do |invoice|
+        !invoice.is_paid_in_full?
+      end
     end
   end
   ##### the follow is for sa.merchants_with_only_one_item

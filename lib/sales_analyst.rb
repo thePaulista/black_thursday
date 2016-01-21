@@ -282,7 +282,6 @@ class SalesAnalyst
   def merchants_with_only_one_item
     merchants_ids_with_only_one_item.map do |id|
       @sales_engine.merchants.find_by_id(id)
-      # binding.pry
     end
   end
 
@@ -290,10 +289,13 @@ class SalesAnalyst
     merchants_ranked_by_revenue.take(count)
   end
 
-  def merchants_ranked_by_revenue
+  def merchants_ranked_by_revenue # 12334193
     merchants_sorted_by_revenue = @sales_engine.merchants.all.sort_by do |merchant|
       merchant.total_revenue
     end.reverse
+    merchants_sorted_by_revenue.select do |merchant|
+      merchant.total_revenue != 0
+    end
   end
 
   def merchants_with_pending_invoices
@@ -312,10 +314,8 @@ class SalesAnalyst
   end
 
   def revenue_by_merchant(merchant_id)
-    @sales_engine.merchants.all.find_by_id(merchant_id)
-
-
-
+    merchant = @sales_engine.merchants.all.find_by_id(merchant_id)
+    merchant.total_revenue
   end
 
 end
@@ -341,6 +341,7 @@ date = Time.parse("2011-02-27")
 # sa.merchants_with_only_one_item_regsitered_in_month("March")
 # =======
 # sa.top_revenue_earners
-sa.merchants_ranked_by_revenue
+# sa.merchants_ranked_by_revenue
+sa.revenue_by_merchant
 
 end

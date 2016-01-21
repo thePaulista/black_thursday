@@ -273,6 +273,7 @@ class SalesAnalyst
       end
     end
   end
+
   ##### the follow is for sa.merchants_with_only_one_item
   def merchants_ids_with_only_one_item
     item_counts_for_each_merchant.select {|k,v| v < 2}.keys
@@ -286,26 +287,14 @@ class SalesAnalyst
   end
 
   def top_revenue_earners(count=20)
+    merchants_ranked_by_revenue.take(count)
+  end
+
+  def merchants_ranked_by_revenue
     merchants_sorted_by_revenue = @sales_engine.merchants.all.sort_by do |merchant|
       merchant.total_revenue
     end.reverse
-    merchants_sorted_by_revenue.take(count)
   end
-
-  #   # qualified_invoice_ids = @sales_engine.invoices.all.map do |invoice|
-  #   #   invoice.id if invoice.is_paid_in_full? == true
-  #   # end - [nil]
-  #   #
-  #   # merch_inv_items = qualified_invoice_ids.map do |invoice|
-  #   #   inv_item = @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
-  #   #   [invoice.merchant_id, inv_item]
-  #   # end.to_h
-  #
-  #   prices = invoice_item_match.map do |inv_item|
-  #     inv_item.unit_price * inv_item.quantity.to_i
-  #   end
-  #
-  # end
 
   def merchants_with_pending_invoices
     @sales_engine.merchants.all.select do |merchant|
@@ -351,6 +340,7 @@ date = Time.parse("2011-02-27")
 # sa.merchants_with_only_one_item
 # sa.merchants_with_only_one_item_regsitered_in_month("March")
 # =======
-sa.top_revenue_earners
+# sa.top_revenue_earners
+sa.merchants_ranked_by_revenue
 
 end

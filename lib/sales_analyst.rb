@@ -201,10 +201,9 @@ class SalesAnalyst
     invoices = invoice_count_for_each_merchants
     two_stdv = two_stdv_below_from_mean
     invoices.select {|key, value| value < two_stdv}.keys
-  end #returning four merchants for now, expected 5
+  end
 
-  def bottom_merchants_by_invoice_count #required method
-    # binding.pry
+  def bottom_merchants_by_invoice_count
     all_merchants = @sales_engine.merchants.all
     invoices = all_merchants.group_by do |merchant|
       merchant.invoices.count
@@ -213,9 +212,7 @@ class SalesAnalyst
     invoices.delete_if do |key, value|
       key > two_stdv
     end.values.flatten
-    # merchants = merchants_id_for_two_stdv_below_mean
-    # merchants.map {|merchant_id| @sales_engine.merchants.find_by_id(merchant_id)}
-  end #returns four merchant objects
+  end
 
   def collect_the_day_with_most_sales_among_top_sellers
       merchant_id = get_merchants_two_stdv_above_mean
@@ -377,22 +374,4 @@ se = SalesEngine.from_csv({
   :customers     => './data/customers.csv'})
 
 sa = SalesAnalyst.new(se)
-
-date = Time.parse("2011-02-27")
-# date = Time.parse("2012-03-27")
-# date = Time.parse("2016-01-06")
-# puts sa.total_revenue_by_date(date)
-# puts sa.total_revenue_by_date(date).class
-
-# sa.merchants_with_only_one_item
-# sa.merchants_with_only_one_item_regsitered_in_month("March")
-# =======
-# sa.top_revenue_earners
-# sa.merchants_ranked_by_revenue
-# sa.revenue_by_merchant(12334194)
-# sa.most_sold_item_for_merchant(12334189)
-# sa.most_sold_item_for_merchant(12337105)
-# sa.best_item_for_merchant(12334189)
-sa.bottom_merchants_by_invoice_count
-
 end

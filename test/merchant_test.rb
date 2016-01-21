@@ -13,7 +13,9 @@ class MerchantTest < Minitest::Test
     :transactions  => './data/transactions.csv',
     :customers     => './data/customers.csv'})
 
-  @@merchant = Merchant.new({:id => 12334195, :name => "Turing School"})
+  @@time = Time.now.to_s
+
+  @@merchant = Merchant.new({:id => 12334195, :name => "Turing School", :created_at => @@time})
 
   def test_inputs_are_name_and_id
     assert_equal 12334195, @@merchant.id

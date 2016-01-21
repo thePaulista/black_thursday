@@ -318,7 +318,7 @@ class SalesAnalyst
     merchant.total_revenue
   end
 
-  def most_sold_item_for_merchant(merchant_id)
+  def find_qualified_invoices_for_merchant_id(merchant_id)
     invoices = @sales_engine.invoices.find_all_by_merchant_id(merchant_id)
 
     qualified_invoices = invoices.select do |invoice|
@@ -327,10 +327,24 @@ class SalesAnalyst
 
     qualified_inv_items = qualified_invoices.map do |invoice|
       @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
-    end
+    end.flatten!
+  end
 
-    qualified_inv_items.flatten!
+  def most_sold_item_for_merchant(merchant_id)
+    # invoices = @sales_engine.invoices.find_all_by_merchant_id(merchant_id)
+    #
+    # qualified_invoices = invoices.select do |invoice|
+    #   invoice.is_paid_in_full?
+    # end
+    #
+    # qualified_inv_items = qualified_invoices.map do |invoice|
+    #   @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
+    # end
+    #
+    # qualified_inv_items.flatten!
 
+    qualified_inv_items = find_qualified_invoices_for_merchant_id(merchant_id)
+    
     item_quantities = qualified_inv_items.map do |inv_item|
       item = @sales_engine.items.find_by_id(inv_item.item_id)
       {item => inv_item.quantity.to_i}

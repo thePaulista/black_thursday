@@ -243,26 +243,26 @@ class SalesAnalyst
     get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.max.first(1)
   end
 
-  # def total_revenue_by_date(date)
-  #   date_match_invoices = @sales_engine.invoices.find_all_by_created_at_date(date)
-  #
-  #   qualified_payments = date_match_invoices.select do |invoice|
-  #     invoice.is_paid_in_full? == true
-  #   end
-  #
-  #   invoice_item_match = qualified_payments.map do |invoice|
-  #     @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
-  #   end
-  #
-  #   invoice_item_match.flatten!
-  #
-  #   prices = invoice_item_match.map do |inv_item|
-  #     inv_item.unit_price * inv_item.quantity.to_i
-  #   end
-  #
-  #   final = prices.reduce(:+)
-  #   BigDecimal.new(final) / 100
-  # end
+  def total_revenue_by_date(date)
+    date_match_invoices = @sales_engine.invoices.find_all_by_created_at_date(date)
+
+    qualified_payments = date_match_invoices.select do |invoice|
+      invoice.is_paid_in_full? == true
+    end
+
+    invoice_item_match = qualified_payments.map do |invoice|
+      @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
+    end
+
+    invoice_item_match.flatten!
+
+    prices = invoice_item_match.map do |inv_item|
+      inv_item.unit_price * inv_item.quantity.to_i
+    end
+
+    final = prices.reduce(:+)
+    BigDecimal.new(final) / 100
+  end
 
 ###these two methods find merchants_with_pending_invoices
 

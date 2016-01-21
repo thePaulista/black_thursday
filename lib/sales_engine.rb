@@ -45,7 +45,7 @@ class SalesEngine
     transaction_invoice_connection
     merchant_customers_connection
     customer_merchants_connection
-    invoices_to_invoice_items_connection
+    # invoices_to_invoice_items_connection
   end
 
   def merchant_items_connection
@@ -77,12 +77,16 @@ class SalesEngine
   end
 
   def invoice_items_connection
+    # binding.pry
     invoices.all.map do |invoice|
       invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
-      items_offered = invoice_item_check.each.map do |inv_item|
-        items.find_by_id(inv_item.item_id)
-      end
+      items_offered = items.find_by_id(invoice_item_check.item_id)
       invoice.specific_items(items_offered)
+      # binding.pry
+      # items_offered = invoice_item_check.each.map do |inv_item|
+      #   items.find_by_id(inv_item.item_id)
+      # end
+      # invoice.specific_items(items_offered)
     end
   end
 
@@ -128,6 +132,12 @@ class SalesEngine
   end
 
   def invoices_to_invoice_items_connection
+    # invoices.all.map do |invoice|
+    #   invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
+    #   items_offered = items.find_by_id(invoice_item_check.item_id)
+    #   invoice.specific_items(items_offered)
+
+
     invoices.all.map do |invoice|
       invoice_item_check = invoice_items.find_all_by_invoice_id(invoice.id)
       quantity = invoice_item_check.map do |inv_item|

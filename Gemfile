@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'mrspec'
-gem 'simplecov', :require => false, :group => :test
+gem 'simplecov'
 gem 'cane'
 gem 'reek'
 gem 'rake'

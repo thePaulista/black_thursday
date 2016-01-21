@@ -238,11 +238,11 @@ class SalesAnalyst
     top_days = find_all_sales_days_for_invoices_two_stdv_above_mean
     top_days.inject(Hash.new(0)) {|hash, days| hash[days] += 1; hash}
   end
-  #
-  # def top_days_by_invoice_count
-  #   get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.max.first(1)
-  # end
-  #
+
+  def top_days_by_invoice_count
+    get_hash_of_days_of_the_week_to_frequency.sort_by {|k,v| v}.max.first(1)
+  end
+  
   # def total_revenue_by_date(date)
   #   date_match_invoices = @sales_engine.invoices.find_all_by_created_at_date(date)
   #

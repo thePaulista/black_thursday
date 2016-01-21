@@ -55,7 +55,7 @@ class ItemRepository
   end
 
   def find_all_dates
-    @all_invoices.map do |inv|
+    @items.map do |inv|
       inv.created_at.strftime("%A")
     end
   end

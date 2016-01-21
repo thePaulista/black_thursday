@@ -292,7 +292,6 @@ class SalesAnalyst
     merchants_sorted_by_revenue.take(count)
   end
 
-
   #   # qualified_invoice_ids = @sales_engine.invoices.all.map do |invoice|
   #   #   invoice.id if invoice.is_paid_in_full? == true
   #   # end - [nil]
@@ -318,15 +317,16 @@ class SalesAnalyst
 
   def merchants_with_only_one_item_regsitered_in_month(month)
     merchants_with_one_item = merchants_with_only_one_item
-
-    # merchants_with_only_one_item.map do |merchant|
-    #   @sales_engine.items.find_all_by_merchant_id(merchant.id)
-    # end
-    merchants_with_only_one_item.map do |merchant|
-      merchant.items.map do |item|
-        puts "#{item.id} and #{item.created_at.month}"
-      end
+    merchants_with_only_one_item.select do |merchant|
+      merchant.created_at.strftime("%B") == month
     end
+  end
+
+  def revenue_by_merchant(merchant_id)
+    @sales_engine.merchants.all.find_by_id(merchant_id)
+
+
+
   end
 
 end

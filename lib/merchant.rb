@@ -34,7 +34,10 @@ class Merchant
   end
 
   def total_revenue
-    @invoices.inject(0) { |sum, invoice| sum + invoice.total }
+    total = @invoices.select do |invoice|
+      invoice.is_paid_in_full?
+    end
+    total.inject(0) { |sum, invoice| sum + invoice.total }
   end
 
 end

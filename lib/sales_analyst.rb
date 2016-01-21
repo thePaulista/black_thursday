@@ -318,16 +318,46 @@ class SalesAnalyst
     merchant.total_revenue
   end
 
+  # def most_sold_item_for_merchant(merchant_id)
+  #   # run through merchants
+  #   # select the ones that have invoices that are paid in full
+  #   #
+  #   merchant_items = @sales_engine.items.find_all_by_merchant_id(merchant_id)
+  #   # binding.pry
+  #   merchant_items.group_by do |item|
+  #     inv_items = @sales_engine.invoice_items.find_all_by_item_id(item.id)
+  #     inv_items.map do |inv_item|
+  #       inv_item.quantity.to_i
+  #     end.reduce(:+)
+  #   end.max #.last
+  # end
+
   def most_sold_item_for_merchant(merchant_id)
-    merchant_items = @sales_engine.items.find_all_by_merchant_id(merchant_id)
-    merchant_items.map do |item|
-      inv_items = @sales_engine.invoice_items.find_all_by_item_id(item.id)
-      inv_items.map do |inv_item|
-        inv_item.quantity.to_i
-      end.reduce(:+)
+    invoices = @sales_engine.invoices.find_all_by_merchant_id(merchant_id)
+
+    qualified_invoices = invoices.select do |invoice|
+      invoice.is_paid_in_full?
     end
+
+    qualified_inv_items = qualified_invoices.map do |invoice|
+      @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
+    end
+
     # binding.pry
+    qualified_inv_items.flatten!
+
+    item_quantities = qualified_inv_items.map do |inv_item|
+      item = @sales_engine.items.find
+      {inv_item.item_id => inv_item.quantity.to_i}
+    end
+
+    item_quantities.max_by do |pairs|
+      pairs.values
+    end.keys
+
   end
+
+
 
 # merchant_id = 12334189
 #   expected = sales_analyst.most_sold_item_for_merchant(merchant_id)

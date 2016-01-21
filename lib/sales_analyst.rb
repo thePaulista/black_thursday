@@ -331,20 +331,8 @@ class SalesAnalyst
   end
 
   def most_sold_item_for_merchant(merchant_id)
-    # invoices = @sales_engine.invoices.find_all_by_merchant_id(merchant_id)
-    #
-    # qualified_invoices = invoices.select do |invoice|
-    #   invoice.is_paid_in_full?
-    # end
-    #
-    # qualified_inv_items = qualified_invoices.map do |invoice|
-    #   @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
-    # end
-    #
-    # qualified_inv_items.flatten!
-
     qualified_inv_items = find_qualified_invoices_for_merchant_id(merchant_id)
-    
+
     item_quantities = qualified_inv_items.map do |inv_item|
       item = @sales_engine.items.find_by_id(inv_item.item_id)
       {item => inv_item.quantity.to_i}
@@ -367,14 +355,55 @@ class SalesAnalyst
     end.flatten!
   end
 
+  def best_item_for_merchant(merchant_id)
+    qualified_inv_items = find_qualified_invoices_for_merchant_id(merchant_id)
+
+    # binding.pry
+    item_quantities = qualified_inv_items.map do |inv_item|
+      item = @sales_engine.items.find_by_id(inv_item.item_id)
+      {item => (inv_item.quantity.to_i * inv_item.unit_price)}
+    end
+
+    item_quantities.max_by do |pairs|
+      pairs.values
+    end.keys.first
+
+    # top = item_quantities.max_by do |pairs|
+    #   pairs.values
+    # end
+    #
+    # final_pairs = item_quantities.select do |pairs|
+    #   pairs.values == top.values
+    # end
+    #
+    # final_pairs.map do |pair|
+    #   pair.keys
+    # end.flatten!
+  end
+
+
 
 
 # merchant_id = 12334189
-#   expected = sales_analyst.most_sold_item_for_merchant(merchant_id)
-#   expect(expected.map(&:id).include?(263524984)).to eq true
+# expected = sales_analyst.most_sold_item_for_merchant(merchant_id)
+# expect(expected.map(&:id).include?(263524984)).to eq true
 #
-#   expect(expected.map(&:name).include?("Adult Princess Leia Hat")).to eq true
-#   expect(expected.first.class).to eq Item
+# expect(expected.map(&:name).include?("Adult Princess Leia Hat")).to eq true
+# expect(expected.first.class).to eq Item
+
+
+
+# merchant_id = 12334189
+# expected = sales_analyst.best_item_for_merchant(merchant_id)
+#
+# expect(expected.id).to eq 263516130
+# expect(expected.class).to eq Item
+#
+# merchant_id = 12337105
+# expected = sales_analyst.best_item_for_merchant(merchant_id)
+#
+# expect(expected.id).to eq 263463003
+# expect(expected.class).to eq Item
 
 end
 
@@ -402,7 +431,7 @@ date = Time.parse("2011-02-27")
 # sa.merchants_ranked_by_revenue
 # sa.revenue_by_merchant(12334194)
 # sa.most_sold_item_for_merchant(12334189)
-sa.most_sold_item_for_merchant(12337105)
-
+# sa.most_sold_item_for_merchant(12337105)
+sa.best_item_for_merchant(12334189)
 
 end

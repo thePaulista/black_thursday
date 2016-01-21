@@ -89,8 +89,8 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_average_average_price_per_merchant
-    skip
-    expected = 350.29
+    # skip
+    expected = 349.56
     submitted = @@sales_analyst.average_average_price_per_merchant
 
     assert_equal expected, submitted
@@ -102,7 +102,6 @@ class SalesAnalystTest < Minitest::Test
 
     assert_equal expected, submitted.first.to_s
   end
-
 
   def test_golden_items
     expected = 5
@@ -220,9 +219,9 @@ class SalesAnalystTest < Minitest::Test
   end
 
   def test_total_revenue_by_date
-    skip
-    date = Time.parse("2011-02-27")
-    expected = 13010.46
+    # skip
+    date = Time.parse("2009-02-07")
+    expected = 21067.77
     submitted = @@sales_analyst.total_revenue_by_date(date)
 
     assert_equal expected, submitted

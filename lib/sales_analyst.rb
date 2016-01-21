@@ -318,6 +318,10 @@ class SalesAnalyst
     merchant.total_revenue
   end
 
+  def most_sold_item_for_merchant
+
+  end
+
 end
 
 if __FILE__ == $0

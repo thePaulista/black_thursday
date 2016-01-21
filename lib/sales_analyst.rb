@@ -306,9 +306,8 @@ class SalesAnalyst
     end
   end
 
-  def merchants_with_only_one_item_regsitered_in_month(month)
+  def merchants_with_only_one_item_registered_in_month(month)
     merchants_with_one_item = merchants_with_only_one_item
-    # binding.pry
     merchants_with_only_one_item.select do |merchant|
       merchant.created_at.strftime("%B") == month
     end
@@ -343,6 +342,6 @@ date = Time.parse("2011-02-27")
 # =======
 # sa.top_revenue_earners
 # sa.merchants_ranked_by_revenue
-sa.revenue_by_merchant(12334194)
+# sa.revenue_by_merchant(12334194)
 
 end

@@ -1,6 +1,5 @@
 require 'pry'
 require 'csv'
-require 'set'
 require 'bigdecimal'
 require_relative 'items'
 
@@ -55,10 +54,15 @@ class ItemRepository
   end
 
   def find_all_dates
-    @items.map do |item|
-      item.created_at.strftime("%A")
+    @all_invoices.map do |inv|
+      inv.created_at.strftime("%A")
     end
   end
+
+  # def find_created_date_by_merchant_id(id)
+  #   @items.select {|item| item.created_at if item.merchant_id == id }
+  #   binding.pry
+  # end
 
 end
 

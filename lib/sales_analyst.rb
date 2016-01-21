@@ -318,20 +318,6 @@ class SalesAnalyst
     merchant.total_revenue
   end
 
-  # def most_sold_item_for_merchant(merchant_id)
-  #   # run through merchants
-  #   # select the ones that have invoices that are paid in full
-  #   #
-  #   merchant_items = @sales_engine.items.find_all_by_merchant_id(merchant_id)
-  #   # binding.pry
-  #   merchant_items.group_by do |item|
-  #     inv_items = @sales_engine.invoice_items.find_all_by_item_id(item.id)
-  #     inv_items.map do |inv_item|
-  #       inv_item.quantity.to_i
-  #     end.reduce(:+)
-  #   end.max #.last
-  # end
-
   def most_sold_item_for_merchant(merchant_id)
     invoices = @sales_engine.invoices.find_all_by_merchant_id(merchant_id)
 
@@ -343,18 +329,28 @@ class SalesAnalyst
       @sales_engine.invoice_items.find_all_by_invoice_id(invoice.id)
     end
 
-    # binding.pry
     qualified_inv_items.flatten!
 
     item_quantities = qualified_inv_items.map do |inv_item|
-      item = @sales_engine.items.find
-      {inv_item.item_id => inv_item.quantity.to_i}
+      item = @sales_engine.items.find_by_id(inv_item.item_id)
+      {item => inv_item.quantity.to_i}
     end
 
-    item_quantities.max_by do |pairs|
+    item_quantities.sort_by do |pairs|
       pairs.values
-    end.keys
+    end.last.keys
 
+    top = item_quantities.max_by do |pairs|
+      pairs.values
+    end
+
+    final_pairs = item_quantities.select do |pairs|
+      pairs.values == top.values
+    end
+
+    final_pairs.map do |pair|
+      pair.keys
+    end.flatten!
   end
 
 
@@ -391,6 +387,8 @@ date = Time.parse("2011-02-27")
 # sa.top_revenue_earners
 # sa.merchants_ranked_by_revenue
 # sa.revenue_by_merchant(12334194)
-sa.most_sold_item_for_merchant(12334189)
+# sa.most_sold_item_for_merchant(12334189)
+sa.most_sold_item_for_merchant(12337105)
+
 
 end
